@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import logo from "../Images/Bedrock Rock .png";
 import Footer from "./footer";
 import Header from "./header";
@@ -17,6 +17,14 @@ const Login = () => {
     console.log(formValues);
   };
 
+  const history = useHistory();
+  const loginButtonClicked = () => {
+    let path = "/dashboard";
+    history.push({
+      pathname: path
+    });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     let validation = validate(formValues);
@@ -27,17 +35,19 @@ const Login = () => {
       Object.keys(validation).length === 0
     ) {
       PostApi(formValues.email, formValues.password);
+
     }
   };
   function setColor(color) {
     document.documentElement.style.setProperty("--color-success", color);
   }
-  const PostApi = (email, password) => {
+
+  const PostApi = async (email, password) => {
     const data = {
       email: email,
       password: password,
     };
-    fetch("http://localhost:3000/user/login", {
+    fetch("http://localhost:3000/api/user/login", {
       method: "POST",
       headers: new Headers({
         Accept: "application/json",
@@ -48,7 +58,10 @@ const Login = () => {
     })
       .then((response) => response.json())
       .then((dt) => {
-        if (!dt.message) setSuccess("Logged in Successfully");
+        if (!dt.message) {
+          setSuccess("Logged in Successfully");
+          getUserDetails(email);
+        }
         else {
           setSuccess(dt.message);
           setColor("rgb(192, 62, 62)");
@@ -56,6 +69,24 @@ const Login = () => {
       })
       .catch((error) => {
         console.log("error is ", error);
+      });
+  };
+
+  const getUserDetails = async (email) => {
+    return fetch("http://localhost:3000/api/user/details?email=" + email, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((dt) => {
+        if (dt.message) {
+          return dt.message;
+        } else {
+          let userFirstName = dt.firstName;
+          let uname = dt.firstName + " " + dt.lastName;
+          localStorage.setItem("userName", uname);
+          localStorage.setItem("userFirstName", userFirstName);
+          loginButtonClicked();
+        }
       });
   };
 
@@ -79,7 +110,7 @@ const Login = () => {
 
   return (
     <>
-    <Header/>
+      <Header />
       <div className="login_container">
         <div className="login_sec">
           <div className="form_con">
@@ -142,7 +173,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

@@ -1,10 +1,12 @@
-import React from "react";
+import React ,{useState}from "react";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   useParams,
 } from "react-router-dom";
+
+import { useHistory} from "react-router-dom";
 import Billing from "../components/billing";
 import CompanyInfo from "../components/companyInfo";
 import CreateProject from "../components/createProject";
@@ -17,6 +19,20 @@ import ResetPassword from "../components/resetPassword";
 import Welcome from "../components/welcome";
 
 const AppRoute = () => {
+
+  // const addContactHandler = async (contact) => {
+  //   console.log(contact);
+    // const request = {
+      // id: uuid_v4(),
+    //   ...contact
+    // }
+
+    // const response = await api.post("/contacts", request);
+    // console.log("reponese", response);
+    // setContacts([...contacts, response.data]);
+    // setContacts([...contacts, contact]);
+  // };
+
   return (
     <>
       <Router>
@@ -47,7 +63,13 @@ const AppRoute = () => {
           ></Route>
           <Route
             path="/createProject"
-            component={() => <CreateProject />}
+            component={() => 
+            <CreateProject 
+            // addContactHandler={addContactHandler}
+            />}
+            // render={(props) => (
+            //   <CreateProject {...props} addContactHandler={addContactHandler} />
+            // )}
           ></Route>
           <Route path="/:pagename" component={Nan}></Route>
         </Switch>

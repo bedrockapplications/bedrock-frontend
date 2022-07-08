@@ -1,10 +1,7 @@
 import React from 'react';
 import logo from '../Images/Bedrock Rock .png';
 import Footer from '../components/footer';
-import {
-    BrowserRouter as Router,
-    Link
-} from "react-router-dom";
+import {Link} from "react-router-dom";
 
 
 const Welcome = () => {
@@ -24,7 +21,7 @@ const Welcome = () => {
                 </div>
                 <div className='bottomlayer'>
                     <div className='nextPage_btnSec'>
-                        <Link to="/login">
+                        <Link to="/signup">
                             <button className='btn'>
                                 create your user profile!
                             </button>
