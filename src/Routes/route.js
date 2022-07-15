@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -6,7 +6,6 @@ import {
   useParams,
 } from "react-router-dom";
 import { v4 as uuid_v4 } from "uuid";
-import { useHistory } from "react-router-dom";
 import Billing from "../components/billing";
 import CompanyInfo from "../components/companyInfo";
 import CreateProject from "../components/createProject";
@@ -17,7 +16,6 @@ import NewUser from "../components/newUser";
 import ProjectDirectory from "../components/projectDirectory";
 import ResetPassword from "../components/resetPassword";
 import Welcome from "../components/welcome";
-import Testing from "../components/testingImg";
 
 const AppRoute = () => {
   const [createProJect, setCreateProject] = useState([]);
@@ -26,22 +24,6 @@ const AppRoute = () => {
     setCreateProject([...createProJect, { id: uuid_v4(), ...data }]);
     console.log("createProJect", createProJect);
   }
-  
-  //  const testing = (example) =>{
-  //   console.log("example" , example);
-  //   setSample(example);
-  //  }
-  //  const LOCAL_STORAGE_KEY = 'createProJect';
-  //  useEffect(() => {
-  //   const retriveContacts =JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
-  //   if(retriveContacts){
-  //     setCreateProject(retriveContacts);
-  //   }
-  // }, []);
-
-  //  useEffect(() => {
-  //   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(createProJect));
-  // }, [createProJect]);
 
   return (
     <>
@@ -75,10 +57,8 @@ const AppRoute = () => {
             component={() =>
               <CreateProject  saveProjectData={saveProjectData}/>}
           ></Route>
-          {/* <Route path='/test' component={()=><Testing sample={sample}/>}/> */}
           <Route path="/:pagename" component={Nan}></Route>
         </Switch>
-        {/* <Footer /> */}
       </Router>
     </>
   );

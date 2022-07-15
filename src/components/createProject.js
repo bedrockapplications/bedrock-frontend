@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import plus from "../Images/Plus.png"
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import DashboardHeader from './dashboard_header';
 import DashboardLeft from './dashboard_left';
-// import Tesseract from 'tesseract.js';
-import * as htmlToImage from 'html-to-image';
-// import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 
 const CreateProject = (props) => {
   const userName = localStorage.getItem("userName");
@@ -38,8 +35,9 @@ const CreateProject = (props) => {
   const loginButtonClicked = () => {
     let path = "/projectDirectory";
     history.push(path);
+    props.setSelectedImage(selectedImage);
   };
-  var node = document.getElementById('my-node');
+  
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormErrors(validate(formValues));
@@ -376,13 +374,7 @@ const CreateProject = (props) => {
                 </div>
                 {/* </form> */}
               </div>
-              {/* {selectedImage && (
-                <div>
-                    <img alt="not fount" width={"250px"} src={URL.createObjectURL(selectedImage)} />
-                    <br />
-                    <button onClick={() => setSelectImage(null)}>Remove</button>
-                </div>
-            )} */}
+              
               <div className="upload_sec d_flex">
                 <div className="upload_card background_blue d_flex">
                   <img src={plus} alt="projectDir" />

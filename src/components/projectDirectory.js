@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import plus from "../Images/Plus.png";
 import { Link } from 'react-router-dom';
 import DashboardHeader from './dashboard_header';
@@ -12,7 +12,7 @@ const ProjectDirectory = (props) => {
 
     const [showData, setShowData] = useState(props.createProJect);
     // setShowData(props);
-    const {imageShow} = props;
+    // const {imageShow} = props;
     // const { projectName} = props.createProJect[0];
     // console.log("allTime",projectName);
     // console.log("allImages", imageShow);
