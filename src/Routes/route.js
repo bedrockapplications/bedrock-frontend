@@ -1,12 +1,12 @@
-import React ,{useState}from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
   Switch,
   useParams,
 } from "react-router-dom";
-
-import { useHistory} from "react-router-dom";
+import { v4 as uuid_v4 } from "uuid";
+import { useHistory } from "react-router-dom";
 import Billing from "../components/billing";
 import CompanyInfo from "../components/companyInfo";
 import CreateProject from "../components/createProject";
@@ -17,26 +17,35 @@ import NewUser from "../components/newUser";
 import ProjectDirectory from "../components/projectDirectory";
 import ResetPassword from "../components/resetPassword";
 import Welcome from "../components/welcome";
+import Testing from "../components/testingImg";
 
 const AppRoute = () => {
+  const [createProJect, setCreateProject] = useState([]);
+  const saveProjectData = (data) => {
+    console.log("data", data);
+    setCreateProject([...createProJect, { id: uuid_v4(), ...data }]);
+    console.log("createProJect", createProJect);
+  }
+  
+  //  const testing = (example) =>{
+  //   console.log("example" , example);
+  //   setSample(example);
+  //  }
+  //  const LOCAL_STORAGE_KEY = 'createProJect';
+  //  useEffect(() => {
+  //   const retriveContacts =JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+  //   if(retriveContacts){
+  //     setCreateProject(retriveContacts);
+  //   }
+  // }, []);
 
-  // const addContactHandler = async (contact) => {
-  //   console.log(contact);
-    // const request = {
-      // id: uuid_v4(),
-    //   ...contact
-    // }
-
-    // const response = await api.post("/contacts", request);
-    // console.log("reponese", response);
-    // setContacts([...contacts, response.data]);
-    // setContacts([...contacts, contact]);
-  // };
+  //  useEffect(() => {
+  //   localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(createProJect));
+  // }, [createProJect]);
 
   return (
     <>
       <Router>
-        {/* <Header /> */}
         <Switch>
           <Route exact path="/">
             <Welcome />
@@ -59,18 +68,14 @@ const AppRoute = () => {
           ></Route>
           <Route
             path="/projectDirectory"
-            component={() => <ProjectDirectory />}
+            component={() => <ProjectDirectory createProJect={createProJect}/>}
           ></Route>
           <Route
             path="/createProject"
-            component={() => 
-            <CreateProject 
-            // addContactHandler={addContactHandler}
-            />}
-            // render={(props) => (
-            //   <CreateProject {...props} addContactHandler={addContactHandler} />
-            // )}
+            component={() =>
+              <CreateProject  saveProjectData={saveProjectData}/>}
           ></Route>
+          {/* <Route path='/test' component={()=><Testing sample={sample}/>}/> */}
           <Route path="/:pagename" component={Nan}></Route>
         </Switch>
         {/* <Footer /> */}

@@ -30,16 +30,16 @@ const DashboardHeader = ({ userName }) => {
             }
             else if (hrs >= 12 && hrs <= 15) {
                 setDayState('Good Afternoon');
-                round_spin.backgroundColor = "rgb(243, 212, 34)";
+                if(round_spin)round_spin.backgroundColor = "rgb(243, 212, 34)";
             }
             else if (hrs > 15 && hrs <= 20) {
                 setDayState('Good Evening');
-                round_spin.backgroundColor = "#1d2744";
+                if(round_spin)round_spin.backgroundColor = "#1d2744";
 
             }
             else if (hrs > 20 && hrs <= 24) {
                 setDayState('Good Night');
-                round_spin.backgroundColor = "#1d2744";
+                if(round_spin)round_spin.backgroundColor = "#1d2744";
             }
         }, 1);
     }, []);

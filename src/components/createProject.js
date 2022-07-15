@@ -1,8 +1,11 @@
-import React, { useState } from "react";
-import plus from "../Images/Plus.png";
+import React, { useState } from 'react';
+import plus from "../Images/Plus.png"
 import { useHistory, useLocation } from "react-router-dom";
-import DashboardHeader from "./dashboard_header";
-import DashboardLeft from "./dashboard_left";
+import DashboardHeader from './dashboard_header';
+import DashboardLeft from './dashboard_left';
+// import Tesseract from 'tesseract.js';
+import * as htmlToImage from 'html-to-image';
+// import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 
 const CreateProject = (props) => {
   const userName = localStorage.getItem("userName");
@@ -14,16 +17,13 @@ const CreateProject = (props) => {
     city: "",
     state: "",
     zipcode: "",
-    acreage: "",
-    concretesplit: "",
-    bulidsplit: "",
     date: "",
     document: "",
     bluePrint: "",
     photo: "",
   };
-//   const location = useLocation();
-//   console.log(location);
+  //   const location = useLocation();
+  //   console.log(location);
 
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
@@ -39,9 +39,11 @@ const CreateProject = (props) => {
     let path = "/projectDirectory";
     history.push(path);
   };
+  var node = document.getElementById('my-node');
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormErrors(validate(formValues));
+    console.log("values", formValues);
     if (
       formValues.project &&
       formValues.phoneNumber &&
@@ -49,26 +51,20 @@ const CreateProject = (props) => {
       formValues.city &&
       formValues.state &&
       formValues.zipcode &&
-      formValues.acreage &&
-      formValues.concretesplit &&
-      formValues.bulidsplit &&
       formValues.date &&
       fileName !== "Upload Image" &&
       bluePrintName !== "Upload Blueprint" &&
       docName !== "Upload Document"
-
-      //   Object.keys(doc).length > 0 &&
-      //   Object.keys(bluePrint).length > 0 &&
-      //   Object.keys(file).length > 0
     ) {
       formValues["photo"] = file;
       formValues["bluePrint"] = bluePrint;
       formValues["document"] = doc;
       saveProjectData(formValues);
       loginButtonClicked();
-      props.addContactHandler(formValues);
+      // setSelectedImage(file);
     }
   };
+
 
   const saveProjectData = (formValues) => {
     var formdata = new FormData();
@@ -78,43 +74,28 @@ const CreateProject = (props) => {
     formdata.append("City", formValues.city);
     formdata.append("State", formValues.state);
     formdata.append("Zipcode", formValues.zipcode);
-    formdata.append("Acreage", formValues.acreage);
-    formdata.append("BuildingSplit", formValues.bulidsplit);
-    formdata.append("ConcreteSplit", formValues.concretesplit);
     formdata.append("StartDate", formValues.date);
-    formdata.append("Photos", formValues.photo);
-    formdata.append("Blueprints", formValues.bluePrint);
-    formdata.append("Documents", formValues.document);
-    // const projectupload = {
-    //   projectName: formValues.project,
-    //   ClientPhNumber: formValues.phoneNumber,
-    //   Address: formValues.address,
-    //   City: formValues.city,
-    //   State: formValues.state,
-    //   Zipcode: formValues.zipcode,
-    //   Acreage: formValues.acreage,
-    //   BuildingSplit: formValues.bulidsplit,
-    //   ConcreteSplit: formValues.concretesplit,
-    //   StartDate: formValues.date,
-    //   Photos: formValues.photo,
-    //   Blueprints: formValues.bluePrint,
-    //   Documents: formValues.document,
-    // };
-    // console.log("final data", projectupload);
+    file.forEach((x) => {
+      formdata.append("Photos", x);
+    });
+    bluePrint.forEach((x) => {
+      formdata.append("Blueprints", x);
+    });
+    doc.forEach((x) => {
+      formdata.append("Documents", x);
+    });
     fetch("http://localhost:3000/api/project/upload/", {
       method: "POST",
-      //   headers: new Headers({
-      //     "Content-Type":
-      //       "multipart/form-data",
-      //     "Access-Control-Allow-Origin": "*",
-      //   }),JSON.stringify(projectupload)
       body: formdata,
     })
       .then((response) => response.json())
       .then((dt) => {
-        if (dt) {
+        if (!dt.message) {
+          console.log("previous ", dt);
+          dt._photos=[];
+          dt._photos.push(selectedImage);
+          props.saveProjectData(dt);
           console.log("the data is ", dt);
-          //alert("Saved  Successfully");
         } else {
           console.log("......"); // need to show the error msg;
         }
@@ -125,6 +106,7 @@ const CreateProject = (props) => {
   };
 
   const validate = (values) => {
+    // alert("hii");
     const error = {};
 
     if (!values.project) {
@@ -198,28 +180,64 @@ const CreateProject = (props) => {
     return error;
   };
 
-  const [file, setFile] = useState({});
+  const [file, setFile] = useState();
   const [fileName, setFileName] = useState("Upload Image");
-  const [bluePrint, setBluePrint] = useState({});
+  const [bluePrint, setBluePrint] = useState([]);
   const [bluePrintName, setBluePrintName] = useState("Upload Blueprint");
-  const [doc, setdoc] = useState({});
+  const [doc, setdoc] = useState([]);
   const [docName, setDocName] = useState("Upload Document");
+
+  // props.testing(dataStore);
+  const [selectedImage, setSelectImage] = useState(null);
   const handleselectedFile = (event) => {
-    setFile(event.target.files[0]);
-    setFileName(event.target.files[0].name);
-  };
-  const handleselectedBlueFile = (event) => {
-    setBluePrint(event.target.files[0]);
-    setBluePrintName(event.target.files[0].name);
-  };
-  const handleselectedDocFile = (event) => {
-    setdoc(event.target.files[0]);
-    setDocName(event.target.files[0].name);
-    // selectedDocument: event.target.files[0]
-    // selectedDocumentName: event.target.files[0].name
+    const files = event.target.files;
+    const files_one = event.target.files[0];
+    // setSelectedImage(files_one);
+    setSelectImage(files_one);
+    const tempArr = [];
+    [...event.target.files].forEach((file) => {
+      tempArr.push(file);
+    });
+    setFile(tempArr);
+    setFileName(
+      files.length > 1
+        ? files.length + " images has been selected"
+        : files[0].name
+    );
   };
 
+  const handleselectedDocFile = (event) => {
+    const files = event.target.files;
+    const tempArr = [];
+    [...event.target.files].forEach((file) => {
+      tempArr.push(file);
+    });
+    setdoc(tempArr);
+    setDocName(
+      files.length > 1
+        ? files.length + " documents has been selected"
+        : files[0].name
+    );
+  };
+
+  const handleselectedBlueFile = (event) => {
+    const files = event.target.files;
+    const tempArr = [];
+    [...event.target.files].forEach((file) => {
+      tempArr.push(file);
+    });
+    setBluePrint(tempArr);
+    setBluePrintName(
+      files.length > 1
+        ? files.length + " blueprints has been selected"
+        : files[0].name
+    );
+  };
+
+
   
+
+
   return (
     <div className="primary_container">
       <div className="dashboard_page d_flex ">
@@ -235,6 +253,7 @@ const CreateProject = (props) => {
               className="create_con d_flex"
               onSubmit={handleSubmit}
               encType="multipart/form-data"
+              id='my-node'
             >
               <div className="form_sec">
                 <h1>Project Information.</h1>
@@ -327,7 +346,7 @@ const CreateProject = (props) => {
                       </div>
                       <p className="error">{formErrors.threeFiledcity}</p>
                     </div>
-                    
+
                     <div className="catogory d_flex">
                       <div className="from_field">
                         <label htmlFor="date" className="label">
@@ -357,6 +376,13 @@ const CreateProject = (props) => {
                 </div>
                 {/* </form> */}
               </div>
+              {/* {selectedImage && (
+                <div>
+                    <img alt="not fount" width={"250px"} src={URL.createObjectURL(selectedImage)} />
+                    <br />
+                    <button onClick={() => setSelectImage(null)}>Remove</button>
+                </div>
+            )} */}
               <div className="upload_sec d_flex">
                 <div className="upload_card background_blue d_flex">
                   <img src={plus} alt="projectDir" />
@@ -364,6 +390,7 @@ const CreateProject = (props) => {
                     class="file-upload-input"
                     id="file_typeImg"
                     type="file"
+                    title='Select Image'
                     name="photo"
                     multiple
                     value={formValues.photo}
@@ -383,6 +410,7 @@ const CreateProject = (props) => {
                     class="file-upload-input"
                     id="file_typeblueprint"
                     type="file"
+                    title='Select PDF'
                     name="bluePrint"
                     multiple
                     value={formValues.bluePrint}
@@ -403,6 +431,7 @@ const CreateProject = (props) => {
                     class="file-upload-input"
                     id="file_typedoc"
                     type="file"
+                    title='Select PDF'
                     name="document"
                     multiple
                     value={formValues.document}
@@ -418,10 +447,11 @@ const CreateProject = (props) => {
                 </div>
               </div>
             </form>
+          
           </div>
         </div>
       </div>
     </div>
   );
-};
+}
 export default CreateProject;

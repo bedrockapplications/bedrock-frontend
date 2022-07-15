@@ -1,22 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import plus from "../Images/Plus.png";
 import { Link } from 'react-router-dom';
 import DashboardHeader from './dashboard_header';
 import DashboardLeft from './dashboard_left';
-// import ProjectDirectorySub from './ProjectDirectorySub';
+import ProjectDirectorySub from './ProjectDirectorySub';
 
 
-const ProjectDirectory = () => {
-    // console.log("props",props)
-
+const ProjectDirectory = (props) => {
+    console.log("props", props);
     const userName = localStorage.getItem("userName");
-    // const formValues = localStorage.getItem("formValues");
-    // const { id, name, email } = props.sendContact;
-    // const renderContactList = formValues.map((contact) => {
+
+    const [showData, setShowData] = useState(props.createProJect);
+    // setShowData(props);
+    const {imageShow} = props;
+    // const { projectName} = props.createProJect[0];
+    // console.log("allTime",projectName);
+    // console.log("allImages", imageShow);
+    // useEffect(()=>{
+    //     setShowData(Images);
+    // },[Images])
+    const renderContactList = showData.map((contact) => {
+        return (
+            <ProjectDirectorySub
+                sendContact={contact}
+                key={contact.id}
+            />
+            // <div className='create_card background_blue d_flex'>
+            //     {contact}
+            // {/* <img
+            //     src={data}
+            //     width="200" height="100"
+            //     alt={`img_${id}`}
+            // />
+            // <p>{projectName}</p> */}
+        // </div>
+        )
+    });
+
+    // const renderContactList = props.map((data) => {
+    //     console.log("setting", data)
     //     return (
     //         <ProjectDirectorySub
-    //             sendContact={contact}
-    //             key={contact.id}
+    //             sendContact={data}
+    //             key={data.id}
+    //             setImage={data}
     //         />
     //     )
     // });
@@ -43,7 +70,12 @@ const ProjectDirectory = () => {
                                         <img src={plus} alt="projectDir" />
                                         <p>Create A Project</p>
                                     </Link>
-                                    {/* {renderContactList.length > 0 ? renderContactList : "No Contacts Available"} */}
+                                    {renderContactList}
+                                    {/* <div className='create_card background_blue d_flex'>
+                                        <div>
+                                            {/* <img alt="not fount" width={"250px"} src={URL.createObjectURL(Images)} /> */}
+                                        {/* </div>
+                                    </div> */}
                                 </div>
                             </div>
                         </div>
