@@ -711,6 +711,10 @@ border-radius: .7rem;
   background-color: var(--textColor);
   color: var(--borderColor);
 }
+.background_orange{
+  background-color: #b6a360;
+  color: var(--borderColor);
+}
 .background {
   background-color: var(--borderColor);
   color: var(--textColor);
@@ -769,6 +773,11 @@ border-radius: .7rem;
 .upload_card img{
   width: 4rem;
   height: 4rem;
+}
+.create_card  img.photo_img{
+  width: 9rem !important;
+  height: 6rem;
+  object-fit: cover;
 }
 .upload_card span{
   text-align: center;

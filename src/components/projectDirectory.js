@@ -10,48 +10,19 @@ const ProjectDirectory = (props) => {
     console.log("props", props);
     const userName = localStorage.getItem("userName");
 
-    const [showData, setShowData] = useState(props.createProJect);
-    // setShowData(props);
-    // const {imageShow} = props;
-    // const { projectName} = props.createProJect[0];
-    // console.log("allTime",projectName);
-    // console.log("allImages", imageShow);
-    // useEffect(()=>{
-    //     setShowData(Images);
-    // },[Images])
-    const renderContactList = showData.map((contact) => {
+    const renderContactList = props.createProJect.map((contact) => {
         return (
             <ProjectDirectorySub
                 sendContact={contact}
                 key={contact.id}
             />
-            // <div className='create_card background_blue d_flex'>
-            //     {contact}
-            // {/* <img
-            //     src={data}
-            //     width="200" height="100"
-            //     alt={`img_${id}`}
-            // />
-            // <p>{projectName}</p> */}
-        // </div>
         )
     });
-
-    // const renderContactList = props.map((data) => {
-    //     console.log("setting", data)
-    //     return (
-    //         <ProjectDirectorySub
-    //             sendContact={data}
-    //             key={data.id}
-    //             setImage={data}
-    //         />
-    //     )
-    // });
-
+    
     return (
         <>
             <div className='primary_container'>
-                <div className='dashboard_page d_flex '>
+                <div className='dashboard_page d_flex'>
                     <div className='left_side'>
                         <DashboardLeft />
                     </div>

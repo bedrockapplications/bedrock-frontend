@@ -3,6 +3,8 @@ import plus from "../Images/Plus.png"
 import { useHistory } from "react-router-dom";
 import DashboardHeader from './dashboard_header';
 import DashboardLeft from './dashboard_left';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const CreateProject = (props) => {
   const userName = localStorage.getItem("userName");
@@ -14,13 +16,11 @@ const CreateProject = (props) => {
     city: "",
     state: "",
     zipcode: "",
-    date: "",
+    date: "MM/DD/YYYY",
     document: "",
     bluePrint: "",
     photo: "",
   };
-  //   const location = useLocation();
-  //   console.log(location);
 
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
@@ -28,16 +28,21 @@ const CreateProject = (props) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
+   
   };
+  const DatePic = (date) => {
+    const d = new Date(date).toLocaleDateString('fr-FR');
+    console.log(d);
+    setSelectDate(d);
+  }
 
   const history = useHistory();
 
   const loginButtonClicked = () => {
     let path = "/projectDirectory";
     history.push(path);
-    props.setSelectedImage(selectedImage);
   };
-  
+
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormErrors(validate(formValues));
@@ -59,7 +64,6 @@ const CreateProject = (props) => {
       formValues["document"] = doc;
       saveProjectData(formValues);
       loginButtonClicked();
-      // setSelectedImage(file);
     }
   };
 
@@ -90,7 +94,7 @@ const CreateProject = (props) => {
       .then((dt) => {
         if (!dt.message) {
           console.log("previous ", dt);
-          dt._photos=[];
+          dt._photos = [];
           dt._photos.push(selectedImage);
           props.saveProjectData(dt);
           console.log("the data is ", dt);
@@ -104,7 +108,6 @@ const CreateProject = (props) => {
   };
 
   const validate = (values) => {
-    // alert("hii");
     const error = {};
 
     if (!values.project) {
@@ -185,12 +188,11 @@ const CreateProject = (props) => {
   const [doc, setdoc] = useState([]);
   const [docName, setDocName] = useState("Upload Document");
 
-  // props.testing(dataStore);
   const [selectedImage, setSelectImage] = useState(null);
   const handleselectedFile = (event) => {
     const files = event.target.files;
     const files_one = event.target.files[0];
-    // setSelectedImage(files_one);
+    
     setSelectImage(files_one);
     const tempArr = [];
     [...event.target.files].forEach((file) => {
@@ -232,9 +234,7 @@ const CreateProject = (props) => {
     );
   };
 
-
-  
-
+  const [selectDate, setSelectDate] = useState(formValues.date);
 
   return (
     <div className="primary_container">
@@ -247,6 +247,7 @@ const CreateProject = (props) => {
             <div className="header_con d_flex">
               <DashboardHeader userName={userName} />
             </div>
+
             <form
               className="create_con d_flex"
               onSubmit={handleSubmit}
@@ -340,7 +341,6 @@ const CreateProject = (props) => {
                           value={formValues.zipcode}
                           onChange={handleChange}
                         />
-                        {/* <p className="error">{formErrors.comzipcode}</p> */}
                       </div>
                       <p className="error">{formErrors.threeFiledcity}</p>
                     </div>
@@ -350,14 +350,10 @@ const CreateProject = (props) => {
                         <label htmlFor="date" className="label">
                           Start Date
                         </label>
-                        <input
-                          id="date"
-                          className="input_filed"
-                          type="text"
-                          placeholder="MM/DD/YYYY"
-                          name="date"
-                          value={formValues.date}
-                          onChange={handleChange}
+                        <DatePicker className="input_filed"
+                          dateFormat="dd/MM/yyyy"
+                          value={selectDate}
+                          onChange={DatePic}
                         />
                         <p className="error">{formErrors.date}</p>
                       </div>
@@ -368,13 +364,10 @@ const CreateProject = (props) => {
                         type="submit"
                         value="Create Project"
                       />
-                      {/* <p className="error">{formErrors.companyNumber}</p> */}
                     </div>
                   </div>
                 </div>
-                {/* </form> */}
               </div>
-              
               <div className="upload_sec d_flex">
                 <div className="upload_card background_blue d_flex">
                   <img src={plus} alt="projectDir" />
@@ -439,7 +432,6 @@ const CreateProject = (props) => {
                 </div>
               </div>
             </form>
-          
           </div>
         </div>
       </div>
