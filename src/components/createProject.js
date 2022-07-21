@@ -3,8 +3,6 @@ import plus from "../Images/Plus.png"
 import { useHistory } from "react-router-dom";
 import DashboardHeader from './dashboard_header';
 import DashboardLeft from './dashboard_left';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 
 const CreateProject = (props) => {
   const userName = localStorage.getItem("userName");
@@ -16,7 +14,7 @@ const CreateProject = (props) => {
     city: "",
     state: "",
     zipcode: "",
-    date: "MM/DD/YYYY",
+    date: "",
     document: "",
     bluePrint: "",
     photo: "",
@@ -28,13 +26,8 @@ const CreateProject = (props) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
-   
+    console.log("fshjs",formValues.date)
   };
-  const DatePic = (date) => {
-    const d = new Date(date).toLocaleDateString('fr-FR');
-    console.log(d);
-    setSelectDate(d);
-  }
 
   const history = useHistory();
 
@@ -86,7 +79,7 @@ const CreateProject = (props) => {
     doc.forEach((x) => {
       formdata.append("Documents", x);
     });
-    fetch("http://localhost:3000/api/project/upload/", {
+    fetch("http://ec2-174-129-118-55.compute-1.amazonaws.com:3000/api/project/upload/", {
       method: "POST",
       body: formdata,
     })
@@ -192,7 +185,7 @@ const CreateProject = (props) => {
   const handleselectedFile = (event) => {
     const files = event.target.files;
     const files_one = event.target.files[0];
-    
+
     setSelectImage(files_one);
     const tempArr = [];
     [...event.target.files].forEach((file) => {
@@ -234,8 +227,6 @@ const CreateProject = (props) => {
     );
   };
 
-  const [selectDate, setSelectDate] = useState(formValues.date);
-
   return (
     <div className="primary_container">
       <div className="dashboard_page d_flex ">
@@ -256,7 +247,6 @@ const CreateProject = (props) => {
             >
               <div className="form_sec">
                 <h1>Project Information.</h1>
-                {/* <form className="form"> */}
                 <div className="login_sec">
                   <div className="form_container">
                     <div className="from_field">
@@ -327,7 +317,6 @@ const CreateProject = (props) => {
                           value={formValues.state}
                           onChange={handleChange}
                         />
-                        {/* <p className="error">{formErrors.comstate}</p> */}
                       </div>
                       <div className="from_field">
                         <label htmlFor="zipcode" className="label">
@@ -344,17 +333,23 @@ const CreateProject = (props) => {
                       </div>
                       <p className="error">{formErrors.threeFiledcity}</p>
                     </div>
-
                     <div className="catogory d_flex">
                       <div className="from_field">
                         <label htmlFor="date" className="label">
                           Start Date
                         </label>
-                        <DatePicker className="input_filed"
-                          dateFormat="dd/MM/yyyy"
-                          value={selectDate}
-                          onChange={DatePic}
-                        />
+                        <span className='input_filed'>
+                          <input type="date" class="xDateContainer"
+                          name="date"
+                          value={formValues.date}
+                             onChange={handleChange}
+                            />
+                          <input type="text" id="xTime" name="date" 
+                          placeholder='YYYY-MM-DD'
+                          value={formValues.date}
+                            />
+                            <span >&#9660;</span>
+                        </span>
                         <p className="error">{formErrors.date}</p>
                       </div>
                     </div>

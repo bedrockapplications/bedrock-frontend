@@ -44,7 +44,7 @@ const ForgotPassword = () => {
 
   const SecurityValidation = async (email, schname, brncty) => {
     return fetch(
-      "http://localhost:3000/security/check?email=" +
+      "http://ec2-174-129-118-55.compute-1.amazonaws.com:3000/api/user/securitycheck?email=" +
         email +
         "&schoolName=" +
         schname +

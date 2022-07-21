@@ -47,7 +47,7 @@ const Login = () => {
       email: email,
       password: password,
     };
-    fetch("http://localhost:3000/api/user/login", {
+    fetch("http://ec2-174-129-118-55.compute-1.amazonaws.com:3000/api/user/login", {
       method: "POST",
       headers: new Headers({
         Accept: "application/json",
@@ -73,7 +73,7 @@ const Login = () => {
   };
 
   const getUserDetails = async (email) => {
-    return fetch("http://localhost:3000/api/user/details?email=" + email, {
+    return fetch("http://ec2-174-129-118-55.compute-1.amazonaws.com:3000/api/user/details?email=" + email, {
       method: "GET",
     })
       .then((response) => response.json())

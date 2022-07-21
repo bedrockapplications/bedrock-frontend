@@ -53,8 +53,8 @@ const Billing = () => {
       password: newuser.password,
       phoneNumber: newuser.phonenumber,
       securityQuestions: {
-        schoolName: formValues.schoolName,
-        bornCity: formValues.bornCity,
+        schoolName: newuser.schoolName,
+        bornCity: newuser.bornCity,
       },
       companyInformation: {
         companyName: company.organization,
@@ -78,7 +78,7 @@ const Billing = () => {
       },
     };
     console.log("final data", reqbody);
-    fetch("http://localhost:3000/save/", {
+    fetch("http://ec2-174-129-118-55.compute-1.amazonaws.com:3000/api/user/save/", {
       method: "POST",
       headers: new Headers({
         Accept: "application/json",
@@ -89,7 +89,7 @@ const Billing = () => {
     })
       .then((response) => response.json())
       .then((dt) => {
-        if (dt) alert("Saved  Successfully");
+        if (dt) console.log("Saved  Successfully");
         else {
           console.log("......");
         }

@@ -49,7 +49,7 @@ const NewUser = () => {
   };
 
   const getUserEmail = async (email) => {
-    return fetch("http://localhost:3000/find/email?email=" + email, {
+    return fetch("http://ec2-174-129-118-55.compute-1.amazonaws.com:3000/api/user/finduser?email=" + email, {
       method: "GET",
     })
       .then((response) => response.json())
@@ -76,6 +76,7 @@ const NewUser = () => {
     if (!values.firstName) {
       error.firstName = "First name is required";
     }
+
     if (!values.phonenumber) {
       error.phonenumber = "Phone number is required";
     }
@@ -132,7 +133,7 @@ const NewUser = () => {
                     value={formValues.lastName}
                     onChange={handleChange}
                   />
-                  <p className="error">{formErrors.lastName}</p>
+                  {/* <p className="error">{formErrors.lastName}</p> */}
                 </div>
               </div>
 

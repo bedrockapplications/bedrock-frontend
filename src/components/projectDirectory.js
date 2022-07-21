@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import plus from "../Images/Plus.png";
 import { Link } from 'react-router-dom';
 import DashboardHeader from './dashboard_header';
@@ -42,11 +42,6 @@ const ProjectDirectory = (props) => {
                                         <p>Create A Project</p>
                                     </Link>
                                     {renderContactList}
-                                    {/* <div className='create_card background_blue d_flex'>
-                                        <div>
-                                            {/* <img alt="not fount" width={"250px"} src={URL.createObjectURL(Images)} /> */}
-                                        {/* </div>
-                                    </div> */}
                                 </div>
                             </div>
                         </div>
