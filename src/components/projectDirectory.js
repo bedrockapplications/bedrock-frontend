@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect,useState} from 'react';
 import plus from "../Images/Plus.png";
 import { Link } from 'react-router-dom';
 import DashboardHeader from './dashboard_header';
@@ -8,8 +8,29 @@ import ProjectDirectorySub from './ProjectDirectorySub';
 
 const ProjectDirectory = (props) => {
     console.log("props", props);
-    const userName = localStorage.getItem("userName");
+    const [selectedProject, setSelectedProject] = useState("");
 
+    const userName = localStorage.getItem("userName");
+    const userId = localStorage.getItem("userId");
+
+    const getUserDetails = async () => {
+        return fetch("http://localhost:3000/api/project/getprojects?userId=" + userId, {
+          method: "GET",
+
+        })
+          .then((response) => response.json())
+          .then((dt) => {
+            console.log("dt", dt);
+            setSelectedProject(dt);
+            props.getProjectData(dt);
+            console.log(selectedProject);
+          });
+      };
+      useEffect(() => {
+        getUserDetails();
+    }, [1]);
+       
+      
     const renderContactList = props.createProJect.map((contact) => {
         return (
             <ProjectDirectorySub
@@ -18,7 +39,7 @@ const ProjectDirectory = (props) => {
             />
         )
     });
-    
+   
     return (
         <>
             <div className='primary_container'>
@@ -32,8 +53,8 @@ const ProjectDirectory = (props) => {
                                 <DashboardHeader userName={userName} />
                             </div>
                             <div className='banner_con d_flex align_center'>
-                                <h1>Project Directory</h1>
-                                <p>Ongoing Projects</p>
+                                    <h1>Project Directory</h1>
+                                    <p>Ongoing Projects</p>
                             </div>
                             <div className='card_list'>
                                 <div className='card_con d_flex justify-con'>

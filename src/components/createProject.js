@@ -86,11 +86,9 @@ const CreateProject = (props) => {
       .then((response) => response.json())
       .then((dt) => {
         if (!dt.message) {
-          console.log("previous ", dt);
           dt._photos = [];
           dt._photos.push(selectedImage);
-          props.saveProjectData(dt);
-          console.log("the data is ", dt);
+          // props.saveProjectData(dt);
         } else {
           console.log("......"); // need to show the error msg;
         }
@@ -185,8 +183,8 @@ const CreateProject = (props) => {
   const handleselectedFile = (event) => {
     const files = event.target.files;
     const files_one = event.target.files[0];
-
     setSelectImage(files_one);
+    props.newImage(files_one);
     const tempArr = [];
     [...event.target.files].forEach((file) => {
       tempArr.push(file);

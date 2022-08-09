@@ -18,10 +18,14 @@
   --footerColor: #242b3c;
   --white: #fff;
   --red: rgb(192, 62, 62);
+  --green: rgb(28, 207, 133);
+  --yellow: rgb(255, 217, 0);
   --color-success: rgb(31, 92, 31);
 
   --fontFam: "Open Sans", sans-serif;
   --fontfamily: "Nunito Sans", sans-serif;
+
+  --borderRadius:8px;
 }
 
 /* welcome page start */
@@ -412,6 +416,9 @@ p.sublink .nextink:hover {
   align-items: center;
   justify-content: center;
   padding-bottom: .5rem;
+
+  text-decoration: none;
+  color: var(--white);
 }
 
 .dotted img {
@@ -443,11 +450,10 @@ p.sublink .nextink:hover {
   transition: .3s all ease-in-out;
   color: var(--white);
   text-decoration: none;
-  letter-spacing: 1;
 }
 
-.link_sec ul li:hover {
-  letter-spacing: 1.05px;
+.link_sec ul li:hover{
+  letter-spacing: 1.01px;
   cursor: pointer;
   border-radius: 4px;
   padding: .45rem 0.5rem;
@@ -957,3 +963,116 @@ span.input_filed span {
     float: right;
     cursor: pointer;
 }
+
+/* my project start */
+.height-0{
+  height: auto;
+}
+.card_list .header{
+ width: 15%;
+ background-color: var(--borderColor);
+ padding: .25rem;
+ border-radius: var(--borderRadius) var(--borderRadius) 0 0;
+}
+.card_list .header h5{
+  width: auto;
+  text-align: center;
+ 
+  color: var(--textColor);
+}
+.card_list .table_container{
+  padding:0 0.3rem 0.3rem ;
+  background-color: #303c48;
+  border-radius: 0 0 var(--borderRadius) var(--borderRadius);
+}
+.card_list .table{
+  width: 100%;
+  border-collapse:collapse;
+}
+.card_list .table thead{
+  background-color: var(--btnColor);
+  color: var(--white);
+}
+.card_list .table tbody{
+  background-color: var(--white);
+}
+.card_list .table thead tr th,
+.card_list .table tbody tr td{
+  text-align: center;
+  padding:.15rem .5rem;
+  font-size: .85rem;
+  font-weight: 600;
+  border: 1px solid var(--btnColor);
+}
+.card_list .table tbody tr td{
+  padding:.35rem .5rem;
+}
+.card_list .table thead tr th span.round{
+  margin: 0 1rem;
+  position: relative;
+}
+.card_list .table thead tr th span.round::after{
+  position: absolute;
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: var(--white);
+}
+.card_list .table tbody tr td .green{
+  color: var(--borderColor);
+  background-color: var(--green);
+}
+.card_list .table tbody tr td .red{
+  color: var(--borderColor);
+  background-color: var(--red);
+}
+.card_list .table tbody tr td .yellow{
+  color: var(--borderColor);
+  background-color: var(--yellow);
+}
+.card_list .table tbody tr td .w-100{
+  width: 100%;
+}
+.card_list .table tbody tr td .w-75{
+  width: 75%;
+}
+.card_list .table tbody tr td .w-65{
+  width: 65%;
+}
+.card_list .table tbody tr td .w-50{
+  width: 50%;
+}
+.card_list .table tbody tr td .w-30{
+  width: 30%;
+}
+.card_list .table tbody tr td .w-25{
+  width: 25%;
+}
+.card_list .table tbody tr td .w-20{
+  width: 20%;
+}
+.card_list .table tbody tr td .w-10{
+  width: 10%;
+}
+.last_tdleft{
+  border-radius: 0 0 0 var(--borderRadius);
+}
+.last_tdright{
+  border-radius: 0 0 var(--borderRadius) 0;
+}
+.flex_direction{
+  flex-direction: row;
+  justify-content: space-between;
+}
+.align_item{
+  align-items: center;
+}
+.arrow {
+  padding: 2rem;
+  display: inline-block;
+  position: relative;
+}
+/* my project end */

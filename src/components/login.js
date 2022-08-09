@@ -85,6 +85,7 @@ const Login = () => {
           let uname = dt.firstName + " " + dt.lastName;
           localStorage.setItem("userName", uname);
           localStorage.setItem("userFirstName", userFirstName);
+          localStorage.setItem("userId", dt._id);
           loginButtonClicked();
         }
       });

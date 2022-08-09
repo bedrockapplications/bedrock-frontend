@@ -1,17 +1,23 @@
-import React, { useState,useEffect } from "react";
-
+import React from "react";
+import { Link } from "react-router-dom";
 
 const ProjectDirectorySub = (props) => {
    
-   
-    const { projectName, id } = props.sendContact;
-    
+    const { id } = props.sendContact;
+    console.log("prijectdirectorySub",props);
     return (
-        <div className='create_card background_orange d_flex'>
-            <img className="photo_img" src={URL.createObjectURL(props.sendContact._photos[0])} />
-            <p>{props.sendContact.projectName}</p>
-            {/* <p>{props?.sendContact?.photos[0]?.contentType}</p> */}
-        </div>
+        <Link className='create_card background_orange d_flex' 
+       to={{ pathname: `/myProject/${id}`, state: { contact: props.sendContact } }}
+        >
+                {/* <img 
+                className="photo_img" 
+                // src={URL.createObjectURL(props.sendContact.photos)} 
+                alt={id}
+                /> */}
+                <p>Hii</p>
+                {/* <p>{props.sendContact.projectName}</p> */}
+                {/* <p>{props?.sendContact?.photos[0]?.contentType}</p> */}
+        </Link>
     )
 }
 
