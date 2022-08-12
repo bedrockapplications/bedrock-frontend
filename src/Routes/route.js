@@ -22,11 +22,11 @@ import Welcome from "../components/welcome";
 const AppRoute = () => {
   const [createProJect, setCreateProject] = useState([]);
 
-  const getProjectData = (data) => {
-    console.log("data", data);
-    setCreateProject([...createProJect, { id: uuid_v4(), ...data }]);
-    console.log("createProJect", createProJect);
-  }
+  // const getProjectData = (data) => {
+  //   console.log("data", data);
+  //   setCreateProject([...createProJect, { id: uuid_v4(), ...data }]);
+  //   console.log("createProJect", createProJect);
+  // };
 
   // const [selectedProject, setSelectedProject] = useState();
   // const userId = localStorage.getItem("userId");
@@ -72,35 +72,29 @@ const AppRoute = () => {
             component={() => <ResetPassword />}
           ></Route>
           <Route
-            path="/dashboard" exact
+            path="/dashboard"
+            exact
             component={() => <Dashboard />}
           ></Route>
           <Route
             path="/projectDirectory"
-            component={() => <ProjectDirectory 
-              getProjectData={getProjectData}  createProJect={createProJect}
-               />}
+            component={() => (
+              <ProjectDirectory
+              // getProjectData={getProjectData}
+              // createProJect={createProJect}
+              />
+            )}
           ></Route>
           <Route
             path="/createProject"
-            component={() =>
+            component={() => (
               <CreateProject
-                // saveProjectData={saveProjectData}
-             
-              />}
+              // saveProjectData={saveProjectData}
+              />
+            )}
           ></Route>
-          <Route
-            path="/myProject/:id"
-            component={() =>
-              <MyProject />}
-          >
-          </Route>
-          <Route
-            path="/docManager"
-            component={() =>
-              <DocManager />}
-          >
-          </Route>
+          <Route path="/myProject/:id" component={() => <MyProject />}></Route>
+          <Route path="/docManager" component={() => <DocManager />}></Route>
           <Route path="/:pagename" component={Nan}></Route>
         </Switch>
       </Router>
