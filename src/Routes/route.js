@@ -20,38 +20,7 @@ import ResetPassword from "../components/resetPassword";
 import Welcome from "../components/welcome";
 
 const AppRoute = () => {
-  const [createProJect, setCreateProject] = useState([]);
-
-  // const getProjectData = (data) => {
-  //   console.log("data", data);
-  //   setCreateProject([...createProJect, { id: uuid_v4(), ...data }]);
-  //   console.log("createProJect", createProJect);
-  // };
-
-  // const [selectedProject, setSelectedProject] = useState();
-  // const userId = localStorage.getItem("userId");
-
-  // const getUserDetails = async () => {
-  //     return fetch("http://localhost:3000/api/project/getprojects?userId=" + userId, {
-  //       method: "GET",
-  //     })
-  //       .then((response) => response.json())
-  //       .then((dt) => {
-  //         console.log("dt", dt);
-  //         // setSelectedProject(dt);
-  //         // props.getProjectData(dt);
-  //       });
-  //   };
-  //   useEffect(() => {
-  //     const getAllContacts = async () => {
-  //         const allContacts = await getUserDetails();
-  //         if (allContacts) {
-  //           setSelectedProject(allContacts);
-  //         }
-  //     };
-  //     getAllContacts();
-  // }, []);
-  // console.log("selectedProject",selectedProject);
+  
   return (
     <>
       <Router>
@@ -80,8 +49,6 @@ const AppRoute = () => {
             path="/projectDirectory"
             component={() => (
               <ProjectDirectory
-              // getProjectData={getProjectData}
-              // createProJect={createProJect}
               />
             )}
           ></Route>
@@ -89,7 +56,6 @@ const AppRoute = () => {
             path="/createProject"
             component={() => (
               <CreateProject
-              // saveProjectData={saveProjectData}
               />
             )}
           ></Route>

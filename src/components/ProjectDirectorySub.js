@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const ProjectDirectorySub = (props) => {
-  const { _id } = props.sendContact;
-  const { Photos } = props.sendContact;
-  console.log("prijectdirectorySub", Photos[0].data.data);
+  const { _id , Photos,projectName } = props.sendContact;
+  localStorage.setItem("id", _id);
+  console.log("prijectdirectorySub", props);
   const arrayBufferToBase64 = (buffer) => {
     let binary = "";
     let bytes = new Uint8Array(buffer);
@@ -17,17 +17,9 @@ const ProjectDirectorySub = (props) => {
   return (
     <Link
       className="create_card background_orange d_flex"
-      to={{
-        pathname: `/myProject/${_id}`,
-        state: { contact: props.sendContact },
-      }}
+      to={{pathname: `/myProject/${_id}`, state: { contact: props.sendContact } }}
     >
-      {/* <img 
-                className="photo_img" 
-                // src={URL.createObjectURL(props.sendContact.photos)} 
-                alt={id}
-                /> */}
-
+     
       <img
         className="photo_img"
         src={
@@ -37,9 +29,7 @@ const ProjectDirectorySub = (props) => {
           arrayBufferToBase64(Photos[0].data.data)
         }
       />
-      {/* <p>{projectName}</p> */}
-      <p>{props.sendContact.projectName}</p>
-      {/* <p>{props?.sendContact?.photos[0]?.contentType}</p> */}
+      <p>{projectName}</p>
     </Link>
   );
 };

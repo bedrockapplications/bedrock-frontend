@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import DashboardHeader from './dashboard_header';
 import DashboardLeft from './dashboard_left';
 
-const CreateProject = (props) => {
+const CreateProject = () => {
   const userName = localStorage.getItem("userName");
 
   const initialValues = {
@@ -184,7 +184,6 @@ const CreateProject = (props) => {
     const files = event.target.files;
     const files_one = event.target.files[0];
     setSelectImage(files_one);
-    props.newImage(files_one);
     const tempArr = [];
     [...event.target.files].forEach((file) => {
       tempArr.push(file);

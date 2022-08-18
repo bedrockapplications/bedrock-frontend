@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import notification from "../Images/notification.png";
 import avatar from "../Images/avatar.png";
+import { Link } from "react-router-dom";
 
 const DashboardHeader = ({ userName }) => {
-
-    // console.log("userName",userName);
 
     var dateObj = new Date();
     var dateDay = dateObj.toDateString();
     const [clockState, setClockState] = useState();
     const [dayState, setDayState] = useState();
-   
+    const [toggle, setToggle] = useState(false);
+    const logoutClick = (e) => {
+        e.preventDefault();
+        console.log('You clicked submit.');
+        setToggle(!toggle)
+    }
 
     useEffect(() => {
         setInterval(() => {
@@ -20,7 +24,7 @@ const DashboardHeader = ({ userName }) => {
                 minute: "2-digit",
                 second: "2-digit",
                 hour12: true,
-              });
+            });
             setClockState(time);
             var hrs = date.getHours();
             var round_spin = document.getElementById("roun_spin");
@@ -30,16 +34,16 @@ const DashboardHeader = ({ userName }) => {
             }
             else if (hrs >= 12 && hrs <= 15) {
                 setDayState('Good Afternoon');
-                if(round_spin)round_spin.backgroundColor = "rgb(243, 212, 34)";
+                if (round_spin) round_spin.backgroundColor = "rgb(243, 212, 34)";
             }
             else if (hrs > 15 && hrs <= 20) {
                 setDayState('Good Evening');
-                if(round_spin)round_spin.backgroundColor = "#1d2744";
+                if (round_spin) round_spin.backgroundColor = "#1d2744";
 
             }
             else if (hrs > 20 && hrs <= 24) {
                 setDayState('Good Night');
-                if(round_spin)round_spin.backgroundColor = "#1d2744";
+                if (round_spin) round_spin.backgroundColor = "#1d2744";
             }
         }, 1);
     }, []);
@@ -69,13 +73,20 @@ const DashboardHeader = ({ userName }) => {
                     <li>
                         <img className='notification_img' src={notification} alt='notification' />
                     </li>
-                    <li>
+                    <li onClick={logoutClick} className="last_child">
                         <p className='nameAvatar d_flex m-0'>{userName}
                             &nbsp;
                             <span>
                                 <img className='avatar_img' src={avatar} alt="name" />
                             </span>
                         </p>
+                        {toggle && (
+                            <div className="logout">
+                                <Link to="/login" className='Link'>
+                                    Logout
+                                </Link>
+                            </div>
+                        )}
                     </li>
                 </ul>
             </div></>

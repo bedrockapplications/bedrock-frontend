@@ -1,14 +1,36 @@
-import React from "react";
-// import { Link } from "react-router-dom";
+import React,{useEffect, useState} from "react";
 import DashboardHeader from "./dashboard_header";
 import DashboardLeft from "./dashboard_left";
+import project_Img from "../Images/PROJECTDIRECTORY.png";
+
 
 const MyProject = (props) => {
     console.log("myProject", props);
-    // alert("myproject");
+  
     const userName = localStorage.getItem("userName");
-    // const { id } = props.location.state.contact;
-    // console.log("myProject_id", id);
+    const Id = localStorage.getItem("id");
+
+    const[dataproject,setDataproject] = useState(Id);
+
+    console.log("dataproject",dataproject);
+    useEffect(() => {
+        const getProjectDetails = () => {
+          return fetch(
+            "http://localhost:3000/api/project/getprojectdetailsbyid?_id=" +  Id,
+            {
+              method: "GET",
+            }
+          )
+            .then((response) => response.json())
+            .then((dt) => {
+              console.log("taamil", dt);
+              setDataproject(dt);
+            });
+        };
+        getProjectDetails();
+      }, []);
+    
+
     return (
             <div className='primary_container'>
                 <div className='dashboard_page d_flex'>
@@ -20,9 +42,15 @@ const MyProject = (props) => {
                             <div className='header_con d_flex'>
                                 <DashboardHeader userName={userName} />
                             </div>
-                            <div className='banner_con d_flex align_center'>
-                                <h1>Project Directory</h1>
-                                <p>Ongoing Projects</p>
+                            <div className='banner_con d_flex align_item flex_direction'>
+                                <div>
+                                    <h1>{dataproject.projectName}</h1>
+                                    <p>{dataproject.City}, {dataproject.State} - {dataproject.Zipcode}</p>
+                                    <p>Ongoing <span className="round"></span> [Current Phase]</p>
+                                </div>
+                                <div className="rounded_Img">
+                                    <img src={project_Img} alt="project_Img"/>
+                                </div>
                             </div>
                             <div className='card_list height-0'>
                                 <div className="header">

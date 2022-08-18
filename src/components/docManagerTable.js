@@ -1,11 +1,4 @@
 import React from 'react';
-import {
-    GridComponent,
-    ColumnsDirective,
-    ColumnDirective,
-    Page, Inject, Filter,
-    Sort, Edit, Toolbar
-} from '@syncfusion/ej2-react-grids';
 
 
 
@@ -15,20 +8,22 @@ class DocTable extends React.Component {
         super(...arguments);
         this.toolbarOptions = ['Search'];
         this.dataSet = props.data;
-        console.log("dataset", props.data);
+        console.log("dataset", this.dataSet);
+       
+
     }
     render() {
-
-
-
         return (
             <div className='tabcontent'>
                 <div>
                    
                 </div>
+
             </div>
         );
+
     }
+
 }
 
 

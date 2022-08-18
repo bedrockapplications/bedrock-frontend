@@ -35,7 +35,6 @@ const Login = () => {
       Object.keys(validation).length === 0
     ) {
       PostApi(formValues.email, formValues.password);
-
     }
   };
   function setColor(color) {
