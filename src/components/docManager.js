@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DashboardHeader from "./dashboard_header";
 import DashboardLeft from "./dashboard_left";
-import DocTable from "./docManagerTable";
 import axios from 'axios';
 import File__upload from "../Images/File upload.png";
 import Folder_upload from "../Images/upload Folder.png";
@@ -23,8 +22,6 @@ const DocManager = () => {
         fileDocument: "",
         folderDocument: "",
     };
-
-    // const [formValues, setFormValues] = useState(initialValues);
     const [formErrors, setFormErrors] = useState({});
 
     const [data, setData] = useState([]);
@@ -38,9 +35,6 @@ const DocManager = () => {
         if (toggle) {
             if (filedocName === "File Upload" && folderdocName === "Folder Upload") {
                 document.getElementById("submitBtn").style.display = "none";
-                setTimeout(() => {
-                    setFormErrors(validate(initialValues));
-                }, 1000);
             }
             else {
                 document.getElementById("submitBtn").style.display = "block";
@@ -64,8 +58,6 @@ const DocManager = () => {
     };
     const retrieveContacts = async () => {
         const response = await axios.get("https://restcountries.com/v2/all");
-        // const resData = response.data;
-        // debugger
         return response.data;
     }
 
@@ -110,7 +102,6 @@ const DocManager = () => {
                 : files[0].name
         );
     };
-
     const fileUploadSubmit = (e) => {
         e.preventDefault();
         setFormErrors(validate(initialValues));
@@ -120,8 +111,6 @@ const DocManager = () => {
             }, 1000);
         }
     };
-
-
     return (
         <>
             <div className='primary_container'>
@@ -161,7 +150,6 @@ const DocManager = () => {
                                                 <img src={search} alt="search" />
                                             </span>
                                         )}
-
                                     </div>
                                     <button className="uploadBtn" onClick={handleUploadClick}>
                                         Upload <span className="arrow"></span>

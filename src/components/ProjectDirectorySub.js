@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 
 const ProjectDirectorySub = (props) => {
   const { _id , Photos,projectName } = props.sendContact;
-  localStorage.setItem("id", _id);
-  console.log("prijectdirectorySub", props);
   const arrayBufferToBase64 = (buffer) => {
     let binary = "";
     let bytes = new Uint8Array(buffer);
@@ -17,9 +15,8 @@ const ProjectDirectorySub = (props) => {
   return (
     <Link
       className="create_card background_orange d_flex"
-      to={{pathname: `/myProject/${_id}`, state: { contact: props.sendContact } }}
+      to={{pathname: `/myProject/${_id}`}}
     >
-     
       <img
         className="photo_img"
         src={

@@ -1322,6 +1322,9 @@ padding:2rem 2rem 4rem !important;
   justify-content: space-between;
   align-items: center;
 }
+.select_sec.onphase{
+  margin: 0rem 0 0 !important;
+}
 .selectBar {
    position: relative;
    width: auto;
@@ -1332,6 +1335,10 @@ padding:2rem 2rem 4rem !important;
    background: var(--white);
    overflow: hidden;
    border-radius: .25em;
+}
+.selectBar.onphase{
+  width: 200px !important;
+  padding: 0.3rem .5rem 0.3rem !important;
 }
 .select_sec::after {
   content: "";
