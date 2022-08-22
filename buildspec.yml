@@ -4,6 +4,7 @@ phases:
   pre_build:
     commands:
       - npm install
+      - npm install axios --save
   build:
     commands:
       - npm run build
