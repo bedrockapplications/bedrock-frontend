@@ -5,8 +5,6 @@ import DashboardHeader from "./dashboard_header";
 import DashboardLeft from "./dashboard_left";
 import ProjectDirectorySub from "./ProjectDirectorySub";
 
-
-
 const ProjectDirectory = (props) => {
   const [selectedProject, setSelectedProject] = useState([]);
 
