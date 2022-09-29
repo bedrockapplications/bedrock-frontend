@@ -10,7 +10,6 @@ import CompanyInfo from "../components/companyInfo";
 import ForgotPassword from "../components/forgotPassword";
 import Billing from "../components/billing";
 import ResetPassword from "../components/resetPassword";
-
 import CreateProject from "../components/createProject";
 import DocManager from "../components/docManager";
 import MyProject from "../components/myProject";
@@ -18,12 +17,6 @@ import ProjectDirectory from "../components/projectDirectory";
 
 import MyProjects from "../pages/MyProjects";
 import Dashboard from "../pages/Dashboard";
-
-
-
-
-
-
 
 export const routes = (
   <Switch>
@@ -35,6 +28,8 @@ export const routes = (
     <PublicRoute exact path="/billing" component={Billing} />
     <PublicRoute exact path="/resetpassword" component={ResetPassword} />
     <PrivateRoute exact path="/dashboard" component={Dashboard} />
+    <PrivateRoute exact path="/projectDirectory" component={ProjectDirectory} />
+    
     <PrivateRoute exact path="/myprojects" component={MyProjects} />
     <PrivateRoute exact path="/createProject" component={CreateProject} />
     <PrivateRoute exact path="/myProject/:id" component={MyProject} />

@@ -113,7 +113,7 @@ const AppBar = styled(MuiAppBar, {
 })(({ theme, open }) => ({
   width: `calc(100% - 65px)`,
   zIndex: theme.zIndex.drawer + 1,
-  backgroundColor: "#ecf1f5",
+  backgroundColor: "#d7d6db",
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -182,7 +182,6 @@ export default function MiniDrawer(props) {
       } else if (hrs > 20 && hrs <= 24) {
         setDayState("Good Night");
       }
-      console.log("time", time);
     }, 1000);
   };
 

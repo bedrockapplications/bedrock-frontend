@@ -6,6 +6,8 @@ import cloud from "../../Images/CLoud.png";
 import crane from "../../Images/crane.png";
 import { makeStyles } from "@mui/styles";
 import Paper from "@mui/material/Paper";
+import Checkbox from "@mui/material/Checkbox";
+import { Stack } from "@mui/system";
 
 const useStyle = makeStyles(() => ({
   employeeImg: {
@@ -34,6 +36,35 @@ const useStyle = makeStyles(() => ({
     alignItems: "center",
   },
 }));
+
+const list = [
+  {
+    time: "8:00 AM",
+    meetingTitle: "City of Atlanta Inspection",
+    subTitle: "Meet them at the gallery first; then take them to Lunch",
+    isChecked: false,
+  },
+  {
+    time: "10:00 AM",
+    meetingTitle: "Fire Dept Inspection",
+    subTitle: "Meet them at the gallery first; then take them to Lunch",
+    isChecked: false,
+  },
+  {
+    time: "3:00 PM",
+    meetingTitle: "Prepare for Full Team Meeting Tomorrow",
+    subTitle: "Meet them at the gallery first; then take them to Lunch",
+    isChecked: false,
+  },
+  {
+    time: "6:00 PM",
+    meetingTitle: "Complete Daily Log before Closing Out",
+    subTitle: "Meet them at the gallery first; then take them to Lunch",
+    isChecked: false,
+  },
+];
+
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const Dashboard = () => {
   const classes = useStyle();
@@ -79,6 +110,55 @@ const Dashboard = () => {
           </Grid>
         </Grid>
         <Grid item xs={12}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={12} md={8} lg={8}>
+              <Paper sx={{ p: "1rem", backgroundColor: "#f3f2f7" }}>
+                <Box>
+                  <Typography
+                    variant="h6"
+                    fontWeight={600}
+                    sx={{ textShadow: "1px 0px #242b3c" }}
+                  >
+                    Today's Tasks
+                  </Typography>
+                </Box>
+                <Box sx={{ height: "55vh", overflowY: "auto", p: "5px" }}>
+                  {list.map((item, i) => (
+                    <Box
+                      sx={{
+                        backgroundColor: "#e6e5ea",
+                        p: "10px",
+                        m: "10px 0px",
+                        borderRadius: "5px",
+                      }}
+                      key={item?.meetingTitle}
+                    >
+                      <Stack
+                        direction="row"
+                        justifyContent="flex-start"
+                        alignItems="center"
+                        spacing={2}
+                      >
+                        <Checkbox {...label} />
+                        <Typography sx={{ textAlign: "center" }}>
+                          {item.time}
+                        </Typography>
+                        <Box>
+                          <Typography>{item.meetingTitle}</Typography>
+                          <Typography>{item.subTitle}</Typography>
+                        </Box>
+                      </Stack>
+                    </Box>
+                  ))}
+                </Box>
+              </Paper>
+            </Grid>
+            <Grid item xs={12} sm={12} md={4} lg={4}>
+              <Paper sx={{ p: "1rem", backgroundColor: "#f3f2f7" }}></Paper>
+            </Grid>
+          </Grid>
+        </Grid>
+        {/* <Grid item xs={12}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <Paper
@@ -141,7 +221,7 @@ const Dashboard = () => {
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
+        </Grid> */}
       </Grid>
     </>
   );

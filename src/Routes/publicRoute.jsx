@@ -7,8 +7,7 @@ const PublicRoute = (props) => {
     <Route
       {...rest}
       render={(routeProps) =>
-        localStorage.getItem("userId") &&
-        JSON.parse(localStorage.getItem("userId")) ? (
+        localStorage.getItem("userId") && localStorage.getItem("userId") ? (
           <Redirect
             to={{
               pathname: "/dashboard",
