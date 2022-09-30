@@ -1,13 +1,24 @@
-import React from "react";
-import Typography from "@mui/material/Typography";
-import { Grid, Box } from "@mui/material";
+import React, { useEffect, useState } from "react";
+
+import { getTodayTasksApi } from "../../services/request";
+
 import employee from "../../Images/employee.png";
 import cloud from "../../Images/CLoud.png";
 import crane from "../../Images/crane.png";
 import { makeStyles } from "@mui/styles";
-import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
-import { Stack } from "@mui/system";
+import TaskDetails from "./TaskDetails";
+import ContactPageOutlinedIcon from "@mui/icons-material/ContactPageOutlined";
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import {
+  Grid,
+  Box,
+  IconButton,
+  Stack,
+  Paper,
+  Typography,
+  Tooltip,
+} from "@mui/material";
 
 const useStyle = makeStyles(() => ({
   employeeImg: {
@@ -35,31 +46,55 @@ const useStyle = makeStyles(() => ({
     justifyContent: "center",
     alignItems: "center",
   },
+  taskList: {
+    backgroundColor: "#e6e5ea",
+    padding: "10px",
+    margin: "10px 0px",
+    borderRadius: "5px",
+    cursor: "pointer",
+  },
+  taskTitle: {
+    fontSize: "14px",
+    fontWeight: "600 !important",
+  },
+  taskSubTitle: {
+    fontSize: "11px !important",
+    fontWeight: "600 !important",
+  },
+  timeText: {
+    fontSize: "14px !important",
+    whiteSpace: "nowrap",
+  },
+  timeWapper: {
+    width: "5rem",
+    marginLeft: "0px !important",
+    textAlign: "center",
+  },
 }));
 
 const list = [
   {
     time: "8:00 AM",
     meetingTitle: "City of Atlanta Inspection",
-    subTitle: "Meet them at the gallery first; then take them to Lunch",
+    subTitle: "Meet them at the gallery first; then take them to lunch",
     isChecked: false,
   },
   {
     time: "10:00 AM",
     meetingTitle: "Fire Dept Inspection",
-    subTitle: "Meet them at the gallery first; then take them to Lunch",
+    subTitle: "",
     isChecked: false,
   },
   {
     time: "3:00 PM",
     meetingTitle: "Prepare for Full Team Meeting Tomorrow",
-    subTitle: "Meet them at the gallery first; then take them to Lunch",
+    subTitle: "",
     isChecked: false,
   },
   {
     time: "6:00 PM",
     meetingTitle: "Complete Daily Log before Closing Out",
-    subTitle: "Meet them at the gallery first; then take them to Lunch",
+    subTitle: "",
     isChecked: false,
   },
 ];
@@ -67,7 +102,41 @@ const list = [
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const Dashboard = () => {
+  const userId = localStorage.getItem("userId");
   const classes = useStyle();
+  const [showTask, setShowTask] = useState(false);
+  const [taskDetails, setTaskDetails] = useState(null);
+  const [detailsList, setDetailsList] = useState([]);
+
+  const handleShowDetails = (item) => {
+    if (item) {
+      setTaskDetails({ ...item });
+      setShowTask(true);
+    }
+  };
+  const handleHideDetails = () => {
+    setShowTask(null);
+    setShowTask(false);
+  };
+
+  const getAllTasksList = () => {
+    if (userId) {
+      getTodayTasksApi(userId)
+        .then((res) => {
+          if (res.status === 200) {
+            console.log(res.data);
+            setDetailsList([...list]);
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    }
+  };
+
+  useEffect(() => {
+    getAllTasksList();
+  }, []);
 
   return (
     <>
@@ -76,7 +145,7 @@ const Dashboard = () => {
           <Grid
             container
             sx={{
-              background: "#242b3c",
+              background: "#3a3a3c",
               paddingLeft: "2rem",
               borderRadius: "15px",
             }}
@@ -111,9 +180,13 @@ const Dashboard = () => {
         </Grid>
         <Grid item xs={12}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={12} md={8} lg={8}>
+            <Grid item xs={12} sm={12} md={9} lg={9}>
               <Paper sx={{ p: "1rem", backgroundColor: "#f3f2f7" }}>
-                <Box>
+                <Stack
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
                   <Typography
                     variant="h6"
                     fontWeight={600}
@@ -121,17 +194,29 @@ const Dashboard = () => {
                   >
                     Today's Tasks
                   </Typography>
-                </Box>
+                  <Box>
+                    <IconButton color="primary" size="small">
+                      <Tooltip title="Add Tasks">
+                        <AddCircleOutlineOutlinedIcon />
+                      </Tooltip>
+                    </IconButton>
+                    <IconButton
+                      color="primary"
+                      size="small"
+                      onClick={handleHideDetails}
+                    >
+                      <Tooltip title="View Contacts">
+                        <ContactPageOutlinedIcon />
+                      </Tooltip>
+                    </IconButton>
+                  </Box>
+                </Stack>
                 <Box sx={{ height: "55vh", overflowY: "auto", p: "5px" }}>
-                  {list.map((item, i) => (
+                  {detailsList?.map((item, i) => (
                     <Box
-                      sx={{
-                        backgroundColor: "#e6e5ea",
-                        p: "10px",
-                        m: "10px 0px",
-                        borderRadius: "5px",
-                      }}
+                      className={classes.taskList}
                       key={item?.meetingTitle}
+                      onClick={() => handleShowDetails(item)}
                     >
                       <Stack
                         direction="row"
@@ -139,13 +224,24 @@ const Dashboard = () => {
                         alignItems="center"
                         spacing={2}
                       >
-                        <Checkbox {...label} />
-                        <Typography sx={{ textAlign: "center" }}>
-                          {item.time}
-                        </Typography>
+                        <Checkbox
+                          {...label}
+                          onClick={(event) => {
+                            event.stopPropagation();
+                          }}
+                        />
+                        <Box className={classes.timeWapper}>
+                          <Typography className={classes.timeText}>
+                            {item.time}
+                          </Typography>
+                        </Box>
                         <Box>
-                          <Typography>{item.meetingTitle}</Typography>
-                          <Typography>{item.subTitle}</Typography>
+                          <Typography className={classes.taskTitle}>
+                            {item.meetingTitle}
+                          </Typography>
+                          <Typography className={classes.taskSubTitle}>
+                            {item.subTitle}
+                          </Typography>
                         </Box>
                       </Stack>
                     </Box>
@@ -153,75 +249,15 @@ const Dashboard = () => {
                 </Box>
               </Paper>
             </Grid>
-            <Grid item xs={12} sm={12} md={4} lg={4}>
-              <Paper sx={{ p: "1rem", backgroundColor: "#f3f2f7" }}></Paper>
+            <Grid item xs={12} sm={12} md={3} lg={3}>
+              <Paper
+                sx={{ p: "1rem", backgroundColor: "#f3f2f7", height: "64.8vh" }}
+              >
+                {showTask ? <TaskDetails details={taskDetails} /> : null}
+              </Paper>
             </Grid>
           </Grid>
         </Grid>
-        {/* <Grid item xs={12}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={12} md={6} lg={6}>
-              <Paper
-                elevation={0}
-                className={classes.paper}
-                sx={{ height: "420px" }}
-              >
-                <Typography
-                  fontWeight={600}
-                  sx={{ width: "50%", textAlign: "center" }}
-                >
-                  Place Holder for something importan Consult W/Team
-                </Typography>
-              </Paper>
-            </Grid>
-            <Grid item xs={12} sm={12} md={6} lg={6}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Paper
-                    elevation={0}
-                    className={classes.paper}
-                    sx={{ height: "125px" }}
-                  >
-                    <Typography
-                      fontWeight={600}
-                      sx={{ width: "50%", textAlign: "center" }}
-                    >
-                      Place Holder for something importan Consult W/Team
-                    </Typography>
-                  </Paper>
-                </Grid>
-                <Grid item xs={12} sm={12} md={6} lg={6}>
-                  <Paper
-                    elevation={0}
-                    className={classes.paper}
-                    sx={{ height: "125px" }}
-                  >
-                    <Typography
-                      fontWeight={600}
-                      sx={{ width: "50%", textAlign: "center" }}
-                    >
-                      Place Holder for something importan Consult W/Team
-                    </Typography>
-                  </Paper>
-                </Grid>
-                <Grid item xs={12}>
-                  <Paper
-                    elevation={0}
-                    className={classes.paper}
-                    sx={{ height: "280px" }}
-                  >
-                    <Typography
-                      fontWeight={600}
-                      sx={{ width: "50%", textAlign: "center" }}
-                    >
-                      Place Holder for something importan Consult W/Team
-                    </Typography>
-                  </Paper>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid> */}
       </Grid>
     </>
   );

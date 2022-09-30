@@ -13,7 +13,7 @@ export const theme = createTheme({
     MuiDrawer: {
       styleOverrides: {
         paper: {
-          background: "#242b3c",
+          background: "#3a3a3c",
         },
       },
     },

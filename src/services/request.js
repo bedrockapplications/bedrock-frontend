@@ -1,6 +1,8 @@
 import axios from "./axiosConfig";
 
-
+export const getTodayTasksApi = async (uId) => {
+  return axios.get(`/project/getprojects?userId=${uId}`);
+};
 export const getAllProjectList = async (uId) => {
   return axios.get(`/project/getprojects?userId=${uId}`);
 };
