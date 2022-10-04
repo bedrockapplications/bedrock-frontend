@@ -1377,3 +1377,17 @@ p span.round::after {
   color: var(--signColor);
 }
 /* my project end */
+
+.css-q8hpuo-MuiFormControl-root{
+  margin-left: 1rem !important;
+  margin-top: .25rem !important;
+}
+
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input {
+  padding: 5px 10px !important;
+}
+.css-6oumdz-MuiTypography-root {
+  font-weight: 400 !important;
+  font-size: 0.9rem !important;
+  line-height: 1.2 !important;
+}

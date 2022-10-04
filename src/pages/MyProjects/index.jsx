@@ -1,8 +1,7 @@
 import React from "react";
 import { Grid, Paper, Typography } from "@mui/material";
 import { getAllProjectList } from "../../services/request";
-import { useEffect } from "react";
-import { useState } from "react";
+import {  useState,useEffect, useContext } from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -11,6 +10,7 @@ import plus from "../../Images/Plus.png";
 import { Box } from "@mui/system";
 import { CardActionArea } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
+import { Text, LanguageContext } from "../../containers/language";
 
 const MyProjects = () => {
   const uId = localStorage.getItem("userId");
@@ -48,9 +48,11 @@ const MyProjects = () => {
   }, []);
 
   const handleClickCard = () => {};
-
+  //language 
+  const { dictionary } = useContext(LanguageContext);
   return (
     <>
+
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Grid conatiner spacing={2}>
@@ -64,10 +66,10 @@ const MyProjects = () => {
               }}
             >
               <Typography variant="h4" color="#fff" fontWeight="600">
-                Project Directory
+                <Text tid="exploreHeader" />
               </Typography>
               <Typography variant="h6" color="#fff">
-                Ongoing Projects
+                <Text tid="description"/>
               </Typography>
             </Grid>
           </Grid>
@@ -87,7 +89,7 @@ const MyProjects = () => {
                 </Box>
                 <Box sx={{ textAlign: "center" }}>
                   <Typography color="#FFF" fontWeight={600}>
-                    Create A Project
+                    <Text tid="buttontxt"/>
                   </Typography>
                 </Box>
               </CardContent>
@@ -117,6 +119,7 @@ const MyProjects = () => {
                   </Box>
                   <Box sx={{ textAlign: "center", margin: "4px 0px" }}>
                     <Typography color="#FFF" fontWeight={600}>
+                      
                       {item?.projectName}
                     </Typography>
                   </Box>

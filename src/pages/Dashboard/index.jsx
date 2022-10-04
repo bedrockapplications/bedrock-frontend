@@ -8,6 +8,7 @@ import { makeStyles } from "@mui/styles";
 import Paper from "@mui/material/Paper";
 import Checkbox from "@mui/material/Checkbox";
 import { Stack } from "@mui/system";
+import LanguageSelector from "../../components/languageSelector";
 
 const useStyle = makeStyles(() => ({
   employeeImg: {
@@ -81,6 +82,7 @@ const Dashboard = () => {
               borderRadius: "15px",
             }}
           >
+            
             <Grid item xs={2} className={classes.employeeImg}>
               <img
                 src={employee}

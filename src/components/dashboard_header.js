@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+
 import notification from "../Images/notification.png";
 import avatar from "../Images/avatar.png";
 import { Link } from "react-router-dom";
+import LanguageSelector from "./languageSelector";
 
 const DashboardHeader = ({ userName }) => {
 
@@ -61,7 +63,7 @@ const DashboardHeader = ({ userName }) => {
                         </p>
                     </li>
                     <li>
-                        <p>English (US)</p>
+                        <LanguageSelector/>
                     </li>
                 </ul>
             </div>
