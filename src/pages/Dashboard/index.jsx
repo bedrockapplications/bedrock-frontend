@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, memo } from "react";
 
 import { getTodayTasksApi } from "../../services/request";
 
@@ -6,10 +6,11 @@ import employee from "../../Images/employee.png";
 import cloud from "../../Images/CLoud.png";
 import crane from "../../Images/crane.png";
 import { makeStyles } from "@mui/styles";
-import Checkbox from "@mui/material/Checkbox";
 import TaskDetails from "./TaskDetails";
-import ContactPageOutlinedIcon from "@mui/icons-material/ContactPageOutlined";
-import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
+import CreateNewTask from "./CreateNewTask";
+import DirectContact from "./DirectContact";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import ContactPageIcon from "@mui/icons-material/ContactPage";
 import {
   Grid,
   Box,
@@ -18,7 +19,13 @@ import {
   Paper,
   Typography,
   Tooltip,
+  DialogContent,
+  DialogActions,
+  Button,
+  Divider,
 } from "@mui/material";
+import CancelIcon from "@mui/icons-material/Cancel";
+import MuiDialog from "../../components/MuiDialog";
 
 const useStyle = makeStyles(() => ({
   employeeImg: {
@@ -99,24 +106,58 @@ const list = [
   },
 ];
 
+const contactList = [
+  {
+    name: "Fuad Hossain",
+    role: "Architect",
+    mail: "Fuad123@gmail.com",
+    mobile: "1234567890",
+  },
+  {
+    name: "Ganesh",
+    role: "Architect",
+    mail: "ganesh123@gmail.com",
+    mobile: "1234567890",
+  },
+  {
+    name: "Srikanth",
+    role: "Architect",
+    mail: "Srikanth123@gmail.com",
+    mobile: "1234567890",
+  },
+  {
+    name: "Mayuran",
+    role: "Architect",
+    mail: "Fuad123@gmail.com",
+    mobile: "1234567890",
+  },
+];
+
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const Dashboard = () => {
   const userId = localStorage.getItem("userId");
   const classes = useStyle();
-  const [showTask, setShowTask] = useState(false);
+  const [show, setShow] = useState("Direct Contact");
   const [taskDetails, setTaskDetails] = useState(null);
   const [detailsList, setDetailsList] = useState([]);
+  const [openCancle, setOpenCancle] = useState(false);
+  const [cancleItem, setCancleItem] = useState(null);
+  const [contactDetails, setContactDetails] = useState([]);
 
   const handleShowDetails = (item) => {
     if (item) {
       setTaskDetails({ ...item });
-      setShowTask(true);
+      setShow("Details");
     }
   };
   const handleHideDetails = () => {
-    setShowTask(null);
-    setShowTask(false);
+    setTaskDetails(null);
+    setShow("Direct Contact");
+  };
+
+  const handleShowTaskForm = () => {
+    setShow("Add Task");
   };
 
   const getAllTasksList = () => {
@@ -124,8 +165,8 @@ const Dashboard = () => {
       getTodayTasksApi(userId)
         .then((res) => {
           if (res.status === 200) {
-            console.log(res.data);
             setDetailsList([...list]);
+            setContactDetails([...contactList]);
           }
         })
         .catch((error) => {
@@ -137,6 +178,16 @@ const Dashboard = () => {
   useEffect(() => {
     getAllTasksList();
   }, []);
+
+  const handleCancleTask = (event, item) => {
+    event.stopPropagation();
+    setOpenCancle(true);
+    setCancleItem({ ...item });
+  };
+
+  const handleCloseCancleModel = () => {
+    setOpenCancle(false);
+  };
 
   return (
     <>
@@ -180,8 +231,8 @@ const Dashboard = () => {
         </Grid>
         <Grid item xs={12}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={12} md={9} lg={9}>
-              <Paper sx={{ p: "1rem", backgroundColor: "#f3f2f7" }}>
+            <Grid item xs={12} sm={12} md={8} lg={8}>
+              <Paper sx={{ p: "0.75rem", backgroundColor: "#f3f2f7" }}>
                 <Stack
                   direction="row"
                   justifyContent="space-between"
@@ -195,9 +246,13 @@ const Dashboard = () => {
                     Today's Tasks
                   </Typography>
                   <Box>
-                    <IconButton color="primary" size="small">
+                    <IconButton
+                      color="primary"
+                      size="small"
+                      onClick={handleShowTaskForm}
+                    >
                       <Tooltip title="Add Tasks">
-                        <AddCircleOutlineOutlinedIcon />
+                        <AddCircleIcon />
                       </Tooltip>
                     </IconButton>
                     <IconButton
@@ -206,7 +261,7 @@ const Dashboard = () => {
                       onClick={handleHideDetails}
                     >
                       <Tooltip title="View Contacts">
-                        <ContactPageOutlinedIcon />
+                        <ContactPageIcon />
                       </Tooltip>
                     </IconButton>
                   </Box>
@@ -224,12 +279,12 @@ const Dashboard = () => {
                         alignItems="center"
                         spacing={2}
                       >
-                        <Checkbox
-                          {...label}
-                          onClick={(event) => {
-                            event.stopPropagation();
-                          }}
-                        />
+                        <IconButton
+                          size="small"
+                          onClick={(event) => handleCancleTask(event, item)}
+                        >
+                          <CancelIcon />
+                        </IconButton>
                         <Box className={classes.timeWapper}>
                           <Typography className={classes.timeText}>
                             {item.time}
@@ -249,16 +304,54 @@ const Dashboard = () => {
                 </Box>
               </Paper>
             </Grid>
-            <Grid item xs={12} sm={12} md={3} lg={3}>
+            <Grid item xs={12} sm={12} md={4} lg={4}>
               <Paper
-                sx={{ p: "1rem", backgroundColor: "#f3f2f7", height: "64.8vh" }}
+                sx={{
+                  p: "0.75rem",
+                  backgroundColor: "#f3f2f7",
+                  height: "64vh",
+                }}
               >
-                {showTask ? <TaskDetails details={taskDetails} /> : null}
+                {show === "Direct Contact" ? (
+                  <DirectContact list={contactDetails} />
+                ) : show === "Add Task" ? (
+                  <CreateNewTask />
+                ) : (
+                  <TaskDetails details={taskDetails} />
+                )}
               </Paper>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
+      <MuiDialog
+        open={openCancle}
+        handleClose={handleCloseCancleModel}
+        id={"cancelTask"}
+        title={"Cancel Task"}
+      >
+        <Divider />
+        <DialogContent>
+          <Typography fontSize={14} fontWeight={500}>
+            Are you sure You want to Cancel{" "}
+            <Typography
+              variant="span"
+              fontWeight={600}
+              sx={{ textDecoration: "underline" }}
+            >
+              {cancleItem?.meetingTitle}{" "}
+            </Typography>{" "}
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleCloseCancleModel}>
+            No
+          </Button>
+          <Button onClick={handleCloseCancleModel} autoFocus>
+            Yes
+          </Button>
+        </DialogActions>
+      </MuiDialog>
     </>
   );
 };

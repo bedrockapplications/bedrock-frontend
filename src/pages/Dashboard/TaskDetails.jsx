@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { makeStyles } from "@mui/styles";
 import FilePresentOutlinedIcon from "@mui/icons-material/FilePresentOutlined";
 import { Box, Typography } from "@mui/material";
@@ -40,4 +40,4 @@ const TaskDetails = (props) => {
     </>
   );
 };
-export default TaskDetails;
+export default memo(TaskDetails);

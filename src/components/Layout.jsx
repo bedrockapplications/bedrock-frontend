@@ -75,7 +75,6 @@ const sideLinks = [
     link: "/myprojects",
   },
   { icon: <DescriptionIcon />, label: "Document Manager", link: "/docManager" },
-  // { icon: <CalendarMonthIcon />, label: "Tasks/Calendar",},
 ];
 
 const openedMixin = (theme) => ({
