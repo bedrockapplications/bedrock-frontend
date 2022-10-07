@@ -32,6 +32,12 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import dotted_img from "../Images/Dotted Circles.png";
 import { NavLink as RouterLink } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
+import { useTranslation } from "react-i18next";
+import { Button } from "@mui/material";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import TranslateIcon from "@mui/icons-material/Translate";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 
 const drawerWidth = 240;
 
@@ -67,14 +73,19 @@ const useStyle = makeStyles(() => ({
   },
 }));
 
+const LanguagesList = [
+  { label: "English", code: "en" },
+  { label: "Français", code: "fr" },
+];
+
 const sideLinks = [
-  { icon: <DashboardIcon />, label: "Dashboard", link: "/dashboard" },
+  { icon: <DashboardIcon />, label: "dashboard", link: "/dashboard" },
   {
     icon: <EngineeringIcon />,
-    label: "My Projects",
+    label: "my_projects",
     link: "/myprojects",
   },
-  { icon: <DescriptionIcon />, label: "Document Manager", link: "/docManager" },
+  { icon: <DescriptionIcon />, label: "document_manager", link: "/docManager" },
 ];
 
 const openedMixin = (theme) => ({
@@ -145,13 +156,19 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
+const ITEM_HEIGHT = 48;
+
 export default function MiniDrawer(props) {
+  const { i18n, t } = useTranslation();
   const theme = useTheme();
   const classes = useStyle();
   const userName = localStorage.getItem("userName");
   const [open, setOpen] = React.useState(true);
   const [clockState, setClockState] = useState("");
   const [dayState, setDayState] = useState("");
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [selected, setSelectedIndex] = React.useState({});
+  const openLang = Boolean(anchorEl);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -173,39 +190,103 @@ export default function MiniDrawer(props) {
       setClockState(time);
       let hrs = date.getHours();
       if (hrs < 12) {
-        setDayState("Good Morning");
+        setDayState("good_morning");
       } else if (hrs >= 12 && hrs <= 15) {
-        setDayState("Good Afternoon");
+        setDayState("good_afternoon");
       } else if (hrs > 15 && hrs <= 20) {
-        setDayState("Good Evening");
+        setDayState("good_evening");
       } else if (hrs > 20 && hrs <= 24) {
-        setDayState("Good Night");
+        setDayState("good_night");
       }
     }, 1000);
   };
 
+  // const getCookie = (key) => {
+  //   let b = document?.cookie?.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
+  //   if (b?.pop() !== "") {
+  //     setSelectedIndex(
+  //       LanguagesList?.filter((item, i) => item.code === b?.pop())
+  //     );
+  //   } else {
+  //     setSelectedIndex({ label: "English", code: "en" });
+  //   }
+  //   // return b ? b.pop() : "";
+  // };
+
   useEffect(() => {
     GetDateAndTime();
+    // getCookie("i18next");
   }, []);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuItemClick = (item) => {
+    i18n.changeLanguage(item.code);
+    setSelectedIndex(item);
+    setAnchorEl(null);
+  };
 
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar elevation={0} position="fixed" open={open}>
         <Toolbar>
           <Box sx={{ width: "60%", display: { xs: "none", md: "flex" } }}>
-            <Box>
+            <Box sx={{ minWidth: "205px", marginRight: "1.5rem" }}>
               <Typography color="primary" className={classes.dayText}>
                 {dayState === "Good Night" ? (
                   <CircleIcon fontSize="small" />
                 ) : (
                   <WbSunnyIcon fontSize="small" sx={{ color: "orange" }} />
                 )}
-                {`${dayState}`}
+                {t(dayState)}
               </Typography>
               <Typography color="primary" className={classes.timeText}>
                 {`${new Date()?.toDateString()} ${clockState}`}
               </Typography>
             </Box>
+            {/* <Button
+              id="demo-customized-button"
+              aria-controls={openLang ? "demo-customized-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={openLang ? "true" : undefined}
+              disableElevation
+              onClick={handleClick}
+              endIcon={<KeyboardArrowDownIcon fontSize="small" />}
+              startIcon={<TranslateIcon />}
+              size="small"
+              sx={{ textTransform: "capitalize" }}
+            >
+              {
+                LanguagesList?.filter(
+                  (lang) => lang?.code === localStorage?.getItem("i18nextLng")
+                )[0]?.label
+              }
+            </Button> */}
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={openLang}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+              PaperProps={{
+                style: {
+                  maxHeight: ITEM_HEIGHT * 4.5,
+                  width: "15ch",
+                },
+              }}
+            >
+              {LanguagesList?.map((option) => (
+                <MenuItem
+                  key={option?.code}
+                  onClick={() => handleMenuItemClick(option)}
+                >
+                  {option?.label}
+                </MenuItem>
+              ))}
+            </Menu>
           </Box>
           <Box
             sx={{
@@ -291,7 +372,7 @@ export default function MiniDrawer(props) {
                     color: "#fff",
                   }}
                 >
-                  <Tooltip title={list?.label} placement="right-start">
+                  <Tooltip title={t(list?.label)} placement="right-start">
                     <ListItemIcon
                       sx={{
                         minWidth: 0,
@@ -304,7 +385,7 @@ export default function MiniDrawer(props) {
                     </ListItemIcon>
                   </Tooltip>
                   <ListItemText
-                    primary={list?.label}
+                    primary={t(list?.label)}
                     sx={{ opacity: open ? 1 : 0 }}
                   />
                 </ListItemButton>

@@ -9,6 +9,7 @@ import MuiTimePicker from "../../components/Formik/MuiTimePicker";
 import { format } from "date-fns";
 import MuiTextArea from "../../components/Formik/MuiTextArea";
 import TranslateIcon from "@mui/icons-material/Translate";
+import { useTranslation } from "react-i18next";
 
 const validationSchema = Yup.object().shape({
   taskName: Yup.string().required().nullable(),
@@ -21,11 +22,18 @@ const validationSchema = Yup.object().shape({
 });
 
 const CreateNewTask = (props) => {
+  const { t } = useTranslation();
   return (
     <Box>
       <Grid container spacing={1}>
         <Grid item xs={12}>
-          <Typography>Create Tasks</Typography>
+          <Typography
+            variant="h6"
+            fontWeight={600}
+            sx={{ textShadow: "1px 0px #242b3c" }}
+          >
+            {t("create_task")}
+          </Typography>
         </Grid>
         <Grid item xs={12}>
           <Formik
@@ -51,14 +59,14 @@ const CreateNewTask = (props) => {
                     <MuiTextField
                       name="taskName"
                       id="taskName"
-                      label="Task Name"
+                      label={t("task_name")}
                     />
                   </Grid>
                   <Grid item xs={6}>
                     <MuiDatePicker
                       name="startDate"
                       id="startDate"
-                      label="Start Date"
+                      label={t("start_date")}
                       disablePast
                       value={values?.startDate}
                     />
@@ -67,7 +75,7 @@ const CreateNewTask = (props) => {
                     <MuiDatePicker
                       name="endDate"
                       id="endDate"
-                      label="End Date"
+                      label={t("end_date")}
                       disablePast
                       disabled={values?.startDate === null}
                       minDate={values?.startDate}
@@ -78,7 +86,7 @@ const CreateNewTask = (props) => {
                     <MuiTimePicker
                       name="startTime"
                       id="startTime"
-                      label="Start Time"
+                      label={t("start_time")}
                       disablePast
                       value={values?.startTime}
                     />
@@ -87,7 +95,7 @@ const CreateNewTask = (props) => {
                     <MuiTimePicker
                       name="endTime"
                       id="endTime"
-                      label="End Time"
+                      label={t("end_time")}
                       disablePast
                       value={values?.endTime}
                     />
@@ -96,11 +104,11 @@ const CreateNewTask = (props) => {
                     <MuiTextField
                       name="partiesInvolved"
                       id="partiesInvolved"
-                      label="Parties Involved"
+                      label={t("parties_involved")}
                     />
                   </Grid>
                   <Grid item xs={12}>
-                    <MuiTextArea name="notes" id="notes" label="Notes" />
+                    <MuiTextArea name="notes" id="notes" label={t("notes")} />
                   </Grid>
                   <Grid item xs={12} sx={{ textAlign: "right" }}>
                     <Button
@@ -109,7 +117,7 @@ const CreateNewTask = (props) => {
                       size="small"
                       disabled={!isValid || isSubmitting}
                     >
-                      Create Task
+                      {t("create_task")}
                     </Button>
                   </Grid>
                 </Grid>

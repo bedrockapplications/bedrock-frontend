@@ -7,8 +7,10 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import { Grid, Typography } from "@mui/material";
 import Profile from "../../Images/avatar.png";
+import { useTranslation } from "react-i18next";
 
 const DirectContact = (props) => {
+  const { t } = useTranslation();
   const { list } = props;
   return (
     <>
@@ -19,7 +21,7 @@ const DirectContact = (props) => {
             fontWeight={600}
             sx={{ textShadow: "1px 0px #242b3c" }}
           >
-            Direct Contact
+            {t("direct_contacts")}
           </Typography>
         </Grid>
         <Grid

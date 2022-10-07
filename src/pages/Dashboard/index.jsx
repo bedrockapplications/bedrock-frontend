@@ -26,6 +26,7 @@ import {
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import MuiDialog from "../../components/MuiDialog";
+import { useTranslation } from "react-i18next";
 
 const useStyle = makeStyles(() => ({
   employeeImg: {
@@ -136,6 +137,7 @@ const contactList = [
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const Dashboard = () => {
+  const { t } = useTranslation();
   const userId = localStorage.getItem("userId");
   const classes = useStyle();
   const [show, setShow] = useState("Direct Contact");
@@ -243,7 +245,7 @@ const Dashboard = () => {
                     fontWeight={600}
                     sx={{ textShadow: "1px 0px #242b3c" }}
                   >
-                    Today's Tasks
+                    {t("today's_tasks")}
                   </Typography>
                   <Box>
                     <IconButton
@@ -251,7 +253,7 @@ const Dashboard = () => {
                       size="small"
                       onClick={handleShowTaskForm}
                     >
-                      <Tooltip title="Add Tasks">
+                      <Tooltip title={t("create_task")}>
                         <AddCircleIcon />
                       </Tooltip>
                     </IconButton>
@@ -260,7 +262,7 @@ const Dashboard = () => {
                       size="small"
                       onClick={handleHideDetails}
                     >
-                      <Tooltip title="View Contacts">
+                      <Tooltip title={t("direct_contacts")}>
                         <ContactPageIcon />
                       </Tooltip>
                     </IconButton>
@@ -328,7 +330,7 @@ const Dashboard = () => {
         open={openCancle}
         handleClose={handleCloseCancleModel}
         id={"cancelTask"}
-        title={"Cancel Task"}
+        title={t("cancel_task")}
       >
         <Divider />
         <DialogContent>
