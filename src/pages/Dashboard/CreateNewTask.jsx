@@ -1,15 +1,14 @@
 import React from "react";
-import { Formik, Form, FastField } from "formik";
+import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import MuiTextField from "../../components/Formik/MuiTextField";
 import moment from "moment";
 import { Grid, Typography, TextField, Box, Button } from "@mui/material";
 import MuiDatePicker from "../../components/Formik/MuiDatePicker";
 import MuiTimePicker from "../../components/Formik/MuiTimePicker";
-import { format } from "date-fns";
 import MuiTextArea from "../../components/Formik/MuiTextArea";
-import TranslateIcon from "@mui/icons-material/Translate";
 import { useTranslation } from "react-i18next";
+import { createMeetingApi } from "../../services/request";
 
 const validationSchema = Yup.object().shape({
   taskName: Yup.string().required().nullable(),
@@ -22,7 +21,10 @@ const validationSchema = Yup.object().shape({
 });
 
 const CreateNewTask = (props) => {
+  const { getAllTasksList } = props;
   const { t } = useTranslation();
+  const userId = localStorage.getItem("userId");
+
   return (
     <Box>
       <Grid container spacing={1}>
@@ -48,8 +50,28 @@ const CreateNewTask = (props) => {
             }}
             enableReinitialize
             validationSchema={validationSchema}
-            onSubmit={(values, { setSubmitting }) => {
-              console.log("values", values);
+            onSubmit={(values, { setSubmitting, resetForm }) => {
+              let payload = {
+                title: values.taskName,
+                description: values.notes,
+                startDate: moment(values.startDate).format("YYYY-MM-DD"),
+                endDate: moment(values.endDate).format("YYYY-MM-DD"),
+                startTime: moment(values.startTime).format("hh:mm A"),
+                endTime: moment(values.endTime).format("hh:mm A"),
+                userId: userId,
+              };
+              createMeetingApi(payload)
+                .then((res) => {
+                  if (res.status === 200) {
+                    getAllTasksList();
+                    resetForm();
+                    setSubmitting(false);
+                  }
+                })
+                .catch((error) => {
+                  console.log("error", error);
+                  setSubmitting(false);
+                });
             }}
           >
             {({ values, isValid, isSubmitting, setFieldValue }) => (

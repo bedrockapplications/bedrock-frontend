@@ -71,11 +71,15 @@ const useStyle = makeStyles(() => ({
     height: "30px",
     marginRight: "0.62rem",
   },
+  link: {
+    textDecoration: "none",
+  },
 }));
 
 const LanguagesList = [
-  { label: "English", code: "en" },
-  { label: "Français", code: "fr" },
+  { label: "English", code: "US", local: "en" },
+  { label: "Français", code: "FR", local: "fr" },
+  { label: "Español", code: "ES", local: "es" },
 ];
 
 const sideLinks = [
@@ -167,11 +171,15 @@ export default function MiniDrawer(props) {
   const [clockState, setClockState] = useState("");
   const [dayState, setDayState] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selected, setSelectedIndex] = React.useState({});
+  const [selected, setSelectedIndex] = React.useState(
+    LanguagesList?.filter(
+      (lang) => lang?.local === localStorage?.getItem("i18nextLng")
+    )[0]
+  );
   const openLang = Boolean(anchorEl);
 
   const handleDrawerOpen = () => {
-    setOpen(true);
+    setOpen(!open);
   };
 
   const handleDrawerClose = () => {
@@ -201,21 +209,8 @@ export default function MiniDrawer(props) {
     }, 1000);
   };
 
-  // const getCookie = (key) => {
-  //   let b = document?.cookie?.match("(^|;)\\s*" + key + "\\s*=\\s*([^;]+)");
-  //   if (b?.pop() !== "") {
-  //     setSelectedIndex(
-  //       LanguagesList?.filter((item, i) => item.code === b?.pop())
-  //     );
-  //   } else {
-  //     setSelectedIndex({ label: "English", code: "en" });
-  //   }
-  //   // return b ? b.pop() : "";
-  // };
-
   useEffect(() => {
     GetDateAndTime();
-    // getCookie("i18next");
   }, []);
 
   const handleClick = (event) => {
@@ -223,7 +218,7 @@ export default function MiniDrawer(props) {
   };
 
   const handleMenuItemClick = (item) => {
-    i18n.changeLanguage(item.code);
+    i18n.changeLanguage(item.local);
     setSelectedIndex(item);
     setAnchorEl(null);
   };
@@ -246,7 +241,7 @@ export default function MiniDrawer(props) {
                 {`${new Date()?.toDateString()} ${clockState}`}
               </Typography>
             </Box>
-            {/* <Button
+            <Button
               id="demo-customized-button"
               aria-controls={openLang ? "demo-customized-menu" : undefined}
               aria-haspopup="true"
@@ -258,12 +253,8 @@ export default function MiniDrawer(props) {
               size="small"
               sx={{ textTransform: "capitalize" }}
             >
-              {
-                LanguagesList?.filter(
-                  (lang) => lang?.code === localStorage?.getItem("i18nextLng")
-                )[0]?.label
-              }
-            </Button> */}
+              {`${selected?.label}   (${selected?.code})`}
+            </Button>
             <Menu
               id="basic-menu"
               anchorEl={anchorEl}
@@ -275,15 +266,17 @@ export default function MiniDrawer(props) {
                 style: {
                   maxHeight: ITEM_HEIGHT * 4.5,
                   width: "15ch",
+                  backgroundColor: "#f3f2f7",
                 },
               }}
             >
               {LanguagesList?.map((option) => (
                 <MenuItem
                   key={option?.code}
+                  selected={option?.label === selected?.label}
                   onClick={() => handleMenuItemClick(option)}
                 >
-                  {option?.label}
+                  {`${option?.label}  (${option?.code})`}
                 </MenuItem>
               ))}
             </Menu>
@@ -313,9 +306,11 @@ export default function MiniDrawer(props) {
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
-          {/* <Box>
-            <img alt="logo" src={Bedrock_Black} className={classes.logo} />
-          </Box> */}
+          {open ? (
+            <Box>
+              <img alt="logo" src={Bedrock_Black} className={classes.logo} />
+            </Box>
+          ) : null}
 
           {!open ? (
             <IconButton
@@ -331,39 +326,47 @@ export default function MiniDrawer(props) {
             </IconButton>
           ) : (
             <>
-              <IconButton
-                onClick={handleDrawerClose}
-                size="small"
-                sx={{ color: "#fff" }}
-              >
-                {theme.direction === "rtl" ? (
-                  <ChevronRightIcon />
-                ) : (
-                  <ChevronLeftIcon />
-                )}
-              </IconButton>
+              <Box>
+                <IconButton
+                  onClick={handleDrawerClose}
+                  size="small"
+                  sx={{ color: "#fff" }}
+                >
+                  {theme.direction === "rtl" ? (
+                    <ChevronRightIcon />
+                  ) : (
+                    <ChevronLeftIcon />
+                  )}
+                </IconButton>
+              </Box>
             </>
           )}
         </DrawerHeader>
-        {/* <Box
-          sx={{
-            padding: "8px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <img alt="logo" src={dotted_img} className={classes.bottedImg} />
-          <Typography variant="h6" sx={{ color: "#fff", fontWeight: "600" }}>
-            Select Project
-          </Typography>
-        </Box> */}
         <Divider sx={{ color: "#fff" }} />
-
         <List>
+          {/* <ListItem
+            disablePadding
+            onClick={handleDrawerOpen}
+            sx={{ display: "block" }}
+          >
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+                color: "#fff",
+              }}
+            >
+              <MenuIcon />
+            </ListItemButton>
+          </ListItem> */}
           {sideLinks?.map((list, index) => (
-            <ListItem key={list.label} disablePadding sx={{ display: "block" }}>
-              <RouterLink exact to={list?.link}>
+            <ListItem
+              key={list?.label + index}
+              disablePadding
+              sx={{ display: "block" }}
+            >
+              <RouterLink exact to={list?.link} className={classes.link}>
                 <ListItemButton
                   sx={{
                     minHeight: 48,
@@ -401,5 +404,3 @@ export default function MiniDrawer(props) {
     </Box>
   );
 }
-
-// sx={{ minHeight: "48px !important" }}

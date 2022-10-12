@@ -17,5 +17,8 @@
   "start_time": "Start Time",
   "end_time": "End Time",
   "parties_involved": "Parties Involved",
-  "notes": "Notes"
+  "notes": "Notes",
+  "hi": "Hi {{name}}",
+  "you_completed": "You have completed 2 of your Projects this week, there are 3 Projects to go, keep on rolling and reach your goal!",
+  "0": ""
 }

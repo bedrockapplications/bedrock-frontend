@@ -25,7 +25,7 @@ const TaskDetails = (props) => {
   const { details } = props;
   return (
     <>
-      <Typography className={classes.title}>{details?.meetingTitle}</Typography>
+      <Typography className={classes.title}>{details?.title}</Typography>
       <Typography className={classes.text}>
         Supervisor, Sub-contractor, Owner
       </Typography>
@@ -34,7 +34,7 @@ const TaskDetails = (props) => {
       <Typography className={classes.text}>Notes:</Typography>
       <Box className={classes.noteContainer}>
         <Typography className={classes.text}>
-          {details?.subTitle || "---"}
+          {details?.description || "---"}
         </Typography>
       </Box>
     </>

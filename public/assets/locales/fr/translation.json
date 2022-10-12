@@ -17,5 +17,8 @@
   "start_time": "Heure de début",
   "end_time": "Heure de fin",
   "parties_involved": "Parties impliquées",
-  "notes": "Nota"
+  "notes": "Nota",
+  "hi": "Salut {{name}}",
+  "you_completed": "Vous avez terminé 2 de vos projets cette semaine, il reste 3 projets à réaliser, continuez à rouler et atteignez votre objectif !",
+  "0": ""
 }

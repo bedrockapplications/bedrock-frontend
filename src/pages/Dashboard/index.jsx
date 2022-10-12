@@ -1,6 +1,6 @@
 import React, { useEffect, useState, memo } from "react";
 
-import { getTodayTasksApi } from "../../services/request";
+import { getMeetingsList, deleteMeetingApi } from "../../services/request";
 
 import employee from "../../Images/employee.png";
 import cloud from "../../Images/CLoud.png";
@@ -41,7 +41,7 @@ const useStyle = makeStyles(() => ({
     position: "absolute",
     top: "-15px",
     left: "20px",
-    width: "88%",
+    width: "inherit",
   },
   craneImg: {
     width: "inherit",
@@ -55,7 +55,6 @@ const useStyle = makeStyles(() => ({
     alignItems: "center",
   },
   taskList: {
-    backgroundColor: "#e6e5ea",
     padding: "10px",
     margin: "10px 0px",
     borderRadius: "5px",
@@ -139,6 +138,7 @@ const label = { inputProps: { "aria-label": "Checkbox demo" } };
 const Dashboard = () => {
   const { t } = useTranslation();
   const userId = localStorage.getItem("userId");
+  const userFirstName = localStorage.getItem("userFirstName");
   const classes = useStyle();
   const [show, setShow] = useState("Direct Contact");
   const [taskDetails, setTaskDetails] = useState(null);
@@ -159,15 +159,17 @@ const Dashboard = () => {
   };
 
   const handleShowTaskForm = () => {
+    setTaskDetails(null);
     setShow("Add Task");
   };
 
   const getAllTasksList = () => {
     if (userId) {
-      getTodayTasksApi(userId)
+      getMeetingsList(userId)
         .then((res) => {
           if (res.status === 200) {
-            setDetailsList([...list]);
+            console.log("res", res);
+            setDetailsList([...res.data]);
             setContactDetails([...contactList]);
           }
         })
@@ -189,6 +191,20 @@ const Dashboard = () => {
 
   const handleCloseCancleModel = () => {
     setOpenCancle(false);
+  };
+
+  const handleYesModel = () => {
+    deleteMeetingApi(cancleItem?._id)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("res", res);
+          getAllTasksList();
+          setOpenCancle(false);
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
   };
 
   return (
@@ -218,12 +234,16 @@ const Dashboard = () => {
               lg={8}
               sx={{ padding: "1rem 2rem" }}
             >
-              <Typography variant="h5" color="#fff" fontWeight="600">
-                Hi Ganesh
+              <Typography
+                variant="h5"
+                color="#fff"
+                fontWeight="600"
+                textTransform="capitalize"
+              >
+                {t("hi", { name: userFirstName })}
               </Typography>
               <Typography variant="p" color="#fff" fontSize={15}>
-                You have completed 2 of your Projects this week, there are 3
-                Projects to go, keep on rolling and reach your goal!
+                {t("you_completed")}
               </Typography>
             </Grid>
             <Grid item xs={2} sx={{ width: "6rem", textAlign: "end" }}>
@@ -272,6 +292,10 @@ const Dashboard = () => {
                   {detailsList?.map((item, i) => (
                     <Box
                       className={classes.taskList}
+                      sx={{
+                        backgroundColor:
+                          item?._id === taskDetails?._id ? "#fff" : "#e6e5ea",
+                      }}
                       key={item?.meetingTitle}
                       onClick={() => handleShowDetails(item)}
                     >
@@ -289,15 +313,15 @@ const Dashboard = () => {
                         </IconButton>
                         <Box className={classes.timeWapper}>
                           <Typography className={classes.timeText}>
-                            {item.time}
+                            {item.startTime}
                           </Typography>
                         </Box>
                         <Box>
                           <Typography className={classes.taskTitle}>
-                            {item.meetingTitle}
+                            {item.title}
                           </Typography>
                           <Typography className={classes.taskSubTitle}>
-                            {item.subTitle}
+                            {item.description}
                           </Typography>
                         </Box>
                       </Stack>
@@ -317,7 +341,7 @@ const Dashboard = () => {
                 {show === "Direct Contact" ? (
                   <DirectContact list={contactDetails} />
                 ) : show === "Add Task" ? (
-                  <CreateNewTask />
+                  <CreateNewTask getAllTasksList={getAllTasksList} />
                 ) : (
                   <TaskDetails details={taskDetails} />
                 )}
@@ -341,7 +365,7 @@ const Dashboard = () => {
               fontWeight={600}
               sx={{ textDecoration: "underline" }}
             >
-              {cancleItem?.meetingTitle}{" "}
+              {cancleItem?.title}{" "}
             </Typography>{" "}
           </Typography>
         </DialogContent>
@@ -349,7 +373,7 @@ const Dashboard = () => {
           <Button autoFocus onClick={handleCloseCancleModel}>
             No
           </Button>
-          <Button onClick={handleCloseCancleModel} autoFocus>
+          <Button onClick={handleYesModel} autoFocus>
             Yes
           </Button>
         </DialogActions>
