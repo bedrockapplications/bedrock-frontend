@@ -5,8 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { Field } from "formik";
 import PropTypes from "prop-types";
 import { TextField } from "@mui/material";
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-
+import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 
 const RenderDatePicker = (props) => {
   const {
@@ -34,7 +33,7 @@ const RenderDatePicker = (props) => {
           disabled={disabled}
           onChange={(newValue) => form.setFieldValue(field?.name, newValue)}
           renderInput={(params) => (
-            <TextField {...params} autoComplete="off" size="small" />
+            <TextField {...params} autoComplete="off" size="small" fullWidth />
           )}
         />
       </LocalizationProvider>

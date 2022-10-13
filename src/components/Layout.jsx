@@ -19,7 +19,6 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import DescriptionIcon from "@mui/icons-material/Description";
 import Bedrock_Black from "../Images/Bedrock Black.png";
-import Dashboard from "../pages/Dashboard";
 import Avatar from "@mui/material/Avatar";
 import userProfile from "../Images/avatar.png";
 import notification from "../Images/notification.png";
@@ -28,8 +27,6 @@ import { useState } from "react";
 import { useEffect } from "react";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import CircleIcon from "@mui/icons-material/Circle";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import dotted_img from "../Images/Dotted Circles.png";
 import { NavLink as RouterLink } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
@@ -38,6 +35,11 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import TranslateIcon from "@mui/icons-material/Translate";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import favicon from "../Images/Bedrock_Rock_-removebg-preview.png";
+
+// import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+// import dotted_img from "../Images/Dotted Circles.png";
+// import Dashboard from "../pages/Dashboard";
 
 const drawerWidth = 240;
 
@@ -310,9 +312,11 @@ export default function MiniDrawer(props) {
             <Box>
               <img alt="logo" src={Bedrock_Black} className={classes.logo} />
             </Box>
-          ) : null}
+          ) : (
+            <img alt="" src={favicon} style={{ width: "45px" }} />
+          )}
 
-          {!open ? (
+          {/* {!open ? (
             <IconButton
               aria-label="open drawer"
               onClick={handleDrawerOpen}
@@ -340,16 +344,13 @@ export default function MiniDrawer(props) {
                 </IconButton>
               </Box>
             </>
-          )}
+          )} */}
         </DrawerHeader>
         <Divider sx={{ color: "#fff" }} />
         <List>
-          {/* <ListItem
-            disablePadding
-            onClick={handleDrawerOpen}
-            sx={{ display: "block" }}
-          >
+          <ListItem disablePadding sx={{ display: "block" }}>
             <ListItemButton
+              onClick={handleDrawerOpen}
               sx={{
                 minHeight: 48,
                 justifyContent: open ? "initial" : "center",
@@ -357,9 +358,23 @@ export default function MiniDrawer(props) {
                 color: "#fff",
               }}
             >
-              <MenuIcon />
+              {!open ? (
+                <MenuIcon />
+              ) : (
+                <>
+                  {theme.direction === "rtl" ? (
+                    <ChevronRightIcon />
+                  ) : (
+                    <ChevronLeftIcon />
+                  )}
+                </>
+              )}
+              <ListItemText
+                primary={"       "}
+                sx={{ opacity: open ? 1 : 0 }}
+              />
             </ListItemButton>
-          </ListItem> */}
+          </ListItem>
           {sideLinks?.map((list, index) => (
             <ListItem
               key={list?.label + index}

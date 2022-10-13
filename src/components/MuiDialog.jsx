@@ -16,14 +16,14 @@ const CustomDialog = styled(Dialog)(({ theme }) => ({
 }));
 
 const MuiDialog = (props) => {
-  const { open, handleClose, id, title, children } = props;
+  const { open, handleClose, id, title, children, maxWidth } = props;
   return (
     <CustomDialog
       aria-labelledby={id || ""}
       onClose={handleClose}
       open={open}
       fullWidth
-      maxWidth={"xs"}
+      maxWidth={maxWidth || "xs"}
       PaperProps={{
         style: {
           backgroundColor: "#f3f2f7",
