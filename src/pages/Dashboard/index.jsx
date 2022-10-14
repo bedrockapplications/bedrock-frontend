@@ -443,6 +443,7 @@ const Dashboard = () => {
                         getAllTasksList();
                         resetForm();
                         setSubmitting(false);
+                        setOpenForm(false);
                       }
                     })
                     .catch((error) => {
