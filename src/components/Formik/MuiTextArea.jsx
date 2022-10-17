@@ -19,6 +19,7 @@ const RenderTextArea = (props) => {
       autoComplete="off"
       multiline
       rows={3}
+      required
     />
   );
 };

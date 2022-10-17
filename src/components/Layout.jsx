@@ -169,7 +169,7 @@ export default function MiniDrawer(props) {
   const theme = useTheme();
   const classes = useStyle();
   const userName = localStorage.getItem("userName");
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [clockState, setClockState] = useState("");
   const [dayState, setDayState] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -232,11 +232,11 @@ export default function MiniDrawer(props) {
           <Box sx={{ width: "60%", display: { xs: "none", md: "flex" } }}>
             <Box sx={{ minWidth: "205px", marginRight: "1.5rem" }}>
               <Typography color="primary" className={classes.dayText}>
-                {dayState === "Good Night" ? (
-                  <CircleIcon fontSize="small" />
-                ) : (
-                  <WbSunnyIcon fontSize="small" sx={{ color: "orange" }} />
-                )}
+                {dayState === "Good Night"
+                  ? // <CircleIcon fontSize="small" />
+                    ""
+                  : // <WbSunnyIcon fontSize="small" sx={{ color: "orange" }} />
+                    ""}
                 {t(dayState)}
               </Typography>
               <Typography color="primary" className={classes.timeText}>

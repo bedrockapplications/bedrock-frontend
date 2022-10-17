@@ -18,6 +18,7 @@ const RenderDatePicker = (props) => {
     minDate,
     disabled,
     form,
+    required,
   } = props;
   return (
     <>
@@ -33,7 +34,13 @@ const RenderDatePicker = (props) => {
           disabled={disabled}
           onChange={(newValue) => form.setFieldValue(field?.name, newValue)}
           renderInput={(params) => (
-            <TextField {...params} autoComplete="off" size="small" fullWidth />
+            <TextField
+              {...params}
+              autoComplete="off"
+              size="small"
+              fullWidth
+              required={required}
+            />
           )}
         />
       </LocalizationProvider>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { useEffect, useState, memo, useRef } from "react";
 
 import { getMeetingsList, deleteMeetingApi } from "../../services/request";
 
@@ -23,6 +23,7 @@ import {
   DialogActions,
   Button,
   Divider,
+  TextField,
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 import MuiDialog from "../../components/MuiDialog";
@@ -37,6 +38,9 @@ import MuiTextField from "../../components/Formik/MuiTextField";
 import moment from "moment";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
+import MuiFileUpload from "../../components/Formik/MuiFileUpload";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import InputAdornment from "@mui/material/InputAdornment";
 
 const useStyle = makeStyles(() => ({
   employeeImg: {
@@ -157,6 +161,7 @@ const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const Dashboard = () => {
   const { t } = useTranslation();
+  const inputRef = useRef(null);
   const userId = localStorage.getItem("userId");
   const userFirstName = localStorage.getItem("userFirstName");
   const classes = useStyle();
@@ -169,6 +174,7 @@ const Dashboard = () => {
   const [openForm, setOpenForm] = useState(false);
 
   const handleShowDetails = (item) => {
+    console.log("item", item);
     if (item) {
       setTaskDetails({ ...item });
       setShow("Details");
@@ -191,7 +197,7 @@ const Dashboard = () => {
 
   const getAllTasksList = () => {
     if (userId) {
-      getMeetingsList(userId)
+      getMeetingsList(userId, moment(new Date()).format("YYYY-MM-DD"))
         .then((res) => {
           if (res.status === 200) {
             console.log("res", res);
@@ -231,6 +237,11 @@ const Dashboard = () => {
       .catch((error) => {
         console.log("error", error);
       });
+  };
+
+  const handleClick = () => {
+    // 👇️ open file input box on click of other element
+    inputRef.current.click();
   };
 
   return (
@@ -424,20 +435,47 @@ const Dashboard = () => {
                   endTime: null,
                   partiesInvolved: "",
                   notes: "",
+                  attachment: null,
+                  fileName: "",
                 }}
                 enableReinitialize
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting, resetForm }) => {
-                  let payload = {
-                    title: values.taskName,
-                    description: values.notes,
-                    startDate: moment(values.startDate).format("YYYY-MM-DD"),
-                    endDate: moment(values.endDate).format("YYYY-MM-DD"),
-                    startTime: moment(values.startTime).format("hh:mm A"),
-                    endTime: moment(values.endTime).format("hh:mm A"),
-                    userId: userId,
-                  };
-                  createMeetingApi(payload)
+                  let fileUploaded = values.attachment;
+                  let formData = new FormData();
+                  formData.append("attachment", fileUploaded);
+                  formData.append("title", values.taskName);
+                  formData.append("description", values.notes);
+                  formData.append(
+                    "startDate",
+                    moment(values.startDate).format("YYYY-MM-DD")
+                  );
+                  formData.append(
+                    "endDate",
+                    moment(values.endDate).format("YYYY-MM-DD")
+                  );
+                  formData.append(
+                    "startTime",
+                    moment(values.startTime).format("hh:mm A")
+                  );
+                  formData.append(
+                    "endTime",
+                    moment(values.endTime).format("hh:mm A")
+                  );
+                  formData.append("userId", userId);
+
+                  // let payload = {
+                  //   title: values.taskName,
+                  //   description: values.notes,
+                  //   startDate: moment(values.startDate).format("YYYY-MM-DD"),
+                  //   endDate: moment(values.endDate).format("YYYY-MM-DD"),
+                  //   startTime: moment(values.startTime).format("hh:mm A"),
+                  //   endTime: moment(values.endTime).format("hh:mm A"),
+                  //   userId: userId,
+                  //   attachment: formData,
+                  // };
+                  console.log("payload", formData);
+                  createMeetingApi(formData)
                     .then((res) => {
                       if (res.status === 200) {
                         getAllTasksList();
@@ -460,6 +498,7 @@ const Dashboard = () => {
                           name="taskName"
                           id="taskName"
                           label={t("task_name")}
+                          required={true}
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -469,6 +508,7 @@ const Dashboard = () => {
                           label={t("start_date")}
                           disablePast
                           value={values?.startDate}
+                          required={true}
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -480,6 +520,7 @@ const Dashboard = () => {
                           disabled={values?.startDate === null}
                           minDate={values?.startDate}
                           value={values?.endDate}
+                          required={true}
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -489,6 +530,7 @@ const Dashboard = () => {
                           label={t("start_time")}
                           disablePast
                           value={values?.startTime}
+                          required={true}
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -498,6 +540,45 @@ const Dashboard = () => {
                           label={t("end_time")}
                           disablePast
                           value={values?.endTime}
+                          required={true}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <input
+                          id="attachment"
+                          name="attachment"
+                          type="file"
+                          ref={inputRef}
+                          style={{ display: "none" }}
+                          onChange={(event) => {
+                            setFieldValue(
+                              "attachment",
+                              event.currentTarget.files[0]
+                            );
+                            setFieldValue(
+                              "fileName",
+                              event.currentTarget.files[0].name
+                            );
+                          }}
+                        />
+                        <TextField
+                          id="fileName"
+                          name="fileName"
+                          fullWidth
+                          size="small"
+                          label={t("attachments")}
+                          value={values.fileName}
+                          required
+                          inputProps={{ readOnly: true }}
+                          InputProps={{
+                            endAdornment: (
+                              <InputAdornment position="end">
+                                <IconButton size="small" onClick={handleClick}>
+                                  <CloudUploadIcon />
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
                         />
                       </Grid>
                       <Grid item xs={12}>
@@ -505,6 +586,7 @@ const Dashboard = () => {
                           name="partiesInvolved"
                           id="partiesInvolved"
                           label={t("parties_involved")}
+                          required={true}
                         />
                       </Grid>
                       <Grid item xs={12}>
