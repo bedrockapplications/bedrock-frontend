@@ -17,8 +17,38 @@ export const theme = createTheme({
         },
       },
     },
+    MUIDataTable: {
+      styleOverrides: {
+        root: {
+          border: "3px solid #3A3A3C",
+        },
+      },
+    },
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          textAlign: "center",
+          padding: "8px",
+        },
+      },
+    },
+    MUIDataTableHeadCell: {
+      styleOverrides: {
+        root: {
+          padding: "8px !important",
+          backgroundColor: "#3A3A3C",
+          color: "#fff !important",
+          display: "table-cell !important",
+        },
+        contentWrapper: {
+          justifyContent: "center",
+          textTransform: "capitalize",
+          fontWeight: "700",
+        },
+      },
+    },
   },
   typography: {
-    fontFamily: ["Open Sans", "sans-serif"].join(","),
+    fontFamily: ["Poppins", "Open Sans", "sans-serif"].join(","),
   },
 });

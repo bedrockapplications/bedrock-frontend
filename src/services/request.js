@@ -1,8 +1,8 @@
 import axios from "./axiosConfig";
 
 //Task Api start
-export const getMeetingsList = async (uId) => {
-  return axios.get(`/document/getMeetings?userId=${uId}`);
+export const getMeetingsList = async (uId, startDate) => {
+  return axios.get(`/document/getMeetings?userId=${uId}&startDate=${startDate}`);
 };
 
 export const createMeetingApi = async (payload) => {

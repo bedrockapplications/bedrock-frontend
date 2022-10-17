@@ -129,7 +129,7 @@ const AppBar = styled(MuiAppBar, {
 })(({ theme, open }) => ({
   width: `calc(100% - 65px)`,
   zIndex: theme.zIndex.drawer + 1,
-  backgroundColor: "#d7d6db",
+  backgroundColor: "#D6D6DB",
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -169,7 +169,7 @@ export default function MiniDrawer(props) {
   const theme = useTheme();
   const classes = useStyle();
   const userName = localStorage.getItem("userName");
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   const [clockState, setClockState] = useState("");
   const [dayState, setDayState] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -268,7 +268,7 @@ export default function MiniDrawer(props) {
                 style: {
                   maxHeight: ITEM_HEIGHT * 4.5,
                   width: "15ch",
-                  backgroundColor: "#f3f2f7",
+                  backgroundColor: "#D6D6DB",
                 },
               }}
             >
@@ -412,7 +412,7 @@ export default function MiniDrawer(props) {
           ))}
         </List>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 2 }}>
+      <Box component="main" sx={{ flexGrow: 1, p: 2, height: "100vh" }}>
         <DrawerHeader />
         {React.cloneElement(props.children)}
       </Box>

@@ -191,7 +191,7 @@ const Dashboard = () => {
 
   const getAllTasksList = () => {
     if (userId) {
-      getMeetingsList(userId)
+      getMeetingsList(userId, moment(new Date()).format("YYYY-MM-DD"))
         .then((res) => {
           if (res.status === 200) {
             console.log("res", res);
