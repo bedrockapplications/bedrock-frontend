@@ -50,18 +50,22 @@ const useStyle = makeStyles(() => ({
     fontWeight: "600 !important",
   },
   timeText: {
-    fontSize: "0.95rem !important",
-    fontWeight: "500 ! important",
-    color: `#242b3c`,
-    textShadow: "1px 0px #242b3c",
+    fontStyle: "normal",
+    fontSize: "0.75rem",
+    fontWeight: "400",
+    lineHeight: "18px",
+    color: `#1D242E`,
+    textShadow: "1px 0px #1D242E",
   },
   dayText: {
-    fontSize: "0.95rem !important",
-    fontWeight: "500 ! important",
-    textShadow: "1px 0px #242b3c",
+    fontStyle: "normal",
+    fontSize: "0.875rem",
+    fontWeight: "500",
+    lineHeight: "24px",
     display: "flex",
     justifyContent: "flex-start",
     alignItems: "center",
+    textShadow: "1px 0px #1D242E",
   },
   logo: {
     width: "100%",
@@ -201,13 +205,18 @@ export default function MiniDrawer(props) {
       let hrs = date.getHours();
       if (hrs < 12) {
         setDayState("good_morning");
-      } else if (hrs >= 12 && hrs <= 15) {
+      } else if (hrs < 17) {
         setDayState("good_afternoon");
-      } else if (hrs > 15 && hrs <= 20) {
+      } else {
         setDayState("good_evening");
-      } else if (hrs > 20 && hrs <= 24) {
-        setDayState("good_night");
       }
+      // } else if (hrs >= 12 && hrs <= 15) {
+      //   setDayState("good_afternoon");
+      // } else if (hrs > 15 && hrs <= 20) {
+      //   setDayState("good_evening");
+      // } else if (hrs > 20 && hrs <= 24) {
+      //   setDayState("good_night");
+      // }
     }, 1000);
   };
 

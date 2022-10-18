@@ -21,7 +21,6 @@ axiosIntance.interceptors.response.use(
   (error) => {
     const status = error?.response ? error?.response?.status : 500;
     if (status && status === 500) {
-      console.log(status);
       //   showAlert("error", "Internal Server Error");
     }
     if (status && status === 401) {

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Grid, Paper, Typography } from "@mui/material";
 import { getAllProjectList } from "../../services/request";
 import { useEffect } from "react";
@@ -263,4 +263,4 @@ const MyProjects = () => {
     </>
   );
 };
-export default MyProjects;
+export default memo(MyProjects);
