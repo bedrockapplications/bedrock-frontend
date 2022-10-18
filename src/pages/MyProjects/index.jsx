@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Grid, Paper, Typography } from "@mui/material";
 import { getAllProjectList } from "../../services/request";
 import { useEffect } from "react";
@@ -11,10 +11,118 @@ import plus from "../../Images/Plus.png";
 import { Box } from "@mui/system";
 import { CardActionArea } from "@mui/material";
 import CardMedia from "@mui/material/CardMedia";
+import { makeStyles } from "@mui/styles";
+import ProjectTable from "../../components/MuiTable";
+import ProjectDataTable from "./ProjectDataTable";
+
+const useStyle = makeStyles(() => ({
+  projectHeader: {
+    backgroundColor: "#3A3A3C !important",
+    padding: "26px 0px 36px 26px",
+    color: "#fff !important",
+    borderRadius: "10px !important",
+  },
+  projectText: {
+    fontSize: "1.5rem !important",
+    fontWeight: "700 !important",
+    lineHeight: "2.25rem !important",
+    fontStyle: "normal",
+  },
+  ongoingText: {
+    fontSize: "0.938rem !important",
+    fontWeight: "500 !important",
+    lineHeight: "1.406rem !important",
+    fontStyle: "normal",
+  },
+}));
+
+const tableData = [
+  {
+    name: "McDonald’s Renovation",
+    type: "Med Com.",
+    status: "Pre-Con",
+    projectManager: "Jim Willis",
+    location: "Tampa, Fl",
+    amount: "01873",
+  },
+  {
+    name: "McDonald’s Renovation",
+    type: "Med Com.",
+    status: "Pre-Con",
+    projectManager: "Jim Willis",
+    location: "Tampa, Fl",
+    amount: "01873",
+  },
+  {
+    name: "McDonald’s Renovation",
+    type: "Med Com.",
+    status: "Pre-Con",
+    projectManager: "Jim Willis",
+    location: "Tampa, Fl",
+    amount: "01873",
+  },
+];
+
+let disableFilter = {
+  filter: false,
+  sort: false,
+};
 
 const MyProjects = () => {
+  const classes = useStyle();
   const uId = localStorage.getItem("userId");
   const [projectsList, setProjectsList] = useState([]);
+
+  const columns = [
+    {
+      name: "name",
+      label: "Name",
+      options: {
+        ...disableFilter,
+        customBodyRender: (value) => (value ? value : `---`),
+      },
+    },
+    {
+      name: "type",
+      label: "Type",
+      options: {
+        ...disableFilter,
+        customBodyRender: (value) => (value ? value : `---`),
+      },
+    },
+    {
+      name: "status",
+      label: "Status",
+      options: {
+        ...disableFilter,
+        customBodyRender: (value) => (value ? value : `---`),
+      },
+    },
+    {
+      name: "projectManager",
+      label: "Project Manager",
+      options: {
+        ...disableFilter,
+        customBodyRender: (value) => (value ? value : `---`),
+      },
+    },
+    {
+      name: "location",
+      label: "Location",
+      options: {
+        ...disableFilter,
+        customBodyRender: (value) => (value ? value : `---`),
+      },
+    },
+    {
+      name: "amount",
+      label: "#",
+      options: {
+        ...disableFilter,
+        customBodyRender: (value) => (value ? value : `---`),
+      },
+    },
+  ];
 
   const arrayBufferToBase64 = (buffer) => {
     let binary = "";
@@ -58,7 +166,7 @@ const MyProjects = () => {
               item
               xs={12}
               sx={{
-                backgroundColor: "#242b3c",
+                backgroundColor: "#3A3A3C",
                 padding: "1rem",
                 borderRadius: "15px",
               }}
@@ -73,7 +181,7 @@ const MyProjects = () => {
           </Grid>
         </Grid>
         <Grid item xs={2}>
-          <Card sx={{ backgroundColor: "#242b3c", height: "10rem" }}>
+          <Card sx={{ backgroundColor: "#3A3A3C", height: "10rem" }}>
             <CardActionArea>
               <CardContent sx={{ p: "1rem" }}>
                 <Box sx={{ textAlign: "center", height: "110px" }}>
@@ -126,7 +234,33 @@ const MyProjects = () => {
           </Grid>
         ))}
       </Grid>
+      {/* <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Paper elevation={0} className={classes.projectHeader}>
+            <Typography className={classes.projectText}>
+              Project Directory
+            </Typography>
+            <Typography className={classes.ongoingText}>
+              Create or Select on Ongoing Projects
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={8}>
+          <Paper
+            elevation={2}
+            sx={{ height: "100%", backgroundColor: "#E5E5EA", padding: "10px" }}
+          >
+            <ProjectTable columns={columns} data={tableData} />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Paper
+            elevation={2}
+            sx={{ height: "100%", backgroundColor: "#E5E5EA" }}
+          ></Paper>
+        </Grid>
+      </Grid> */}
     </>
   );
 };
-export default MyProjects;
+export default memo(MyProjects);

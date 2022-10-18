@@ -75,21 +75,54 @@ const useStyle = makeStyles(() => ({
     cursor: "pointer",
   },
   taskTitle: {
-    fontSize: "14px",
-    fontWeight: "600 !important",
+    fontSize: "1.25rem",
+    fontWeight: "500",
+    fontStyle: "normal",
+    lineHeight: "30px",
+    color: "rgba(28, 28, 30, 0.85)",
   },
   taskSubTitle: {
-    fontSize: "11px !important",
-    fontWeight: "600 !important",
+    fontSize: "0.75rem",
+    fontWeight: "500",
+    fontStyle: "normal",
+    lineHeight: "18px",
+    color: "#3A3A3D",
+    opacity: 0.9,
   },
   timeText: {
-    fontSize: "14px !important",
-    whiteSpace: "nowrap",
+    fontSize: "1rem",
+    fontWeight: "400",
+    fontStyle: "normal",
+    lineHeight: "24px",
+    color: "#48484A",
   },
   timeWapper: {
     width: "5rem",
     marginLeft: "0px !important",
     textAlign: "center",
+  },
+  titleText: {
+    fontSize: "1.5rem",
+    fontWeight: "700",
+    fontStyle: "normal",
+    lineHeight: "36px",
+    color: "#3A3A3C",
+  },
+  personText: {
+    fontSize: "1.5rem",
+    fontWeight: "700",
+    fontStyle: "normal",
+    lineHeight: "36px",
+    color: "#fff",
+    textTransform: "capitalize",
+  },
+  messageText: {
+    width: "532px",
+    fontSize: "0.75rem",
+    fontWeight: "500",
+    fontStyle: "normal",
+    lineHeight: "18px",
+    color: "#FFF",
   },
 }));
 
@@ -102,33 +135,6 @@ const validationSchema = Yup.object().shape({
   partiesInvolved: Yup.string().required().nullable(),
   notes: Yup.string().required().nullable(),
 });
-
-const list = [
-  {
-    time: "8:00 AM",
-    meetingTitle: "City of Atlanta Inspection",
-    subTitle: "Meet them at the gallery first; then take them to lunch",
-    isChecked: false,
-  },
-  {
-    time: "10:00 AM",
-    meetingTitle: "Fire Dept Inspection",
-    subTitle: "",
-    isChecked: false,
-  },
-  {
-    time: "3:00 PM",
-    meetingTitle: "Prepare for Full Team Meeting Tomorrow",
-    subTitle: "",
-    isChecked: false,
-  },
-  {
-    time: "6:00 PM",
-    meetingTitle: "Complete Daily Log before Closing Out",
-    subTitle: "",
-    isChecked: false,
-  },
-];
 
 const contactList = [
   {
@@ -174,7 +180,6 @@ const Dashboard = () => {
   const [openForm, setOpenForm] = useState(false);
 
   const handleShowDetails = (item) => {
-    console.log("item", item);
     if (item) {
       setTaskDetails({ ...item });
       setShow("Details");
@@ -200,7 +205,6 @@ const Dashboard = () => {
       getMeetingsList(userId, moment(new Date()).format("YYYY-MM-DD"))
         .then((res) => {
           if (res.status === 200) {
-            console.log("res", res);
             setDetailsList([...res.data]);
             setContactDetails([...contactList]);
           }
@@ -229,7 +233,6 @@ const Dashboard = () => {
     deleteMeetingApi(cancleItem?._id)
       .then((res) => {
         if (res.status === 200) {
-          console.log("res", res);
           getAllTasksList();
           setOpenCancle(false);
         }
@@ -252,7 +255,7 @@ const Dashboard = () => {
             container
             sx={{
               background: "#3a3a3c",
-              paddingLeft: "2rem",
+              paddingLeft: "7rem",
               borderRadius: "15px",
             }}
           >
@@ -271,15 +274,10 @@ const Dashboard = () => {
               lg={8}
               sx={{ padding: "1rem 2rem" }}
             >
-              <Typography
-                variant="h5"
-                color="#fff"
-                fontWeight="600"
-                textTransform="capitalize"
-              >
+              <Typography className={classes.personText}>
                 {t("hi", { name: userFirstName })}
               </Typography>
-              <Typography variant="p" color="#fff" fontSize={15}>
+              <Typography className={classes.messageText}>
                 {t("you_completed")}
               </Typography>
             </Grid>
@@ -297,11 +295,7 @@ const Dashboard = () => {
                   justifyContent="space-between"
                   alignItems="center"
                 >
-                  <Typography
-                    variant="h6"
-                    fontWeight={600}
-                    sx={{ textShadow: "1px 0px #242b3c" }}
-                  >
+                  <Typography className={classes.titleText}>
                     {t("today's_tasks")}
                   </Typography>
                   <Box>
@@ -474,7 +468,6 @@ const Dashboard = () => {
                   //   userId: userId,
                   //   attachment: formData,
                   // };
-                  console.log("payload", formData);
                   createMeetingApi(formData)
                     .then((res) => {
                       if (res.status === 200) {
@@ -613,16 +606,35 @@ const Dashboard = () => {
             </Grid>
           </Grid>
         </DialogContent>
-        {/* <DialogActions>
-          <Button autoFocus onClick={handleCloseCancleModel}>
-            No
-          </Button>
-          <Button onClick={handleYesModel} autoFocus>
-            Yes
-          </Button>
-        </DialogActions> */}
       </MuiDialog>
     </>
   );
 };
 export default Dashboard;
+
+// const list = [
+//   {
+//     time: "8:00 AM",
+//     meetingTitle: "City of Atlanta Inspection",
+//     subTitle: "Meet them at the gallery first; then take them to lunch",
+//     isChecked: false,
+//   },
+//   {
+//     time: "10:00 AM",
+//     meetingTitle: "Fire Dept Inspection",
+//     subTitle: "",
+//     isChecked: false,
+//   },
+//   {
+//     time: "3:00 PM",
+//     meetingTitle: "Prepare for Full Team Meeting Tomorrow",
+//     subTitle: "",
+//     isChecked: false,
+//   },
+//   {
+//     time: "6:00 PM",
+//     meetingTitle: "Complete Daily Log before Closing Out",
+//     subTitle: "",
+//     isChecked: false,
+//   },
+// ];
