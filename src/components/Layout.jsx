@@ -232,11 +232,11 @@ export default function MiniDrawer(props) {
           <Box sx={{ width: "60%", display: { xs: "none", md: "flex" } }}>
             <Box sx={{ minWidth: "205px", marginRight: "1.5rem" }}>
               <Typography color="primary" className={classes.dayText}>
-                {dayState === "Good Night" ? (
-                  <CircleIcon fontSize="small" />
-                ) : (
-                  <WbSunnyIcon fontSize="small" sx={{ color: "orange" }} />
-                )}
+                {dayState === "Good Night"
+                  ? // <CircleIcon fontSize="small" />
+                    ""
+                  : // <WbSunnyIcon fontSize="small" sx={{ color: "orange" }} />
+                    ""}
                 {t(dayState)}
               </Typography>
               <Typography color="primary" className={classes.timeText}>
