@@ -47,6 +47,18 @@ export const theme = createTheme({
         },
       },
     },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          color: "#fff",
+          backgroundColor: "rgba(58, 58, 60, 0.6)",
+          "&.Mui-selected": {
+            backgroundColor: "#3A3A3C",
+            color: "#fff",
+          },
+        },
+      },
+    },
   },
   typography: {
     fontFamily: ["Poppins", "Open Sans", "sans-serif"].join(","),
