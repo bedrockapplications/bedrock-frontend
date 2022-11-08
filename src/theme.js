@@ -27,8 +27,9 @@ export const theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
-          textAlign: "center",
+          textAlign: "left",
           padding: "8px",
+          borderBottom: "2px solid #242b3c"
         },
       },
     },

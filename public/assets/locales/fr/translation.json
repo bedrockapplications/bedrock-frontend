@@ -20,5 +20,12 @@
   "notes": "Nota",
   "hi": "Salut {{name}}",
   "you_completed": "Joyeux lundi! Dans l'actualité du jour : le président Biden a adopté une nouvelle taxe à l'importation, augmentant les contrats à terme sur l'acier de plus de 7 % !",
-  "0": ""
+  "document": {
+    "document_manager": "Gestionnaire de documents",
+    "search_all_documents": "Rechercher tous les documents",
+    "new_file": "nouveaux fichiers",
+    "design_documents": "Document de conception",
+    "photos": "Les photos",
+    "submittals": "Soumission"
+  }
 }
