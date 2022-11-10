@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useHistory } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -175,6 +176,7 @@ const Drawer = styled(MuiDrawer, {
 const ITEM_HEIGHT = 48;
 
 export default function MiniDrawer(props) {
+  let history = useHistory();
   const { i18n, t } = useTranslation();
   const theme = useTheme();
   const classes = useStyle();
@@ -381,7 +383,7 @@ export default function MiniDrawer(props) {
             transformOrigin={{ horizontal: "right", vertical: "top" }}
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
-            <MenuItem>Settings</MenuItem>
+            <MenuItem onClick={() => history.push("/settings")}>Settings</MenuItem>
             <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
           </Menu>
         </Toolbar>

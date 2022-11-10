@@ -28,5 +28,11 @@
     "design_documents": "Design Document",
     "photos": "Photos",
     "submittals": "Submittals"
+  },
+  "settings": {
+    "account_overview": "Account Overview",
+    "general": "General",
+    "billing": "Billing",
+    "security": "Security"
   }
 }

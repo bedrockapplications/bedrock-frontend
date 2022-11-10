@@ -18,6 +18,7 @@ import ProjectDirectory from "../components/projectDirectory";
 import MyProjects from "../pages/MyProjects";
 import Dashboard from "../pages/Dashboard";
 import DocumentManager from "../pages/DocumentManager";
+import Settings from "../pages/Settings";
 
 export const routes = (
   <Switch>
@@ -35,6 +36,7 @@ export const routes = (
     <PrivateRoute exact path="/createProject" component={CreateProject} />
     <PrivateRoute exact path="/myProject/:id" component={MyProject} />
     <PrivateRoute exact path="/docManager" component={DocumentManager} />
+    <PrivateRoute exact path="/settings" component={Settings} />
 
     {/* <PrivateRoute exact path="/docManager" component={DocManager} /> */}
   </Switch>
