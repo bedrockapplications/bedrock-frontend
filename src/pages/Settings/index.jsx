@@ -158,10 +158,41 @@ const Settings = () => {
             />
           </Tabs>
           <TabPanel value={tabValue} index={0}>
+          <Grid container spacing={2} md={12} sx={{marginLeft: "0px", marginTop: "0px", border:"3px solid #3A3A3C"}}>
+            <Grid item xs={12} md={4} sx={{padding:"10px !important"}}>
+              <Paper
+                elevation={2}
+                sx={{ height: "calc(100vh - 250px)", backgroundColor: "#E5E5EA", padding: "10px" }}
+              >
+              </Paper>
+            </Grid>
+            <Grid item xs={12} md={8} sx={{padding:"10px !important"}}>
+              <Paper
+                elevation={2}
+                sx={{ height: "calc(100vh - 250px)", backgroundColor: "#E5E5EA" }}
+              ></Paper>
+            </Grid>
+          </Grid>
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
+          <Grid container spacing={2} md={12} sx={{marginLeft: "0px", marginTop: "0px", border:"3px solid #3A3A3C"}}>
+            <Grid item xs={12} md={12} sx={{padding:"10px !important"}}>
+              <Paper
+                elevation={2}
+                sx={{ height: "calc(100vh - 250px)", backgroundColor: "#E5E5EA" }}
+              ></Paper>
+            </Grid>
+          </Grid>
           </TabPanel>
           <TabPanel value={tabValue} index={2}>
+          <Grid container spacing={2} md={12} sx={{marginLeft: "0px", marginTop: "0px", border:"3px solid #3A3A3C"}}>
+            <Grid item xs={12} md={12} sx={{padding:"10px !important"}}>
+              <Paper
+                elevation={2}
+                sx={{ height: "calc(100vh - 250px)", backgroundColor: "#E5E5EA" }}
+              ></Paper>
+            </Grid>
+          </Grid>
           </TabPanel>
         </Grid>
       </Grid>
