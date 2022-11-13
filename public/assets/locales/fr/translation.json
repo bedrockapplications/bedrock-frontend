@@ -27,5 +27,11 @@
     "design_documents": "Document de conception",
     "photos": "Les photos",
     "submittals": "Soumission"
+  },
+  "settings": {
+    "account_overview": "Aperçu du compte",
+    "general": "Général",
+    "billing": "Facturation",
+    "security": "Sécurité"
   }
 }
