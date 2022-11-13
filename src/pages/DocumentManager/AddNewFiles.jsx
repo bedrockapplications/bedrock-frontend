@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import MuiDialog from "../../components/MuiDialog";
 import {
   Grid,
@@ -12,7 +12,8 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import MuiSelectField from "../../components/Formik/MuiSelectField";
 import FileUpload from "../../components/Drag&DropUpload";
-import { createMeetingApi, uploadDocumentApi } from "../../services/request";
+import { uploadDocumentApi } from "../../services/request";
+import { GlobalState } from "../../Context/Context";
 
 const validationSchema = Yup.object().shape({
   projectId: Yup.string().required().nullable(),
@@ -23,6 +24,7 @@ const categoryList = ["DesignDocument", "Photos", "Submittals"];
 const AddNewFiles = (props) => {
   const { open, handleClose, GetDocumentsLists, projectOptions, categoryType } =
     props;
+  const { page, rowsPerPage } = useContext(GlobalState);
 
   const userId = localStorage.getItem("userId");
 
@@ -39,7 +41,7 @@ const AddNewFiles = (props) => {
     uploadDocumentApi(formData)
       .then((res) => {
         if (res.status === 200) {
-          GetDocumentsLists();
+          GetDocumentsLists(page, rowsPerPage);
           setSubmitting(false);
           resetForm();
           handleClose();

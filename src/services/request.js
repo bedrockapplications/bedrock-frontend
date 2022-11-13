@@ -35,12 +35,18 @@ export const uploadDocumentApi = (payload) => {
   return axios.post(`/document/uploadDocument`, payload, { headers });
 };
 
-export const getAllDocumentListApi = (userId, pageNumber, limit) => {
+export const updateDocumentApi = (docId, payload) => {
+  return axios.put(`/document/updateDocument/${docId}`, payload);
+};
+
+export const getAllDocumentListApi = (pageNumber, limit, userId, projectId) => {
   return axios.get(
-    `/document/getDocs?pageNumber=${0}&limit=${10}&userId=${userId}`
+    `/document/getDocs?pageNumber=${pageNumber}&limit=${limit}&userId=${userId}&projectId=${projectId}`
   );
 };
 
-export const deleteDocumentApi = (docId) => {
-  return axios.delete(`/document/deleteDocument/${docId}`);
+export const deleteDocumentApi = (deleteItem) => {
+  return axios.delete(
+    `/document/deleteDocument?mediaId=${deleteItem.mediaId}&_id=${deleteItem._id}`
+  );
 };

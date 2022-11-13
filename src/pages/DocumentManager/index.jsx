@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useContext } from "react";
 import { makeStyles } from "@mui/styles";
 import {
   Grid,
@@ -16,24 +16,27 @@ import {
   InputAdornment,
   Tabs,
   Tab,
-  IconButton,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
-import DocumentTable from "../../components/MuiTable";
 import TabPanel from "../../components/MuiTabPanel";
-import EditIcon from "@mui/icons-material/Edit";
-import EmailIcon from "@mui/icons-material/Email";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useTranslation } from "react-i18next";
 import AddNewFiles from "./AddNewFiles";
 import {
   getAllProjectList,
   getAllDocumentListApi,
-  deleteDocumentApi,
 } from "../../services/request";
 import { useEffect } from "react";
-import moment from "moment";
+import DesignDocumentTable from "./DesignDocumentTable";
+import PhotosDocTable from "./PhotosDocTable";
+import SubmittalsDocTable from "./SubmittalsDocTable";
+import { GlobalState } from "../../Context/Context";
+
+// import DocumentTable from "../../components/MuiTable";
+// import EditIcon from "@mui/icons-material/Edit";
+// import EmailIcon from "@mui/icons-material/Email";
+// import DeleteIcon from "@mui/icons-material/Delete";
+// import moment from "moment";
 
 const useStyle = makeStyles(() => ({
   bgPaper: {
@@ -79,50 +82,14 @@ const useStyle = makeStyles(() => ({
   },
 }));
 
-const sortOptions = [
-  "Name",
-  "Upload Date",
-  "Date Last Opened",
-  "Date Modified",
-];
-
 let disableFilter = {
   filter: false,
   sort: false,
 };
 
-const tableData = [
-  {
-    id: "1",
-    name: "McDonald’s Foundation Update",
-    type: "PDF",
-    uploadDate: "10/1/2022, 6:00 PM",
-  },
-  {
-    id: "2",
-    name: "McDonald’s Foundation Update",
-    type: "BPDF",
-    uploadDate: "10/1/2022, 6:00 PM",
-  },
-  {
-    id: "3",
-    name: "McDonald’s Foundation Update",
-    type: "DOC",
-    uploadDate: "10/1/2022, 6:00 PM",
-  },
-  {
-    id: "4",
-    name: "McDonald’s Foundation Update",
-    type: "TXT",
-    uploadDate: "10/1/2022, 6:00 PM",
-  },
-  {
-    id: "5",
-    name: "McDonald’s Foundation Update",
-    type: "PDF",
-    uploadDate: "10/1/2022, 6:00 PM",
-  },
-];
+const Placeholder = ({ children }) => {
+  return <Box sx={{ color: "#aaa" }}>{children}</Box>;
+};
 
 function a11yProps(index) {
   return {
@@ -134,6 +101,8 @@ const DocumentManager = () => {
   const classes = useStyle();
   const { t } = useTranslation();
   const userId = localStorage.getItem("userId");
+  const { page, rowsPerPage } = useContext(GlobalState);
+  console.log("pages1", page, rowsPerPage);
 
   const [sortBy, setSortBy] = useState("");
   const [tabValue, setTabValue] = useState(0);
@@ -144,7 +113,10 @@ const DocumentManager = () => {
   const [photoTableData, setPhotoTableData] = useState([]);
   const [submittalsTableData, setSubmittalsTableData] = useState([]);
 
-  const handleSortBy = (event) => {
+  const [totalCount, setTotalCount] = useState(0);
+
+  const handleChangeProject = (event) => {
+    GetDocumentsLists(page, rowsPerPage, event.target.value);
     setSortBy(event.target.value);
   };
 
@@ -167,220 +139,26 @@ const DocumentManager = () => {
       });
   };
 
-  const GetDocumentsLists = () => {
-    getAllDocumentListApi(userId)
+  const GetDocumentsLists = (pageNumber, limit, projectId) => {
+    getAllDocumentListApi(pageNumber || 0, limit || 10, userId, projectId || "")
       .then((res) => {
         if (res.status === 200) {
           const data = res.data.data;
           setDesignTableData([...data.DesignDocuments]);
           setPhotoTableData([...data.Photos]);
           setSubmittalsTableData([...data.Submittals]);
+          setTotalCount(data.DesignDocumentsCount);
         }
       })
       .catch((error) => {
         console.log("error", error);
       });
-  };
-
-  const handleDeleteDocument = (doc) => {
-    deleteDocumentApi(doc._id)
-      .then((res) => {
-        if (res.status === 200) {
-          GetDocumentsLists();
-        }
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
-  };
-
-  const handleEditDocument = (docId) => {
-    console.log("id", docId);
   };
 
   useEffect(() => {
     GetAllProjectsList();
     GetDocumentsLists();
   }, []);
-
-  const Documentscolumns = [
-    {
-      name: "documents",
-      label: "File Name",
-      options: {
-        ...disableFilter,
-        // setCellProps: () => ({ style: { width: "300px" } }),
-        customBodyRender: (value) => (value ? value[0]?.fileName : "---"),
-      },
-    },
-    {
-      name: "documents",
-      label: "Type",
-      options: {
-        ...disableFilter,
-        customBodyRender: (value) => (value ? value[0]?.contentType : `---`),
-      },
-    },
-    {
-      name: "updatedAt",
-      label: "Upload Date",
-      width: "40%",
-      options: {
-        ...disableFilter,
-        // setCellProps: () => ({ style: { width: "700px" } }),
-        customBodyRender: (value) =>
-          value ? moment(value).format("DD-MM-YYYY") : `---`,
-      },
-    },
-    {
-      name: "",
-      label: "Actions",
-      options: {
-        ...disableFilter,
-        customBodyRenderLite: (dataIndex, rowIndex) => (
-          <>
-            <IconButton
-              size="small"
-              color="primary"
-              onClick={() => handleEditDocument(designTableData[dataIndex])}
-            >
-              <EditIcon fontSize="small" />
-            </IconButton>
-            <IconButton size="small" color="primary">
-              <EmailIcon fontSize="small" />
-            </IconButton>
-            <IconButton
-              size="small"
-              color="primary"
-              onClick={() => handleDeleteDocument(designTableData[dataIndex])}
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </>
-        ),
-      },
-    },
-  ];
-
-  const photosColumns = [
-    {
-      name: "documents",
-      label: "File Name",
-      options: {
-        ...disableFilter,
-        // setCellProps: () => ({ style: { width: "300px" } }),
-        customBodyRender: (value) => (value ? value[0]?.fileName : "---"),
-      },
-    },
-    {
-      name: "documents",
-      label: "Type",
-      options: {
-        ...disableFilter,
-        customBodyRender: (value) => (value ? value[0]?.contentType : `---`),
-      },
-    },
-    {
-      name: "updatedAt",
-      label: "Upload Date",
-      width: "40%",
-      options: {
-        ...disableFilter,
-        // setCellProps: () => ({ style: { width: "700px" } }),
-        customBodyRender: (value) =>
-          value ? moment(value).format("DD-MM-YYYY") : `---`,
-      },
-    },
-    {
-      name: "",
-      label: "Actions",
-      options: {
-        ...disableFilter,
-        customBodyRenderLite: (dataIndex, rowIndex) => (
-          <>
-            <IconButton
-              size="small"
-              color="primary"
-              onClick={() => handleEditDocument(photoTableData[dataIndex])}
-            >
-              <EditIcon fontSize="small" />
-            </IconButton>
-            <IconButton size="small" color="primary">
-              <EmailIcon fontSize="small" />
-            </IconButton>
-            <IconButton
-              size="small"
-              color="primary"
-              onClick={() => handleDeleteDocument(photoTableData[dataIndex])}
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </>
-        ),
-      },
-    },
-  ];
-
-  const submittalsColumns = [
-    {
-      name: "documents",
-      label: "File Name",
-      options: {
-        ...disableFilter,
-        // setCellProps: () => ({ style: { width: "300px" } }),
-        customBodyRender: (value) => (value ? value[0]?.fileName : "---"),
-      },
-    },
-    {
-      name: "documents",
-      label: "Type",
-      options: {
-        ...disableFilter,
-        customBodyRender: (value) => (value ? value[0]?.contentType : `---`),
-      },
-    },
-    {
-      name: "updatedAt",
-      label: "Upload Date",
-      width: "40%",
-      options: {
-        ...disableFilter,
-        // setCellProps: () => ({ style: { width: "700px" } }),
-        customBodyRender: (value) =>
-          value ? moment(value).format("DD-MM-YYYY") : `---`,
-      },
-    },
-    {
-      name: "",
-      label: "Actions",
-      options: {
-        ...disableFilter,
-        customBodyRenderLite: (dataIndex, rowIndex) => (
-          <>
-            <IconButton
-              size="small"
-              color="primary"
-              onClick={() => handleEditDocument(submittalsTableData[dataIndex])}
-            >
-              <EditIcon fontSize="small" />
-            </IconButton>
-            <IconButton size="small" color="primary">
-              <EmailIcon fontSize="small" />
-            </IconButton>
-            <IconButton
-              size="small"
-              color="primary"
-              onClick={() =>
-                handleDeleteDocument(submittalsTableData[dataIndex])
-              }
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </>
-        ),
-      },
-    },
-  ];
 
   const handleChangeTab = (event, newValue) => {
     if (newValue === 0) {
@@ -420,9 +198,16 @@ const DocumentManager = () => {
                     id="sortBy"
                     value={sortBy}
                     label=""
-                    onChange={handleSortBy}
+                    displayEmpty
+                    onChange={handleChangeProject}
+                    renderValue={
+                      sortBy !== ""
+                        ? undefined
+                        : () => <Placeholder>Select Project</Placeholder>
+                    }
                     sx={{ backgroundColor: "#fff", borderRadius: "10px" }}
                   >
+                    <MenuItem value={""}>None</MenuItem>
                     {projectOptions?.map((item, i) => (
                       <MenuItem key={item + i} value={item.value}>
                         {item.label}
@@ -506,23 +291,29 @@ const DocumentManager = () => {
             />
           </Tabs>
           <TabPanel value={tabValue} index={0}>
-            <DocumentTable columns={Documentscolumns} data={designTableData} />
+            <DesignDocumentTable
+              data={designTableData}
+              GetDocumentsLists={GetDocumentsLists}
+              projectOptions={projectOptions}
+              totalCount={totalCount}
+            />
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
-            <DocumentTable columns={photosColumns} data={photoTableData} />
+            <PhotosDocTable
+              data={photoTableData}
+              GetDocumentsLists={GetDocumentsLists}
+              projectOptions={projectOptions}
+            />
           </TabPanel>
           <TabPanel value={tabValue} index={2}>
-            <DocumentTable
-              columns={submittalsColumns}
+            <SubmittalsDocTable
               data={submittalsTableData}
+              GetDocumentsLists={GetDocumentsLists}
+              projectOptions={projectOptions}
             />
           </TabPanel>
         </Grid>
       </Grid>
-
-      {/* <Grid item xs={12}>
-          
-        </Grid> */}
       <AddNewFiles
         open={openFileModel}
         handleClose={handleCloseFileModel}

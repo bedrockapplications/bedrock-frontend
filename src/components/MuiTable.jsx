@@ -22,11 +22,6 @@ const MuiDataListTable = (props) => {
     rowsPerPageOptions: [10, 25, 50, 100],
     tableBodyHeight: "390px",
     tableBodyMaxHeight: "",
-    // textLabels: {
-    //   body: {
-    //     noMatch: "sorry no data found",
-    //   },
-    // },
     ...options,
   };
   return (

@@ -5,16 +5,18 @@ import { ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { theme } from "./theme";
 import "./i18n";
-
+import GlobalContext from "./Context/Context";
 
 ReactDOM.render(
   <React.StrictMode>
-    <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
-        <App />
-      </ThemeProvider>
-    </StyledEngineProvider>
+    <GlobalContext>
+      <StyledEngineProvider injectFirst>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <App />
+        </ThemeProvider>
+      </StyledEngineProvider>
+    </GlobalContext>
   </React.StrictMode>,
   document.getElementById("root")
 );
