@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import SubmittalsTable from "../../components/MuiTable";
 import { IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
@@ -8,6 +8,24 @@ import moment from "moment";
 import { deleteDocumentApi } from "../../services/request";
 import DeleteDocument from "./DeleteDocument";
 import EditUploadFiles from "./EditUploadeFiles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import TablePagination from "@mui/material/TablePagination";
+import { makeStyles } from "@mui/styles";
+import { GlobalState } from "../../Context/Context";
+
+const useStyle = makeStyles(() => ({
+  headerText: {
+    backgroundColor: "#3A3A3C",
+    color: "#fff",
+    textAlign: "left",
+  },
+}));
 
 let disableFilter = {
   filter: false,
@@ -15,7 +33,16 @@ let disableFilter = {
 };
 
 const SubmittalsDocTable = (props) => {
-  const { data, GetDocumentsLists, projectOptions } = props;
+  const classes = useStyle();
+  const { data, GetDocumentsLists, projectOptions, totalCount } = props;
+  const {
+    page,
+    setPage,
+    rowsPerPage,
+    setRowsPerPage,
+    selectedProjected,
+    setSelectedProjected,
+  } = useContext(GlobalState);
 
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteItem, setDeleteItem] = useState({});
@@ -23,7 +50,13 @@ const SubmittalsDocTable = (props) => {
   const [editData, setEditData] = useState({});
 
   const handleEditOpen = (item) => {
-    setEditData({ ...item });
+    const data = {
+      projectId: item?.projectId?._id,
+      categoryType: item?.categoryType,
+      fileName: item?.fileName,
+      id: item._id,
+    };
+    setEditData(data);
     setEditOpen(true);
   };
 
@@ -32,8 +65,8 @@ const SubmittalsDocTable = (props) => {
     setEditOpen(false);
   };
 
-  const handleOpenDelete = (docItem) => {
-    setDeleteItem({ ...docItem });
+  const handleOpenDelete = (item) => {
+    setDeleteItem(item._id);
     setDeleteOpen(true);
   };
 
@@ -41,12 +74,8 @@ const SubmittalsDocTable = (props) => {
     setDeleteOpen(false);
   };
 
-  const handleEditDocument = (docId) => {
-    console.log("id", docId);
-  };
-
   const handleDeleteDocument = () => {
-    deleteDocumentApi(deleteItem._id)
+    deleteDocumentApi(deleteItem)
       .then((res) => {
         if (res.status === 200) {
           GetDocumentsLists();
@@ -57,68 +86,81 @@ const SubmittalsDocTable = (props) => {
         console.log("error", error);
       });
   };
-  const columns = [
-    {
-      name: "documents",
-      label: "File Name",
-      options: {
-        ...disableFilter,
-        // setCellProps: () => ({ style: { width: "300px" } }),
-        customBodyRender: (value) => (value ? value[0]?.fileName : "---"),
-      },
-    },
-    {
-      name: "documents",
-      label: "Type",
-      options: {
-        ...disableFilter,
-        customBodyRender: (value) => (value ? value[0]?.contentType : `---`),
-      },
-    },
-    {
-      name: "updatedAt",
-      label: "Upload Date",
-      width: "40%",
-      options: {
-        ...disableFilter,
-        // setCellProps: () => ({ style: { width: "700px" } }),
-        customBodyRender: (value) =>
-          value ? moment(value).format("DD-MM-YYYY") : `---`,
-      },
-    },
-    {
-      name: "",
-      label: "Actions",
-      options: {
-        ...disableFilter,
-        customBodyRenderLite: (dataIndex, rowIndex) => (
-          <>
-            <IconButton
-              size="small"
-              color="primary"
-              onClick={() => handleEditOpen(data[dataIndex])}
-            >
-              <EditIcon fontSize="small" />
-            </IconButton>
-            <IconButton size="small" color="primary">
-              <EmailIcon fontSize="small" />
-            </IconButton>
-            <IconButton
-              size="small"
-              color="primary"
-              onClick={() => handleOpenDelete(data[dataIndex])}
-            >
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </>
-        ),
-      },
-    },
-  ];
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+    GetDocumentsLists(newPage, rowsPerPage, selectedProjected);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value));
+    setPage(0);
+    GetDocumentsLists(0, event.target.value, selectedProjected);
+  };
 
   return (
     <>
-      <SubmittalsTable columns={columns} data={data} />
+      <Paper sx={{ width: "100%", border: "3px solid #3A3A3C" }}>
+        <TableContainer sx={{ height: 320, maxHeight: 320 }}>
+          <Table stickyHeader aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell className={classes.headerText}>File Name</TableCell>
+                <TableCell className={classes.headerText}>Type</TableCell>
+                <TableCell className={classes.headerText}>
+                  Project Name
+                </TableCell>
+                <TableCell className={classes.headerText}>
+                  Upload Date
+                </TableCell>
+                <TableCell className={classes.headerText}>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {data?.map((item, i) => (
+                <TableRow key={item._id}>
+                  <TableCell align="right">{item?.fileName}</TableCell>
+                  <TableCell align="right">{item?.contentType}</TableCell>
+                  <TableCell align="right">
+                    {item?.projectId?.projectName}
+                  </TableCell>
+                  <TableCell align="right">
+                    {moment(item?.updatedAt).format("DD-MM-YYYY")}
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton
+                      size="small"
+                      color="primary"
+                      onClick={() => handleEditOpen(item)}
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton size="small" color="primary">
+                      <EmailIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      color="primary"
+                      onClick={() => handleOpenDelete(item)}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 50, 100]}
+          component="div"
+          count={totalCount}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Paper>
       <DeleteDocument
         open={deleteOpen}
         handleClose={handleCloseDelete}

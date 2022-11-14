@@ -6,6 +6,7 @@ const ContextProvider = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [selectedProjected, setSelectedProjected] = useState("");
   return (
     <GlobalState.Provider
       value={{
@@ -15,6 +16,8 @@ const ContextProvider = (props) => {
         setPage,
         rowsPerPage,
         setRowsPerPage,
+        selectedProjected,
+        setSelectedProjected,
       }}
     >
       {props.children}

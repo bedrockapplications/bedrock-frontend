@@ -101,10 +101,15 @@ const DocumentManager = () => {
   const classes = useStyle();
   const { t } = useTranslation();
   const userId = localStorage.getItem("userId");
-  const { page, rowsPerPage } = useContext(GlobalState);
-  console.log("pages1", page, rowsPerPage);
+  const {
+    page,
+    setPage,
+    rowsPerPage,
+    setRowsPerPage,
+    selectedProjected,
+    setSelectedProjected,
+  } = useContext(GlobalState);
 
-  const [sortBy, setSortBy] = useState("");
   const [tabValue, setTabValue] = useState(0);
   const [openFileModel, setOpenFileModel] = useState(false);
   const [projectOptions, setProjectOptions] = useState([]);
@@ -114,10 +119,13 @@ const DocumentManager = () => {
   const [submittalsTableData, setSubmittalsTableData] = useState([]);
 
   const [totalCount, setTotalCount] = useState(0);
+  const [photosCount, setPhotosCount] = useState(0);
+  const [submittalsCount, setSubmittalsCount] = useState(0);
 
   const handleChangeProject = (event) => {
-    GetDocumentsLists(page, rowsPerPage, event.target.value);
-    setSortBy(event.target.value);
+    setPage(0);
+    GetDocumentsLists(0, rowsPerPage, event.target.value);
+    setSelectedProjected(event.target.value);
   };
 
   const GetAllProjectsList = () => {
@@ -148,6 +156,8 @@ const DocumentManager = () => {
           setPhotoTableData([...data.Photos]);
           setSubmittalsTableData([...data.Submittals]);
           setTotalCount(data.DesignDocumentsCount);
+          setPhotosCount(data.PhotosCount);
+          setSubmittalsCount(data.SubmittalsCount);
         }
       })
       .catch((error) => {
@@ -169,6 +179,9 @@ const DocumentManager = () => {
       setCategoryType("Submittals");
     }
     setTabValue(newValue);
+    setPage(0);
+    setRowsPerPage(10);
+    GetDocumentsLists(0, 10, selectedProjected);
   };
 
   const handleCloseFileModel = () => {
@@ -192,16 +205,16 @@ const DocumentManager = () => {
             >
               <Box sx={{ width: "253px" }}>
                 <FormControl fullWidth size="small" placeholder="Sort By">
-                  <InputLabel id="sortBy"></InputLabel>
+                  <InputLabel id="projectId"></InputLabel>
                   <Select
-                    labelId="sortBy"
-                    id="sortBy"
-                    value={sortBy}
+                    labelId="projectId"
+                    id="projectId"
+                    value={selectedProjected}
                     label=""
                     displayEmpty
                     onChange={handleChangeProject}
                     renderValue={
-                      sortBy !== ""
+                      selectedProjected !== ""
                         ? undefined
                         : () => <Placeholder>Select Project</Placeholder>
                     }
@@ -303,6 +316,7 @@ const DocumentManager = () => {
               data={photoTableData}
               GetDocumentsLists={GetDocumentsLists}
               projectOptions={projectOptions}
+              totalCount={photosCount}
             />
           </TabPanel>
           <TabPanel value={tabValue} index={2}>
@@ -310,6 +324,7 @@ const DocumentManager = () => {
               data={submittalsTableData}
               GetDocumentsLists={GetDocumentsLists}
               projectOptions={projectOptions}
+              totalCount={submittalsCount}
             />
           </TabPanel>
         </Grid>

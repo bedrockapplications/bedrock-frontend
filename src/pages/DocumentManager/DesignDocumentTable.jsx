@@ -34,10 +34,15 @@ let disableFilter = {
 
 const DesignDocumentTable = (props) => {
   const classes = useStyle();
-
   const { data, GetDocumentsLists, projectOptions, totalCount } = props;
-  const { page, setPage, rowsPerPage, setRowsPerPage } =
-    useContext(GlobalState);
+  const {
+    page,
+    setPage,
+    rowsPerPage,
+    setRowsPerPage,
+    selectedProjected,
+    setSelectedProjected,
+  } = useContext(GlobalState);
 
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteItem, setDeleteItem] = useState({});
@@ -45,13 +50,12 @@ const DesignDocumentTable = (props) => {
   const [editData, setEditData] = useState({});
   const [dense, setDense] = React.useState(false);
 
-  const handleEditOpen = (item, doc) => {
+  const handleEditOpen = (item) => {
     const data = {
       projectId: item?.projectId?._id,
       categoryType: item?.categoryType,
-      mediaId: doc?._id,
-      fileName: doc?.fileName,
-      mainId: item._id,
+      fileName: item?.fileName,
+      id: item._id,
     };
     setEditData(data);
     setEditOpen(true);
@@ -62,12 +66,8 @@ const DesignDocumentTable = (props) => {
     setEditOpen(false);
   };
 
-  const handleOpenDelete = (item, doc) => {
-    let obj = {
-      mediaId: doc._id,
-      _id: item._id,
-    };
-    setDeleteItem(obj);
+  const handleOpenDelete = (item) => {
+    setDeleteItem(item._id);
     setDeleteOpen(true);
   };
 
@@ -90,13 +90,13 @@ const DesignDocumentTable = (props) => {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-    GetDocumentsLists(newPage, rowsPerPage);
+    GetDocumentsLists(newPage, rowsPerPage, selectedProjected);
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value));
     setPage(0);
-    GetDocumentsLists(0, event.target.value);
+    GetDocumentsLists(0, event.target.value, selectedProjected);
   };
 
   const emptyRows =
@@ -105,7 +105,7 @@ const DesignDocumentTable = (props) => {
   return (
     <>
       <Paper sx={{ width: "100%", border: "3px solid #3A3A3C" }}>
-        <TableContainer sx={{ maxHeight: 320 }}>
+        <TableContainer sx={{ height: 320, maxHeight: 320 }}>
           <Table stickyHeader aria-label="simple table">
             <TableHead>
               <TableRow>
@@ -121,40 +121,38 @@ const DesignDocumentTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.map((item, i) =>
-                item.documents.map((doc, j) => (
-                  <TableRow key={doc?._id}>
-                    <TableCell align="right">{doc?.fileName}</TableCell>
-                    <TableCell align="right">{doc.contentType}</TableCell>
-                    <TableCell align="right">
-                      {item?.projectId?.projectName}
-                    </TableCell>
-                    <TableCell align="right">
-                      {moment(item?.updatedAt).format("DD-MM-YYYY")}
-                    </TableCell>
-                    <TableCell align="right">
-                      <IconButton
-                        size="small"
-                        color="primary"
-                        onClick={() => handleEditOpen(item, doc)}
-                      >
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                      <IconButton size="small" color="primary">
-                        <EmailIcon fontSize="small" />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        color="primary"
-                        onClick={() => handleOpenDelete(item, doc)}
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-              {emptyRows > 0 && (
+              {data?.map((item, i) => (
+                <TableRow key={item._id}>
+                  <TableCell align="right">{item?.fileName}</TableCell>
+                  <TableCell align="right">{item?.contentType}</TableCell>
+                  <TableCell align="right">
+                    {item?.projectId?.projectName}
+                  </TableCell>
+                  <TableCell align="right">
+                    {moment(item?.updatedAt).format("DD-MM-YYYY")}
+                  </TableCell>
+                  <TableCell align="right">
+                    <IconButton
+                      size="small"
+                      color="primary"
+                      onClick={() => handleEditOpen(item)}
+                    >
+                      <EditIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton size="small" color="primary">
+                      <EmailIcon fontSize="small" />
+                    </IconButton>
+                    <IconButton
+                      size="small"
+                      color="primary"
+                      onClick={() => handleOpenDelete(item)}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+              {/* {emptyRows > 0 && (
                 <TableRow
                   style={{
                     height: (dense ? 33 : 53) * emptyRows,
@@ -162,12 +160,12 @@ const DesignDocumentTable = (props) => {
                 >
                   <TableCell colSpan={6} />
                 </TableRow>
-              )}
+              )} */}
             </TableBody>
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[10, 25, 50, 100]}
           component="div"
           count={totalCount}
           rowsPerPage={rowsPerPage}
@@ -196,23 +194,53 @@ const DesignDocumentTable = (props) => {
 
 export default DesignDocumentTable;
 
+{
+  /* <DocumentTable columns={columns} data={data} options={options} /> */
+}
+
+// const options = {
+//   pagination: true,
+//   rowsPerPageOptions: [10, 25, 50, 100],
+//   serverSide: true,
+//   count: totalCount,
+//   onChangeRowsPerPage: (numberOfRows) => {
+//     setRowsPerPage(numberOfRows);
+//     GetDocumentsLists(page, numberOfRows);
+
+//     // setPageSize(numberOfRows);
+//     // GetDocumentsLists(pageNo, numberOfRows);
+//   },
+//   onTableChange: (action, tableState) => {
+//     if (action === "changePage") {
+//       setPage(tableState?.page);
+//       GetDocumentsLists(tableState?.page, rowsPerPage);
+//     }
+//   },
+// };
+
 // const columns = [
 //   {
-//     name: "documents",
+//     name: "fileName",
 //     label: "File Name",
 //     options: {
 //       ...disableFilter,
-//       // setCellProps: () => ({ style: { width: "300px" } }),
-//       customBodyRender: (value) =>
-//         value ? value?.map((item) => item.fileName) : "---",
+//       customBodyRender: (value) => (value ? value : "---"),
 //     },
 //   },
 //   {
-//     name: "documents",
+//     name: "contentType",
 //     label: "Type",
 //     options: {
 //       ...disableFilter,
-//       customBodyRender: (value) => (value ? value[0]?.contentType : `---`),
+//       customBodyRender: (value) => (value ? value : `---`),
+//     },
+//   },
+//   {
+//     name: "projectId",
+//     label: "Type",
+//     options: {
+//       ...disableFilter,
+//       customBodyRender: (value) => (value ? value?.projectName : `---`),
 //     },
 //   },
 //   {
@@ -221,7 +249,6 @@ export default DesignDocumentTable;
 //     width: "40%",
 //     options: {
 //       ...disableFilter,
-//       // setCellProps: () => ({ style: { width: "700px" } }),
 //       customBodyRender: (value) =>
 //         value ? moment(value).format("DD-MM-YYYY") : `---`,
 //     },

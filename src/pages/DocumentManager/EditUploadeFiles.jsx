@@ -27,7 +27,7 @@ const EditUploadFiles = (props) => {
       mediaId: data.mediaId,
       categoryType: values.categoryType,
     };
-    updateDocumentApi(data.mainId, payload)
+    updateDocumentApi(data.id, payload)
       .then((res) => {
         if (res.status === 200) {
           setSubmitting(false);

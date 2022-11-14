@@ -32,9 +32,8 @@ const AddNewFiles = (props) => {
     setSubmitting(true);
     let formData = new FormData();
     formData.append("projectId", data.projectId);
-    formData.append("categoryType", categoryType);
+    formData.append("categoryType", data.categoryType);
     formData.append("userId", userId);
-    // formData.append("docs", data.docs[0]);
     data?.docs?.forEach((doc) => {
       formData.append("docs", doc);
     });

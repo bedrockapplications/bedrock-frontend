@@ -46,7 +46,5 @@ export const getAllDocumentListApi = (pageNumber, limit, userId, projectId) => {
 };
 
 export const deleteDocumentApi = (deleteItem) => {
-  return axios.delete(
-    `/document/deleteDocument?mediaId=${deleteItem.mediaId}&_id=${deleteItem._id}`
-  );
+  return axios.delete(`/document/deleteDocument/${deleteItem}`);
 };
