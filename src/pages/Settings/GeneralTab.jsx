@@ -177,7 +177,7 @@ const GeneralTab = () => {
                             label="Relationship"
                           />
                         </Grid>
-                        <Grid item xs={12} sx={{ textAlign: "right" }}>
+                        <Grid item xs={12}>
                           <Button
                             variant="contained"
                             type="submit"
