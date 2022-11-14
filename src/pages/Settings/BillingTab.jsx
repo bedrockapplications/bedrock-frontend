@@ -47,22 +47,66 @@ const BillingTab = () => {
                 flexGrow: "1",
                 padding: "7px",
                 // height: "65vh",
-                height: "calc(100vh - 220px)"
+                height: "calc(100vh - 220px)",
               }}
             >
               <Grid container spacing={4}>
                 <Grid item xs={12} sm={12} md={12}>
-                  <Paper sx={{height: "calc(100vh - 240px)"}}>
+                  <Paper sx={{ height: "calc(100vh - 240px)" }}>
                     <Typography className={classes.companyText}>
-                    Manage Your Plan
+                      Manage Your Plan
                     </Typography>
                     <Divider />
                     <Box sx={{ padding: "7px 1rem" }}>
                       <Grid container spacing={2}>
+                        <Grid item>
+                          <Typography
+                            sx={{
+                              margin: "15px 0px",
+                              padding: "0 !important",
+                            }}
+                          >
+                            Your Plan:
+                          </Typography>
+                        </Grid>
+                        <Grid item xs={2}>
+                          <Typography
+                            sx={{
+                              margin: "15px 0px",
+                              padding: "5px !important",
+                              background: "#F2F2F7",
+                              border: "1px solid #D3D3D3",
+                              borderRadius: "5px",
+                              textAlign:"center"
+                            }}
+                          >
+                            Basic
+                          </Typography>
+                        </Grid>
+                        <Grid item>
+                          <Typography
+                            sx={{
+                              margin: "15px 0px",
+                              padding: "0 !important",
+                              color: "#007AFF",
+                              textDecoration: "underline",
+                              cursor:"pointer"
+                            }}
+                          >
+                            Upgrade Plan
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                      <Grid container spacing={2}>
                         <Grid item xs={8}>
-                        <Typography className={classes.companyText} sx={{margin:"30px 0px 15px 0px", padding:"0 !important"}}>
-                        Billing Address
-                    </Typography>
+                          <Typography
+                            className={classes.companyText}
+                            sx={{
+                              padding: "0 !important",
+                            }}
+                          >
+                            Billing Address
+                          </Typography>
                           <Grid container spacing={3}>
                             <Grid item xs={12}>
                               <MuiTextField
@@ -109,17 +153,21 @@ const BillingTab = () => {
                           </Grid>
                         </Grid>
                       </Grid>
-                      <Grid container spacing={2} sx={{marginTop:"30px"}}>
+                      <Grid container spacing={2} sx={{ marginTop: "30px" }}>
                         <Grid item xs={3}>
-                        <Typography sx={{marginBottom:"5px", fontWeight:"600"}}>(Billing) E-mail Address</Typography>
-                          <MuiTextField
-                            name="email"
-                            id="email"
-                            label="email"
-                          />
+                          <Typography
+                            sx={{ marginBottom: "5px", fontWeight: "600" }}
+                          >
+                            (Billing) E-mail Address
+                          </Typography>
+                          <MuiTextField name="email" id="email" label="email" />
                         </Grid>
                         <Grid item xs={3}>
-                        <Typography sx={{marginBottom:"5px", fontWeight:"600"}}>(Billing) Phone Number</Typography>
+                          <Typography
+                            sx={{ marginBottom: "5px", fontWeight: "600" }}
+                          >
+                            (Billing) Phone Number
+                          </Typography>
                           <MuiTextField
                             name="phoneNumber"
                             id="phoneNumber"
@@ -127,7 +175,11 @@ const BillingTab = () => {
                           />
                         </Grid>
                         <Grid item xs={3}>
-                        <Typography sx={{marginBottom:"5px", fontWeight:"600"}}>(Billing) Full Name</Typography>
+                          <Typography
+                            sx={{ marginBottom: "5px", fontWeight: "600" }}
+                          >
+                            (Billing) Full Name
+                          </Typography>
                           <MuiTextField
                             name="fullname"
                             id="fullname"
