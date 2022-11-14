@@ -15,7 +15,6 @@ import {
 } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import MuiTextField from "../../components/Formik/MuiTextField";
-import { Direction } from "react-data-table-component";
 
 const useStyle = makeStyles(() => ({
   companyText: {
@@ -25,14 +24,9 @@ const useStyle = makeStyles(() => ({
     color: "#253858",
     padding: "7px 1rem",
   },
-  userName:{
-    fontSize: "24px",
-    color: "#253858",
-    fontWeight:"700",
-  }
 }));
 
-const GeneralTab = () => {
+const BillingTab = () => {
   const classes = useStyle();
   return (
     <>
@@ -56,39 +50,19 @@ const GeneralTab = () => {
                 height: "calc(100vh - 220px)"
               }}
             >
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={12} md={4}>
-                  <Paper sx={{ textAlign: "center", padding: "1rem 2rem", height: "calc(100vh - 240px)", 
-                display:"flex", flexDirection:"column", justifyContent:"space-evenly", alignItems:"center" }}>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src=""
-                      sx={{ width: 100, height: 100 }}
-                    />
-                    <Typography className={classes.userName}>dummy.user@devias.io</Typography>
-                    <Typography>Your plan: Premium</Typography>
-                    <Typography sx={{fontWeight:"700"}}>Remove Picture</Typography>
-                    <MuiTextField name="email" id="email" label="email" required/>
-                    <MuiTextField
-                      name="phoneNo"
-                      id="phoneNo"
-                      label="Phone Number"
-                      required
-                    />
-                  </Paper>
-                </Grid>
-                <Grid item xs={12} sm={12} md={8}>
-                  <Paper sx={{
-                height: "calc(100vh - 240px)",
-              }}>
+              <Grid container spacing={4}>
+                <Grid item xs={12} sm={12} md={12}>
+                  <Paper sx={{height: "calc(100vh - 240px)"}}>
                     <Typography className={classes.companyText}>
-                      Company Profile
+                    Manage Your Plan
                     </Typography>
                     <Divider />
-                    <Box sx={{ padding: "7px 1rem" , height: "calc(100vh - 282px)", display:"flex", flexDirection:"column", justifyContent:"space-evenly"}}>
+                    <Box sx={{ padding: "7px 1rem" }}>
                       <Grid container spacing={2}>
                         <Grid item xs={8}>
-                          <Typography sx={{marginBottom:"5px", fontWeight:"600"}}>Address</Typography>
+                        <Typography className={classes.companyText} sx={{margin:"30px 0px 15px 0px", padding:"0 !important"}}>
+                        Billing Address
+                    </Typography>
                           <Grid container spacing={3}>
                             <Grid item xs={12}>
                               <MuiTextField
@@ -134,33 +108,18 @@ const GeneralTab = () => {
                             </Grid>
                           </Grid>
                         </Grid>
-                        <Grid item xs={4}>
-                          <Typography sx={{marginBottom:"5px", fontWeight:"600"}}>Position / Title</Typography>
-                          <Grid container spacing={3}>
-                            <Grid item xs={12}>
-                              <MuiTextField
-                                name="type"
-                                id="type"
-                                label="Type"
-                              />
-                            </Grid>
-                          </Grid>
-                        </Grid>
                       </Grid>
-                      <Typography className={classes.companyText} sx={{padding:"0 !important"}}>
-                        Emergency Contact
-                      </Typography>
-                      <Grid container spacing={2}>
+                      <Grid container spacing={2} sx={{marginTop:"30px"}}>
                         <Grid item xs={3}>
-                        <Typography sx={{marginBottom:"5px", fontWeight:"600"}}>Full Name</Typography>
+                        <Typography sx={{marginBottom:"5px", fontWeight:"600"}}>(Billing) E-mail Address</Typography>
                           <MuiTextField
-                            name="fullName"
-                            id="fullName"
-                            label="Full Name"
+                            name="email"
+                            id="email"
+                            label="email"
                           />
                         </Grid>
                         <Grid item xs={3}>
-                        <Typography sx={{marginBottom:"5px", fontWeight:"600"}}>Phone Number</Typography>
+                        <Typography sx={{marginBottom:"5px", fontWeight:"600"}}>(Billing) Phone Number</Typography>
                           <MuiTextField
                             name="phoneNumber"
                             id="phoneNumber"
@@ -168,11 +127,11 @@ const GeneralTab = () => {
                           />
                         </Grid>
                         <Grid item xs={3}>
-                        <Typography sx={{marginBottom:"5px", fontWeight:"600"}}>Relationship</Typography>
+                        <Typography sx={{marginBottom:"5px", fontWeight:"600"}}>(Billing) Full Name</Typography>
                           <MuiTextField
-                            name="relationship"
-                            id="relationship"
-                            label="Relationship"
+                            name="fullname"
+                            id="fullname"
+                            label="Full Name"
                           />
                         </Grid>
                       </Grid>
@@ -228,4 +187,4 @@ const GeneralTab = () => {
   );
 };
 
-export default GeneralTab;
+export default BillingTab;

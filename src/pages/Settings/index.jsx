@@ -21,6 +21,8 @@ import {
 import TabPanel from "../../components/MuiTabPanel";
 import { useTranslation } from "react-i18next";
 import GeneralTab from "./GeneralTab";
+import BillingTab from "./BillingTab";
+import SecurityTab from "./SecurityTab";
 
 const useStyle = makeStyles(() => ({
   bgPaper: {
@@ -77,7 +79,7 @@ const Settings = () => {
           </Paper>
         </Grid>
       </Grid>
-      <Grid container sx={{ height: "75%", marginTop: "10px" }}>
+      <Grid container sx={{ marginTop: "10px" }}>
         <Grid item xs={12}>
           <Tabs
             value={tabValue}
@@ -116,10 +118,10 @@ const Settings = () => {
               <GeneralTab />
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
-            <>General</>
+            <BillingTab />
           </TabPanel>
           <TabPanel value={tabValue} index={2}>
-            <>General</>
+            <SecurityTab />
           </TabPanel>
         </Grid>
       </Grid>
