@@ -59,8 +59,12 @@ const SecurityTab = () => {
                     <Divider />
                     <Box sx={{ padding: "7px 1rem" }}>
                       <Grid container spacing={2}>
-                        <Grid item xs={12} sx={{margin:"40px 0px"}}>
-                          <Typography sx={{marginBottom:"15px", fontWeight:"600"}}>Exisiting Password</Typography>
+                        <Grid item xs={12} sx={{ margin: "40px 0px" }}>
+                          <Typography
+                            sx={{ marginBottom: "15px", fontWeight: "600" }}
+                          >
+                            Exisiting Password
+                          </Typography>
                           <Grid container spacing={3}>
                             <Grid item xs={4}>
                               <MuiTextField
@@ -73,7 +77,11 @@ const SecurityTab = () => {
                           </Grid>
                         </Grid>
                         <Grid item xs={12}>
-                          <Typography sx={{marginBottom:"15px", fontWeight:"600"}}>New Password</Typography>
+                          <Typography
+                            sx={{ marginBottom: "15px", fontWeight: "600" }}
+                          >
+                            New Password
+                          </Typography>
                           <Grid container spacing={3}>
                             <Grid item xs={4}>
                               <MuiTextField
@@ -90,6 +98,15 @@ const SecurityTab = () => {
                                 label="Confirm Password"
                                 type="password"
                               />
+                            </Grid>
+                            <Grid item xs={12} sx={{ textAlign: "right" }}>
+                              <Button
+                                variant="contained"
+                                type="submit"
+                                size="small"
+                              >
+                                Submit
+                              </Button>
                             </Grid>
                           </Grid>
                         </Grid>

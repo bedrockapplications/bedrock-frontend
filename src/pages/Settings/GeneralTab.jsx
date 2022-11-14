@@ -16,6 +16,7 @@ import {
 import Avatar from "@mui/material/Avatar";
 import MuiTextField from "../../components/Formik/MuiTextField";
 import { Direction } from "react-data-table-component";
+import { useTranslation } from "react-i18next";
 
 const useStyle = makeStyles(() => ({
   companyText: {
@@ -34,6 +35,7 @@ const useStyle = makeStyles(() => ({
 
 const GeneralTab = () => {
   const classes = useStyle();
+  const { t } = useTranslation();
   return (
     <>
       <Formik
@@ -174,6 +176,15 @@ const GeneralTab = () => {
                             id="relationship"
                             label="Relationship"
                           />
+                        </Grid>
+                        <Grid item xs={12} sx={{ textAlign: "right" }}>
+                          <Button
+                            variant="contained"
+                            type="submit"
+                            size="small"
+                          >
+                            {t("submit")}
+                          </Button>
                         </Grid>
                       </Grid>
                     </Box>

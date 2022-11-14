@@ -134,6 +134,15 @@ const BillingTab = () => {
                             label="Full Name"
                           />
                         </Grid>
+                        <Grid item xs={12} sx={{ textAlign: "right" }}>
+                          <Button
+                            variant="contained"
+                            type="submit"
+                            size="small"
+                          >
+                            Submit
+                          </Button>
+                        </Grid>
                       </Grid>
                     </Box>
                   </Paper>
