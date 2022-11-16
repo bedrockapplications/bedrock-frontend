@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { makeStyles } from "@mui/styles";
@@ -17,6 +17,7 @@ import Avatar from "@mui/material/Avatar";
 import MuiTextField from "../../components/Formik/MuiTextField";
 import { Direction } from "react-data-table-component";
 import { useTranslation } from "react-i18next";
+import { GlobalState } from "../../Context/Context";
 
 const useStyle = makeStyles(() => ({
   companyText: {
@@ -36,10 +37,18 @@ const useStyle = makeStyles(() => ({
 const GeneralTab = () => {
   const classes = useStyle();
   const { t } = useTranslation();
+  const {userDetails, setUserDetails} = useContext(GlobalState);
+
+  const handleSaveEditFiles = (values, setSubmitting, resetForm) => {
+    setSubmitting(true);
+  };
   return (
     <>
       <Formik
-        initialValues={{}}
+        initialValues={{
+              email: userDetails?.email,
+              phoneNo: userDetails?.phoneNumber,
+        }}
         enableReinitialize
         validationSchema={""}
         onSubmit={(values, { setSubmitting, resetForm }) => {
@@ -67,7 +76,7 @@ const GeneralTab = () => {
                       src=""
                       sx={{ width: 100, height: 100 }}
                     />
-                    <Typography className={classes.userName}>dummy.user@devias.io</Typography>
+                    <Typography className={classes.userName}>{userDetails?.email}</Typography>
                     <Typography>Your plan: Premium</Typography>
                     <Typography sx={{fontWeight:"700"}}>Remove Picture</Typography>
                     <MuiTextField name="email" id="email" label="email" required/>

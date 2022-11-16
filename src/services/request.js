@@ -4,6 +4,16 @@ let headers = {
   "content-type": "multipart/form-data",
 };
 
+
+
+// user details api
+export const getUserDetails = async (id) => {
+  return axios.get(
+    `/user/details?_id=${id}`
+  );
+};
+
+
 //Task Api start
 export const getMeetingsList = async (uId, startDate) => {
   return axios.get(

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { useEffect, useState, useContext, memo } from "react";
 import { makeStyles } from "@mui/styles";
 import {
   Grid,
@@ -23,6 +23,8 @@ import { useTranslation } from "react-i18next";
 import GeneralTab from "./GeneralTab";
 import BillingTab from "./BillingTab";
 import SecurityTab from "./SecurityTab";
+import { getUserDetails } from "../../services/request";
+import { GlobalState } from "../../Context/Context";
 
 const useStyle = makeStyles(() => ({
   bgPaper: {
@@ -59,14 +61,33 @@ function a11yProps(index) {
 }
 
 const Settings = () => {
+
   const classes = useStyle();
   const { t } = useTranslation();
 
+  const {userDetails, setUserDetails} = useContext(GlobalState);
   const [tabValue, setTabValue] = useState(0);
+
 
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
   };
+
+  const handleUserDetails = () => {
+    let id = localStorage.userId;
+    getUserDetails(id).then((res) => {
+      if(res.status === 200 && (res.data.hasOwnProperty('email'))){
+        setUserDetails(res.data)
+      }
+      else{
+        console.log(res.data.message)
+      }
+    })
+  }
+
+  useEffect(() => {
+    handleUserDetails();
+  }, [])
 
   return (
     <>
