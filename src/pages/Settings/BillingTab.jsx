@@ -47,12 +47,12 @@ const BillingTab = () => {
                 flexGrow: "1",
                 padding: "7px",
                 // height: "65vh",
-                height: "calc(100vh - 220px)",
+                // height: "calc(100vh - 220px)",
               }}
             >
               <Grid container spacing={4}>
                 <Grid item xs={12} sm={12} md={12}>
-                  <Paper sx={{ height: "calc(100vh - 240px)" }}>
+                  <Paper>
                     <Typography className={classes.companyText}>
                       Manage Your Plan
                     </Typography>
@@ -77,7 +77,7 @@ const BillingTab = () => {
                               background: "#F2F2F7",
                               border: "1px solid #D3D3D3",
                               borderRadius: "5px",
-                              textAlign:"center"
+                              textAlign: "center",
                             }}
                           >
                             Basic
@@ -90,7 +90,7 @@ const BillingTab = () => {
                               padding: "0 !important",
                               color: "#007AFF",
                               textDecoration: "underline",
-                              cursor:"pointer"
+                              cursor: "pointer",
                             }}
                           >
                             Upgrade Plan

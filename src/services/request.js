@@ -4,15 +4,10 @@ let headers = {
   "content-type": "multipart/form-data",
 };
 
-
-
 // user details api
 export const getUserDetails = async (id) => {
-  return axios.get(
-    `/user/details?_id=${id}`
-  );
+  return axios.get(`/user/details?_id=${id}`);
 };
-
 
 //Task Api start
 export const getMeetingsList = async (uId, startDate) => {
@@ -49,9 +44,18 @@ export const updateDocumentApi = (docId, payload) => {
   return axios.put(`/document/updateDocument/${docId}`, payload);
 };
 
-export const getAllDocumentListApi = (pageNumber, limit, userId, projectId) => {
+export const getAllDocumentListApi = (
+  pageNumber,
+  limit,
+  userId,
+  projectId,
+  searchValue
+) => {
+  console.log("searchValue",searchValue)
   return axios.get(
-    `/document/getDocs?pageNumber=${pageNumber}&limit=${limit}&userId=${userId}&projectId=${projectId}`
+    `/document/getDocs?pageNumber=${pageNumber}&limit=${limit}&userId=${userId}&projectId=${projectId}&fileName=${
+      searchValue || ""
+    }`
   );
 };
 

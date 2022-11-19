@@ -31,6 +31,7 @@ import DesignDocumentTable from "./DesignDocumentTable";
 import PhotosDocTable from "./PhotosDocTable";
 import SubmittalsDocTable from "./SubmittalsDocTable";
 import { GlobalState } from "../../Context/Context";
+import MuiTextField from "../../components/Formik/MuiTextField";
 
 // import DocumentTable from "../../components/MuiTable";
 // import EditIcon from "@mui/icons-material/Edit";
@@ -108,6 +109,8 @@ const DocumentManager = () => {
     setRowsPerPage,
     selectedProjected,
     setSelectedProjected,
+    search,
+    setSearch,
   } = useContext(GlobalState);
 
   const [tabValue, setTabValue] = useState(0);
@@ -147,8 +150,14 @@ const DocumentManager = () => {
       });
   };
 
-  const GetDocumentsLists = (pageNumber, limit, projectId) => {
-    getAllDocumentListApi(pageNumber || 0, limit || 10, userId, projectId || "")
+  const GetDocumentsLists = (pageNumber, limit, projectId, searchValue) => {
+    getAllDocumentListApi(
+      pageNumber || 0,
+      limit || 10,
+      userId,
+      projectId || "",
+      searchValue
+    )
       .then((res) => {
         if (res.status === 200) {
           const data = res.data.data;
@@ -181,11 +190,16 @@ const DocumentManager = () => {
     setTabValue(newValue);
     setPage(0);
     setRowsPerPage(10);
-    GetDocumentsLists(0, 10, selectedProjected);
+    GetDocumentsLists(0, 10, selectedProjected, search);
   };
 
   const handleCloseFileModel = () => {
     setOpenFileModel(false);
+  };
+
+  const handleSearch = (searchValue) => {
+    setSearch(searchValue);
+    GetDocumentsLists(0, 10, selectedProjected, searchValue);
   };
 
   return (
@@ -230,7 +244,25 @@ const DocumentManager = () => {
                 </FormControl>
               </Box>
               <Box sx={{ width: "450px" }}>
-                <Autocomplete
+                <TextField
+                  id="search"
+                  name="search"
+                  placeholder={t(`document.search_all_documents`)}
+                  variant="outlined"
+                  sx={{ backgroundColor: "#fff", borderRadius: "10px" }}
+                  fullWidth
+                  size="small"
+                  onChange={(e) => handleSearch(e.target.value)}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <SearchIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+
+                {/* <Autocomplete
                   id="search"
                   freeSolo
                   options={[]?.map((option) => option?.title)}
@@ -251,7 +283,7 @@ const DocumentManager = () => {
                       }}
                     />
                   )}
-                />
+                /> */}
               </Box>
               <Box sx={{ width: "258px" }}>
                 <Button

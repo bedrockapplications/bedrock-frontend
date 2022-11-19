@@ -42,6 +42,7 @@ const PhotosDocTable = (props) => {
     setRowsPerPage,
     selectedProjected,
     setSelectedProjected,
+    search
   } = useContext(GlobalState);
 
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -93,13 +94,13 @@ const PhotosDocTable = (props) => {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-    GetDocumentsLists(newPage, rowsPerPage, selectedProjected);
+    GetDocumentsLists(newPage, rowsPerPage, selectedProjected,search);
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value));
     setPage(0);
-    GetDocumentsLists(0, event.target.value, selectedProjected);
+    GetDocumentsLists(0, event.target.value, selectedProjected,search);
   };
 
   return (

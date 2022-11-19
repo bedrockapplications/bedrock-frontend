@@ -42,6 +42,8 @@ const DesignDocumentTable = (props) => {
     setRowsPerPage,
     selectedProjected,
     setSelectedProjected,
+    search,
+    setSearch,
   } = useContext(GlobalState);
 
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -90,13 +92,13 @@ const DesignDocumentTable = (props) => {
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
-    GetDocumentsLists(newPage, rowsPerPage, selectedProjected);
+    GetDocumentsLists(newPage, rowsPerPage, selectedProjected, search);
   };
 
   const handleChangeRowsPerPage = (event) => {
     setRowsPerPage(parseInt(event.target.value));
     setPage(0);
-    GetDocumentsLists(0, event.target.value, selectedProjected);
+    GetDocumentsLists(0, event.target.value, selectedProjected, search);
   };
 
   const emptyRows =
@@ -193,112 +195,3 @@ const DesignDocumentTable = (props) => {
 };
 
 export default DesignDocumentTable;
-
-{
-  /* <DocumentTable columns={columns} data={data} options={options} /> */
-}
-
-// const options = {
-//   pagination: true,
-//   rowsPerPageOptions: [10, 25, 50, 100],
-//   serverSide: true,
-//   count: totalCount,
-//   onChangeRowsPerPage: (numberOfRows) => {
-//     setRowsPerPage(numberOfRows);
-//     GetDocumentsLists(page, numberOfRows);
-
-//     // setPageSize(numberOfRows);
-//     // GetDocumentsLists(pageNo, numberOfRows);
-//   },
-//   onTableChange: (action, tableState) => {
-//     if (action === "changePage") {
-//       setPage(tableState?.page);
-//       GetDocumentsLists(tableState?.page, rowsPerPage);
-//     }
-//   },
-// };
-
-// const columns = [
-//   {
-//     name: "fileName",
-//     label: "File Name",
-//     options: {
-//       ...disableFilter,
-//       customBodyRender: (value) => (value ? value : "---"),
-//     },
-//   },
-//   {
-//     name: "contentType",
-//     label: "Type",
-//     options: {
-//       ...disableFilter,
-//       customBodyRender: (value) => (value ? value : `---`),
-//     },
-//   },
-//   {
-//     name: "projectId",
-//     label: "Type",
-//     options: {
-//       ...disableFilter,
-//       customBodyRender: (value) => (value ? value?.projectName : `---`),
-//     },
-//   },
-//   {
-//     name: "updatedAt",
-//     label: "Upload Date",
-//     width: "40%",
-//     options: {
-//       ...disableFilter,
-//       customBodyRender: (value) =>
-//         value ? moment(value).format("DD-MM-YYYY") : `---`,
-//     },
-//   },
-//   {
-//     name: "",
-//     label: "Actions",
-//     options: {
-//       ...disableFilter,
-//       customBodyRenderLite: (dataIndex, rowIndex) => (
-//         <>
-//           <IconButton
-//             size="small"
-//             color="primary"
-//             onClick={() => handleEditOpen(data[dataIndex])}
-//           >
-//             <EditIcon fontSize="small" />
-//           </IconButton>
-//           <IconButton size="small" color="primary">
-//             <EmailIcon fontSize="small" />
-//           </IconButton>
-//           <IconButton
-//             size="small"
-//             color="primary"
-//             onClick={() => handleOpenDelete(data[dataIndex])}
-//           >
-//             <DeleteIcon fontSize="small" />
-//           </IconButton>
-//         </>
-//       ),
-//     },
-//   },
-// ];
-
-// const options = {
-//   pagination: true,
-//   rowsPerPageOptions: [10, 25, 50, 100],
-//   serverSide: true,
-//   onChangeRowsPerPage: (numberOfRows) => {
-//     // setPageSize(numberOfRows);
-//     // GetDocumentsLists(pageNo, numberOfRows);
-//   },
-//   onTableChange: (action, tableState) => {
-//     if (action === "changePage") {
-//       // setpageNo(tableState?.page);
-//       // GetDocumentsLists(tableState?.page, pageSize);
-//     }
-//   },
-// };
-
-{
-  /* <DocumentTable columns={columns} data={data} options={options} /> */
-}
