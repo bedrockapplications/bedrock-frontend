@@ -59,7 +59,7 @@ const Login = () => {
       .then((dt) => {
         if (!dt.message) {
           setSuccess("Logged in Successfully");
-          getUserDetails(email);
+          getUserDetails(dt?._id);
         }
         else {
           setSuccess(dt.message);
@@ -71,8 +71,8 @@ const Login = () => {
       });
   };
 
-  const getUserDetails = async (email) => {
-    return fetch("http://ec2-174-129-118-55.compute-1.amazonaws.com:3000/api/user/details?email=" + email, {
+  const getUserDetails = async (id) => {
+    return fetch("http://ec2-174-129-118-55.compute-1.amazonaws.com:3000/api/user/details?_id=" + id, {
       method: "GET",
     })
       .then((response) => response.json())
