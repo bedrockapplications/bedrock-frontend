@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
   projectId: Yup.string().required().nullable(),
 });
 
-const categoryList = ["DesignDocument", "Photos", "Submittals"];
+const categoryList = ["DesignDocuments", "Photos", "Submittals"];
 
 const AddNewFiles = (props) => {
   const { open, handleClose, GetDocumentsLists, projectOptions, categoryType } =
