@@ -20,5 +20,19 @@
   "notes": "notas",
   "hi": "Hola {{name}}",
   "you_completed": "¡Feliz lunes! En las noticias de hoy: ¡El presidente Biden aprobó un nuevo impuesto a la importación, elevando los futuros de acero en más del 7 %!",
-  "0": ""
+  "submit":"Submit",
+  "document": {
+    "document_manager": "Administrador de documentos",
+    "search_all_documents": "Buscar todos los documentos",
+    "new_file": "archivos nuevos",
+    "design_documents": "Documento de Diseño",
+    "photos": "Fotos",
+    "submittals": "sometimiento"
+  },
+  "settings": {
+    "account_overview": "Descripción de cuenta",
+    "general": "General",
+    "billing": "Facturación",
+    "security": "Seguridad"
+  }
 }

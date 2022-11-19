@@ -159,7 +159,7 @@ const MyProjects = () => {
 
   return (
     <>
-      <Grid container spacing={3}>
+      {/* <Grid container spacing={3}>
         <Grid item xs={12}>
           <Grid conatiner spacing={2}>
             <Grid
@@ -233,8 +233,8 @@ const MyProjects = () => {
             </Card>
           </Grid>
         ))}
-      </Grid>
-      {/* <Grid container spacing={2}>
+      </Grid> */}
+      <Grid container spacing={2}>
         <Grid item xs={12}>
           <Paper elevation={0} className={classes.projectHeader}>
             <Typography className={classes.projectText}>
@@ -259,7 +259,7 @@ const MyProjects = () => {
             sx={{ height: "100%", backgroundColor: "#E5E5EA" }}
           ></Paper>
         </Grid>
-      </Grid> */}
+      </Grid>
     </>
   );
 };

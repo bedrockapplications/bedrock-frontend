@@ -28,6 +28,7 @@ import {
 import CancelIcon from "@mui/icons-material/Cancel";
 import MuiDialog from "../../components/MuiDialog";
 import { useTranslation } from "react-i18next";
+import noDataImg from "../../Images/NoData.png";
 
 //ned to after
 import MuiDatePicker from "../../components/Formik/MuiDatePicker";
@@ -320,44 +321,57 @@ const Dashboard = () => {
                   </Box>
                 </Stack>
                 <Box sx={{ height: "55vh", overflowY: "auto", p: "5px" }}>
-                  {detailsList?.map((item, i) => (
-                    <Box
-                      className={classes.taskList}
-                      sx={{
-                        backgroundColor:
-                          item?._id === taskDetails?._id ? "#fff" : "#e6e5ea",
-                      }}
-                      key={item?.meetingTitle}
-                      onClick={() => handleShowDetails(item)}
-                    >
-                      <Stack
-                        direction="row"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                        spacing={2}
+                  {detailsList.length > 0 ? (
+                    detailsList?.map((item, i) => (
+                      <Box
+                        className={classes.taskList}
+                        sx={{
+                          backgroundColor:
+                            item?._id === taskDetails?._id ? "#fff" : "#e6e5ea",
+                        }}
+                        key={item?.meetingTitle}
+                        onClick={() => handleShowDetails(item)}
                       >
-                        <IconButton
-                          size="small"
-                          onClick={(event) => handleCancleTask(event, item)}
+                        <Stack
+                          direction="row"
+                          justifyContent="flex-start"
+                          alignItems="center"
+                          spacing={2}
                         >
-                          <CancelIcon />
-                        </IconButton>
-                        <Box className={classes.timeWapper}>
-                          <Typography className={classes.timeText}>
-                            {item.startTime}
-                          </Typography>
-                        </Box>
-                        <Box>
-                          <Typography className={classes.taskTitle}>
-                            {item.title}
-                          </Typography>
-                          <Typography className={classes.taskSubTitle}>
-                            {item.description}
-                          </Typography>
-                        </Box>
-                      </Stack>
+                          <IconButton
+                            size="small"
+                            onClick={(event) => handleCancleTask(event, item)}
+                          >
+                            <CancelIcon />
+                          </IconButton>
+                          <Box className={classes.timeWapper}>
+                            <Typography className={classes.timeText}>
+                              {item.startTime}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography className={classes.taskTitle}>
+                              {item.title}
+                            </Typography>
+                            <Typography className={classes.taskSubTitle}>
+                              {item.description}
+                            </Typography>
+                          </Box>
+                        </Stack>
+                      </Box>
+                    ))
+                  ) : (
+                    <Box
+                      sx={{
+                        height: "100%",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                      }}
+                    >
+                      <img src={noDataImg} alt="" />
                     </Box>
-                  ))}
+                  )}
                 </Box>
               </Paper>
             </Grid>
@@ -457,17 +471,6 @@ const Dashboard = () => {
                     moment(values.endTime).format("hh:mm A")
                   );
                   formData.append("userId", userId);
-
-                  // let payload = {
-                  //   title: values.taskName,
-                  //   description: values.notes,
-                  //   startDate: moment(values.startDate).format("YYYY-MM-DD"),
-                  //   endDate: moment(values.endDate).format("YYYY-MM-DD"),
-                  //   startTime: moment(values.startTime).format("hh:mm A"),
-                  //   endTime: moment(values.endTime).format("hh:mm A"),
-                  //   userId: userId,
-                  //   attachment: formData,
-                  // };
                   createMeetingApi(formData)
                     .then((res) => {
                       if (res.status === 200) {

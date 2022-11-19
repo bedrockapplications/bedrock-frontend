@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useHistory } from "react-router-dom";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MuiDrawer from "@mui/material/Drawer";
@@ -36,6 +37,7 @@ import TranslateIcon from "@mui/icons-material/Translate";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import favicon from "../Images/Bedrock_Rock_-removebg-preview.png";
+import { WindowSharp } from "@mui/icons-material";
 
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
@@ -80,6 +82,11 @@ const useStyle = makeStyles(() => ({
   link: {
     textDecoration: "none",
   },
+  accountpop: {
+    background: "#48484A",
+    opacity: "0.95",
+    color: "#FFFFFF",
+  }
 }));
 
 const LanguagesList = [
@@ -169,6 +176,7 @@ const Drawer = styled(MuiDrawer, {
 const ITEM_HEIGHT = 48;
 
 export default function MiniDrawer(props) {
+  let history = useHistory();
   const { i18n, t } = useTranslation();
   const theme = useTheme();
   const classes = useStyle();
@@ -177,12 +185,21 @@ export default function MiniDrawer(props) {
   const [clockState, setClockState] = useState("");
   const [dayState, setDayState] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const [account, setAccount] = React.useState(null);
   const [selected, setSelectedIndex] = React.useState(
     LanguagesList?.filter(
       (lang) => lang?.local === localStorage?.getItem("i18nextLng")
     )[0]
   );
   const openLang = Boolean(anchorEl);
+
+  const openAccount = Boolean(account);
+  const handleAccountClick = (event) => {
+    setAccount(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAccount(null);
+  };
 
   const handleDrawerOpen = () => {
     setOpen(!open);
@@ -191,6 +208,11 @@ export default function MiniDrawer(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    window.location.reload();
+  }
 
   const GetDateAndTime = () => {
     setInterval(() => {
@@ -307,12 +329,63 @@ export default function MiniDrawer(props) {
               <img alt="" src={notification} width="24px" height={"24px"} />
             </IconButton>
             <Typography className={classes.userText}>{userName}</Typography>
-            <Avatar
-              alt="user-profile"
-              src={userProfile}
-              sx={{ filter: "brightness(100%)" }}
-            />
+            <IconButton
+              onClick={handleAccountClick}
+              size="small"
+              sx={{ ml: 2 }}
+              aria-controls={openAccount ? "account-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={openAccount ? "true" : undefined}
+            >
+              <Avatar
+                alt="user-profile"
+                src={userProfile}
+                sx={{ filter: "brightness(100%)" }}
+              />
+            </IconButton>
           </Box>
+          <Menu
+            anchorEl={account}
+            id="account-menu"
+            open={openAccount}
+            onClose={handleClose}
+            onClick={handleClose}
+            PaperProps={{
+              elevation: 0,
+              sx: {
+                overflow: "visible",
+                bgcolor: "#48484A",
+                color:"#FFFFFF",
+                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                mt: 0.3,
+                ml: -0.8,
+                opacity:0.95,
+                "& .MuiAvatar-root": {
+                  width: 32,
+                  height: 32,
+                  ml: -0.5,
+                  mr: 1,
+                },
+                "&:before": {
+                  content: '""',
+                  display: "block",
+                  position: "absolute",
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: "#48484A",
+                  transform: "translateY(-50%) rotate(45deg)",
+                  zIndex: 0,
+                },
+              },
+            }}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+          >
+            <MenuItem onClick={() => history.push("/settings")}>Settings</MenuItem>
+            <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>

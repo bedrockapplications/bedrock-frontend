@@ -27,8 +27,9 @@ export const theme = createTheme({
     MuiTableCell: {
       styleOverrides: {
         root: {
-          textAlign: "center",
+          textAlign: "left",
           padding: "8px",
+          borderBottom: "2px solid #242b3c"
         },
       },
     },
@@ -44,6 +45,18 @@ export const theme = createTheme({
           justifyContent: "center",
           textTransform: "capitalize",
           fontWeight: "700",
+        },
+      },
+    },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          color: "#fff",
+          backgroundColor: "rgba(58, 58, 60, 0.6)",
+          "&.Mui-selected": {
+            backgroundColor: "#3A3A3C",
+            color: "#fff",
+          },
         },
       },
     },
