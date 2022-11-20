@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useContext  } from "react";
+import { GlobalState } from "../../Context/Context";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { makeStyles } from "@mui/styles";
@@ -28,10 +29,16 @@ const useStyle = makeStyles(() => ({
 
 const BillingTab = () => {
   const classes = useStyle();
+  const { userDetails, setUserDetails } = useContext(GlobalState);
   return (
     <>
       <Formik
-        initialValues={{}}
+        initialValues={{
+          address2: userDetails?.billingInformation?.BillingAddress?.street || "",
+          city: userDetails?.billingInformation?.BillingAddress?.city || "",
+          state: userDetails?.billingInformation?.BillingAddress?.state || "",
+          zipCode: userDetails?.billingInformation?.BillingAddress?.zipcode || "",
+        }}
         enableReinitialize
         validationSchema={""}
         onSubmit={(values, { setSubmitting, resetForm }) => {
@@ -102,7 +109,7 @@ const BillingTab = () => {
                           <Typography
                             className={classes.companyText}
                             sx={{
-                              padding: "0 !important",
+                              padding: "1rem 0 !important",
                             }}
                           >
                             Billing Address

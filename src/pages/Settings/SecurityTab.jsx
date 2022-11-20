@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useContext  } from "react";
+import { GlobalState } from "../../Context/Context";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { makeStyles } from "@mui/styles";
@@ -16,6 +17,7 @@ import {
 import Avatar from "@mui/material/Avatar";
 import MuiTextField from "../../components/Formik/MuiTextField";
 
+
 const useStyle = makeStyles(() => ({
   companyText: {
     fontSize: "18px",
@@ -28,6 +30,7 @@ const useStyle = makeStyles(() => ({
 
 const SecurityTab = () => {
   const classes = useStyle();
+  const { userDetails, setUserDetails } = useContext(GlobalState);
   return (
     <>
       <Formik

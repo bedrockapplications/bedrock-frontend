@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { makeStyles } from "@mui/styles";
@@ -41,6 +41,7 @@ const GeneralTab = () => {
 
   const handleSaveEditFiles = (values, setSubmitting, resetForm) => {
     setSubmitting(true);
+          console.log("values", values.city);
   };
   return (
     <>
@@ -48,11 +49,17 @@ const GeneralTab = () => {
         initialValues={{
           email: userDetails?.email || "",
           phoneNo: userDetails?.phoneNumber || "",
+          address2: userDetails?.companyInformation?.companycurrentAddress?.street || "",
+          city: userDetails?.companyInformation?.companycurrentAddress?.city || "",
+          state: userDetails?.companyInformation?.companycurrentAddress?.state || "",
+          zipCode: userDetails?.companyInformation?.companycurrentAddress?.zipcode || "",
+          fullName: `${userDetails?.firstName || ""} ${userDetails?.lastName || ""}`,
+          phoneNumber: userDetails?.phoneNumber || "",
         }}
         enableReinitialize
         validationSchema={""}
         onSubmit={(values, { setSubmitting, resetForm }) => {
-          console.log("values", values);
+          handleSaveEditFiles(values, setSubmitting, resetForm);
         }}
       >
         {({ values, isValid, isSubmitting, setFieldValue }) => (
@@ -217,6 +224,7 @@ const GeneralTab = () => {
                             name="fullName"
                             id="fullName"
                             label="Full Name"
+                            onChange={(e) => console.log(e.target.value, "jjjjj")}
                           />
                         </Grid>
                         <Grid item xs={3}>
@@ -248,6 +256,7 @@ const GeneralTab = () => {
                             variant="contained"
                             type="submit"
                             size="small"
+                            // onClick={() => handleSubmit()}
                           >
                             {t("submit")}
                           </Button>
