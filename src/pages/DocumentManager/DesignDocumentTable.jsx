@@ -18,6 +18,8 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import TablePagination from "@mui/material/TablePagination";
 import { makeStyles } from "@mui/styles";
+import SortingTableHeader from "./SortingTableHeaders";
+import { getComparator, stableSort } from "./SortingTableHeaders";
 
 const useStyle = makeStyles(() => ({
   headerText: {
@@ -27,13 +29,42 @@ const useStyle = makeStyles(() => ({
   },
 }));
 
-let disableFilter = {
-  filter: false,
-  sort: false,
-};
+const headCells = [
+  {
+    id: "fileName",
+    numeric: false,
+    disablePadding: true,
+    label: "fileName",
+  },
+  {
+    id: "contentType",
+    numeric: false,
+    disablePadding: false,
+    label: "type",
+  },
+  {
+    id: "projectId",
+    numeric: false,
+    disablePadding: false,
+    label: "projectName",
+  },
+  {
+    id: "updatedAt",
+    numeric: false,
+    disablePadding: false,
+    label: "uploadDate",
+  },
+  {
+    id: "actions",
+    numeric: false,
+    disablePadding: false,
+    label: "actions",
+  },
+];
 
 const DesignDocumentTable = (props) => {
   const classes = useStyle();
+
   const { data, GetDocumentsLists, projectOptions, totalCount } = props;
   const {
     page,
@@ -51,6 +82,14 @@ const DesignDocumentTable = (props) => {
   const [editOpen, setEditOpen] = useState(false);
   const [editData, setEditData] = useState({});
   const [dense, setDense] = React.useState(false);
+  const [order, setOrder] = React.useState("asc");
+  const [orderBy, setOrderBy] = React.useState("");
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === "asc";
+    setOrder(isAsc ? "desc" : "asc");
+    setOrderBy(property);
+  };
 
   const handleEditOpen = (item) => {
     const data = {
@@ -101,68 +140,53 @@ const DesignDocumentTable = (props) => {
     GetDocumentsLists(0, event.target.value, selectedProjected, search);
   };
 
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - data.length) : 0;
-
   return (
     <>
       <Paper sx={{ width: "100%", border: "3px solid #3A3A3C" }}>
         <TableContainer sx={{ height: 320, maxHeight: 320 }}>
           <Table stickyHeader aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell className={classes.headerText}>File Name</TableCell>
-                <TableCell className={classes.headerText}>Type</TableCell>
-                <TableCell className={classes.headerText}>
-                  Project Name
-                </TableCell>
-                <TableCell className={classes.headerText}>
-                  Upload Date
-                </TableCell>
-                <TableCell className={classes.headerText}>Actions</TableCell>
-              </TableRow>
-            </TableHead>
+            <SortingTableHeader
+              headCells={headCells}
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+              rowCount={data.length}
+            />
+
             <TableBody>
-              {data?.map((item, i) => (
-                <TableRow key={item._id}>
-                  <TableCell align="right">{item?.fileName}</TableCell>
-                  <TableCell align="right">{item?.contentType}</TableCell>
-                  <TableCell align="right">
-                    {item?.projectId?.projectName}
-                  </TableCell>
-                  <TableCell align="right">
-                    {moment(item?.updatedAt).format("DD-MM-YYYY")}
-                  </TableCell>
-                  <TableCell align="right">
-                    <IconButton
-                      size="small"
-                      color="primary"
-                      onClick={() => handleEditOpen(item)}
-                    >
-                      <EditIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton size="small" color="primary">
-                      <EmailIcon fontSize="small" />
-                    </IconButton>
-                    <IconButton
-                      size="small"
-                      color="primary"
-                      onClick={() => handleOpenDelete(item)}
-                    >
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {/* {emptyRows > 0 && (
-                <TableRow
-                  style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                  }}
-                >
-                  <TableCell colSpan={6} />
-                </TableRow>
-              )} */}
+              {stableSort(data, getComparator(order, orderBy))?.map(
+                (item, i) => (
+                  <TableRow key={item._id}>
+                    <TableCell align="right">{item?.fileName}</TableCell>
+                    <TableCell align="right">{item?.contentType}</TableCell>
+                    <TableCell align="right">
+                      {item?.projectId?.projectName}
+                    </TableCell>
+                    <TableCell align="right">
+                      {moment(item?.updatedAt).format("DD-MM-YYYY")}
+                    </TableCell>
+                    <TableCell align="right">
+                      <IconButton
+                        size="small"
+                        color="primary"
+                        onClick={() => handleEditOpen(item)}
+                      >
+                        <EditIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton size="small" color="primary">
+                        <EmailIcon fontSize="small" />
+                      </IconButton>
+                      <IconButton
+                        size="small"
+                        color="primary"
+                        onClick={() => handleOpenDelete(item)}
+                      >
+                        <DeleteIcon fontSize="small" />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                )
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -195,3 +219,19 @@ const DesignDocumentTable = (props) => {
 };
 
 export default DesignDocumentTable;
+
+{
+  /* <TableHead>
+              <TableRow>
+                <TableCell className={classes.headerText}>File Name</TableCell>
+                <TableCell className={classes.headerText}>Type</TableCell>
+                <TableCell className={classes.headerText}>
+                  Project Name
+                </TableCell>
+                <TableCell className={classes.headerText}>
+                  Upload Date
+                </TableCell>
+                <TableCell className={classes.headerText}>Actions</TableCell>
+              </TableRow>
+            </TableHead> */
+}

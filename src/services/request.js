@@ -51,11 +51,16 @@ export const getAllDocumentListApi = (
   projectId,
   searchValue
 ) => {
-  console.log("searchValue",searchValue)
   return axios.get(
     `/document/getDocs?pageNumber=${pageNumber}&limit=${limit}&userId=${userId}&projectId=${projectId}&fileName=${
       searchValue || ""
     }`
+  );
+};
+
+export const getSearchFileList = (userId, projectId, categoryType) => {
+  return axios.get(
+    `/document/getFileNames?userId=${userId}&projectId=${projectId}&categoryType=${categoryType}`
   );
 };
 

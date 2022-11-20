@@ -27,7 +27,12 @@
     "new_file": "nouveaux fichiers",
     "design_documents": "Document de conception",
     "photos": "Les photos",
-    "submittals": "Soumission"
+    "submittals": "Soumission",
+    "fileName": "Nom de fichier",
+    "type": "Taper",
+    "projectName": "Nom de projet",
+    "uploadDate": "Date de téléchargement",
+    "actions": "Actions"
   },
   "settings": {
     "account_overview": "Aperçu du compte",

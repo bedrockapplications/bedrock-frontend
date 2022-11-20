@@ -22,8 +22,14 @@ const validationSchema = Yup.object().shape({
 const categoryList = ["DesignDocuments", "Photos", "Submittals"];
 
 const AddNewFiles = (props) => {
-  const { open, handleClose, GetDocumentsLists, projectOptions, categoryType } =
-    props;
+  const {
+    open,
+    handleClose,
+    GetDocumentsLists,
+    projectOptions,
+    categoryType,
+    GetSearchOptions,
+  } = props;
   const { page, rowsPerPage } = useContext(GlobalState);
 
   const userId = localStorage.getItem("userId");
@@ -40,6 +46,7 @@ const AddNewFiles = (props) => {
     uploadDocumentApi(formData)
       .then((res) => {
         if (res.status === 200) {
+          GetSearchOptions(data?.categoryType);
           GetDocumentsLists(page, rowsPerPage);
           setSubmitting(false);
           resetForm();
