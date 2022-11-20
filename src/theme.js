@@ -29,7 +29,7 @@ export const theme = createTheme({
         root: {
           textAlign: "left",
           padding: "8px",
-          borderBottom: "2px solid #242b3c"
+          borderBottom: "2px solid #242b3c",
         },
       },
     },
@@ -48,6 +48,26 @@ export const theme = createTheme({
         },
       },
     },
+    // MuiTableSortLabel: {
+    //   styleOverrides: {
+    //     root: {
+    //       "&.Mui-active": {
+    //         color: "#fff",
+    //         "&& $icon": {
+    //           opacity: 1,
+    //           color: "#fff",
+    //         },
+    //       },
+    //       ":hover": {
+    //         color: "#fff",
+    //         "&& $icon": {
+    //           opacity: 1,
+    //           color: "#fff",
+    //         },
+    //       },
+    //     },
+    //   },
+    // },
     MuiTab: {
       styleOverrides: {
         root: {

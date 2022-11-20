@@ -27,7 +27,12 @@
     "new_file": "archivos nuevos",
     "design_documents": "Documento de Diseño",
     "photos": "Fotos",
-    "submittals": "sometimiento"
+    "submittals": "sometimiento",
+    "fileName": "Nombre del archivo",
+    "type": "Tipear",
+    "projectName": "Nombre del proyecto",
+    "uploadDate": "Fecha de carga",
+    "actions": "Acciones"
   },
   "settings": {
     "account_overview": "Descripción de cuenta",

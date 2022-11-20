@@ -21,14 +21,19 @@
   "hi": "Hi {{name}}",
   "you_completed": " Happy Monday! In today’s news: President Biden passed a new import tax, raising steel futures by over 7%!",
   "attachments": "Attachment",
-  "submit":"Submit",
+  "submit": "Submit",
   "document": {
     "document_manager": "Document Manager",
     "search_all_documents": "Search all documents",
     "new_file": "new files",
     "design_documents": "Design Documents",
     "photos": "Photos",
-    "submittals": "Submittals"
+    "submittals": "Submittals",
+    "fileName": "File Name",
+    "type": "Type",
+    "projectName": "Project Name",
+    "uploadDate": "Upload Date",
+    "actions": "Actions"
   },
   "settings": {
     "account_overview": "Account Overview",

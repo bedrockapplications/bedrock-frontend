@@ -25,6 +25,7 @@ import AddNewFiles from "./AddNewFiles";
 import {
   getAllProjectList,
   getAllDocumentListApi,
+  getSearchFileList,
 } from "../../services/request";
 import { useEffect } from "react";
 import DesignDocumentTable from "./DesignDocumentTable";
@@ -120,15 +121,18 @@ const DocumentManager = () => {
   const [designTableData, setDesignTableData] = useState([]);
   const [photoTableData, setPhotoTableData] = useState([]);
   const [submittalsTableData, setSubmittalsTableData] = useState([]);
+  const [searchOptions, setSearchOptions] = useState([]);
 
   const [totalCount, setTotalCount] = useState(0);
   const [photosCount, setPhotosCount] = useState(0);
   const [submittalsCount, setSubmittalsCount] = useState(0);
 
   const handleChangeProject = (event) => {
+    setSearch("");
     setPage(0);
-    GetDocumentsLists(0, rowsPerPage, event.target.value);
+    GetDocumentsLists(0, rowsPerPage, event.target.value, "");
     setSelectedProjected(event.target.value);
+    GetSearchOptions(categoryType, event.target.value);
   };
 
   const GetAllProjectsList = () => {
@@ -147,6 +151,27 @@ const DocumentManager = () => {
       })
       .catch((error) => {
         console.log("error", error);
+      });
+  };
+
+  const GetSearchOptions = (category, project) => {
+    getSearchFileList(
+      userId,
+      project || selectedProjected,
+      category || categoryType
+    )
+      .then((res) => {
+        if (res.status === 200) {
+          if (res.data.length > 0) {
+            setSearchOptions([...res.data]);
+          } else {
+            setSearchOptions([]);
+          }
+        }
+      })
+      .catch((error) => {
+        let errorObj = error;
+        console.log(errorObj);
       });
   };
 
@@ -175,22 +200,27 @@ const DocumentManager = () => {
   };
 
   useEffect(() => {
+    GetSearchOptions();
     GetAllProjectsList();
     GetDocumentsLists();
   }, []);
 
   const handleChangeTab = (event, newValue) => {
+    setSearch("");
     if (newValue === 0) {
       setCategoryType("DesignDocuments");
+      GetSearchOptions("DesignDocuments");
     } else if (newValue === 1) {
       setCategoryType("Photos");
+      GetSearchOptions("Photos");
     } else {
       setCategoryType("Submittals");
+      GetSearchOptions("Submittals");
     }
     setTabValue(newValue);
     setPage(0);
     setRowsPerPage(10);
-    GetDocumentsLists(0, 10, selectedProjected, search);
+    GetDocumentsLists(0, 10, selectedProjected, "");
   };
 
   const handleCloseFileModel = () => {
@@ -198,6 +228,7 @@ const DocumentManager = () => {
   };
 
   const handleSearch = (searchValue) => {
+    console.log("searchValue", searchValue);
     setSearch(searchValue);
     GetDocumentsLists(0, 10, selectedProjected, searchValue);
   };
@@ -234,7 +265,7 @@ const DocumentManager = () => {
                     }
                     sx={{ backgroundColor: "#fff", borderRadius: "10px" }}
                   >
-                    <MenuItem value={""}>None</MenuItem>
+                    <MenuItem value={""}>ALL</MenuItem>
                     {projectOptions?.map((item, i) => (
                       <MenuItem key={item + i} value={item.value}>
                         {item.label}
@@ -244,7 +275,7 @@ const DocumentManager = () => {
                 </FormControl>
               </Box>
               <Box sx={{ width: "450px" }}>
-                <TextField
+                {/* <TextField
                   id="search"
                   name="search"
                   placeholder={t(`document.search_all_documents`)}
@@ -260,12 +291,14 @@ const DocumentManager = () => {
                       </InputAdornment>
                     ),
                   }}
-                />
+                /> */}
 
-                {/* <Autocomplete
+                <Autocomplete
                   id="search"
                   freeSolo
-                  options={[]?.map((option) => option?.title)}
+                  value={search}
+                  options={searchOptions?.map((option) => option)}
+                  onChange={(event, newValue) => handleSearch(newValue)}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -283,7 +316,7 @@ const DocumentManager = () => {
                       }}
                     />
                   )}
-                /> */}
+                />
               </Box>
               <Box sx={{ width: "258px" }}>
                 <Button
@@ -367,6 +400,7 @@ const DocumentManager = () => {
         GetDocumentsLists={GetDocumentsLists}
         projectOptions={projectOptions}
         categoryType={categoryType}
+        GetSearchOptions={GetSearchOptions}
       />
     </>
   );
