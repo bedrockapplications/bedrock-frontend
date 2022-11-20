@@ -47,12 +47,14 @@ const SecurityTab = () => {
                 flexGrow: "1",
                 padding: "7px",
                 // height: "65vh",
-                height: "calc(100vh - 220px)",
+                // height: "calc(100vh - 220px)",
               }}
             >
               <Grid container spacing={4}>
                 <Grid item xs={12} sm={12} md={12}>
-                  <Paper sx={{ height: "calc(100vh - 240px)" }}>
+                  <Paper 
+                  // sx={{ height: "calc(100vh - 240px)" }}
+                  >
                     <Typography className={classes.companyText}>
                       Change Your Password
                     </Typography>
@@ -99,7 +101,7 @@ const SecurityTab = () => {
                                 type="password"
                               />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={12} align="right">
                               <Button
                                 variant="contained"
                                 type="submit"

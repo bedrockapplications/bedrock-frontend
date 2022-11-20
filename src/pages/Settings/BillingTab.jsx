@@ -155,38 +155,38 @@ const BillingTab = () => {
                       </Grid>
                       <Grid container spacing={2} sx={{ marginTop: "30px" }}>
                         <Grid item xs={3}>
-                          <Typography
+                          {/* <Typography
                             sx={{ marginBottom: "5px", fontWeight: "600" }}
                           >
                             (Billing) E-mail Address
-                          </Typography>
-                          <MuiTextField name="email" id="email" label="email" />
+                          </Typography> */}
+                          <MuiTextField name="billingemail" id="billingemail" label="(Billing) E-mail Address" />
                         </Grid>
                         <Grid item xs={3}>
-                          <Typography
+                          {/* <Typography
                             sx={{ marginBottom: "5px", fontWeight: "600" }}
                           >
                             (Billing) Phone Number
-                          </Typography>
+                          </Typography> */}
                           <MuiTextField
-                            name="phoneNumber"
-                            id="phoneNumber"
-                            label="Phone Number"
+                            name="billingphoneNumber"
+                            id="billingphoneNumber"
+                            label="(Billing) Phone Number"
                           />
                         </Grid>
                         <Grid item xs={3}>
-                          <Typography
+                          {/* <Typography
                             sx={{ marginBottom: "5px", fontWeight: "600" }}
                           >
                             (Billing) Full Name
-                          </Typography>
+                          </Typography> */}
                           <MuiTextField
-                            name="fullname"
-                            id="fullname"
-                            label="Full Name"
+                            name="billingfullname"
+                            id="billingfullname"
+                            label="(Billing) Full Name"
                           />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12}align="right">
                           <Button
                             variant="contained"
                             type="submit"
