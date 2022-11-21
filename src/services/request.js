@@ -34,6 +34,10 @@ export const getProjectDetails = async (pId) => {
   return axios.get(`/project/getprojectdetailsbyid?_id=${pId}`);
 };
 
+export const createNewProjectApi = async (projectPayload) => {
+  return axios.post(`/project/upload/`, projectPayload);
+};
+
 //document manager apis
 
 export const uploadDocumentApi = (payload) => {
@@ -52,8 +56,7 @@ export const getAllDocumentListApi = (
   searchValue
 ) => {
   return axios.get(
-    `/document/getDocs?pageNumber=${pageNumber}&limit=${limit}&userId=${userId}&projectId=${projectId}&fileName=${
-      searchValue || ""
+    `/document/getDocs?pageNumber=${pageNumber}&limit=${limit}&userId=${userId}&projectId=${projectId}&fileName=${searchValue || ""
     }`
   );
 };

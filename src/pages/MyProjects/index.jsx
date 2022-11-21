@@ -1,19 +1,22 @@
-import React, { memo } from "react";
-import { Grid, Paper, Typography } from "@mui/material";
-import { getAllProjectList } from "../../services/request";
-import { useEffect } from "react";
-import { useState } from "react";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import Button from "@mui/material/Button";
-import plus from "../../Images/Plus.png";
-import { Box } from "@mui/system";
-import { CardActionArea } from "@mui/material";
-import CardMedia from "@mui/material/CardMedia";
+import React, { useState, memo, useEffect } from "react";
+import { Button, Grid, Paper, Typography } from "@mui/material";
+import { getAllProjectList, createNewProjectApi } from "../../services/request";
+
 import { makeStyles } from "@mui/styles";
 import ProjectTable from "../../components/MuiTable";
-import ProjectDataTable from "./ProjectDataTable";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import MuiTextField from "../../components/Formik/MuiTextField";
+
+// import ProjectDataTable from "./ProjectDataTable";
+// import CardMedia from "@mui/material/CardMedia";
+// import { CardActionArea } from "@mui/material";
+// import { Box } from "@mui/system";
+// import Card from "@mui/material/Card";
+// import CardActions from "@mui/material/CardActions";
+// import CardContent from "@mui/material/CardContent";
+// import Button from "@mui/material/Button";
+// import plus from "../../Images/Plus.png";
 
 const useStyle = makeStyles(() => ({
   projectHeader: {
@@ -36,33 +39,6 @@ const useStyle = makeStyles(() => ({
   },
 }));
 
-const tableData = [
-  {
-    name: "McDonald’s Renovation",
-    type: "Med Com.",
-    status: "Pre-Con",
-    projectManager: "Jim Willis",
-    location: "Tampa, Fl",
-    amount: "01873",
-  },
-  {
-    name: "McDonald’s Renovation",
-    type: "Med Com.",
-    status: "Pre-Con",
-    projectManager: "Jim Willis",
-    location: "Tampa, Fl",
-    amount: "01873",
-  },
-  {
-    name: "McDonald’s Renovation",
-    type: "Med Com.",
-    status: "Pre-Con",
-    projectManager: "Jim Willis",
-    location: "Tampa, Fl",
-    amount: "01873",
-  },
-];
-
 let disableFilter = {
   filter: false,
   sort: false,
@@ -73,9 +49,40 @@ const MyProjects = () => {
   const uId = localStorage.getItem("userId");
   const [projectsList, setProjectsList] = useState([]);
 
+  const handleCreateNewProject = (values, setSubmitting, resetForm) => {
+    let formData = new FormData();
+    formData.append("projectName", values.projectName);
+    formData.append("Address", values.address);
+    formData.append("City", values.city);
+    formData.append("State", values.state);
+    formData.append("Zipcode", 500082);
+    formData.append("StartDate", new Date());
+
+    let payload = {
+      projectName: values.projectName,
+      Address: values.address,
+      City: values.city,
+      State: values.state,
+      Zipcode: 500082,
+      StartDate: new Date(),
+    };
+
+    createNewProjectApi(payload)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("res", res.data);
+          getProjects();
+        }
+      })
+      .catch((error) => {
+        const errorObj = error;
+        console.log("errorObj", errorObj);
+      });
+  };
+
   const columns = [
     {
-      name: "name",
+      name: "projectName",
       label: "Name",
       options: {
         ...disableFilter,
@@ -107,7 +114,7 @@ const MyProjects = () => {
       },
     },
     {
-      name: "location",
+      name: "State",
       label: "Location",
       options: {
         ...disableFilter,
@@ -115,7 +122,7 @@ const MyProjects = () => {
       },
     },
     {
-      name: "amount",
+      name: "Zipcode",
       label: "#",
       options: {
         ...disableFilter,
@@ -159,7 +166,159 @@ const MyProjects = () => {
 
   return (
     <>
-      {/* <Grid container spacing={3}>
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Paper elevation={0} className={classes.projectHeader}>
+            <Typography className={classes.projectText}>
+              Project Directory
+            </Typography>
+            <Typography className={classes.ongoingText}>
+              Create or Select on Ongoing Projects
+            </Typography>
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={8}>
+          <Paper
+            elevation={2}
+            sx={{ height: "100%", backgroundColor: "#E5E5EA", padding: "10px" }}
+          >
+            <ProjectTable columns={columns} data={projectsList} />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Paper
+            elevation={2}
+            sx={{ height: "100%", backgroundColor: "#E5E5EA", padding: "1rem" }}
+          >
+            <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Typography className={classes.projectText}>
+                  Create Project
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <Formik
+                  initialValues={{
+                    projectName: "",
+                    address: "",
+                    unitApt: "",
+                    city: "",
+                    state: "",
+                    country: "",
+                  }}
+                  enableReinitialize
+                  validationSchema={""}
+                  onSubmit={(values, { setSubmitting, resetForm }) => {
+                    console.log("values", values);
+                    handleCreateNewProject(values, setSubmitting, resetForm);
+                  }}
+                >
+                  <Form>
+                    <Grid container spacing={2}>
+                      <Grid item xs={12}>
+                        <MuiTextField
+                          name="projectName"
+                          id="projectName"
+                          label={"Project Name"}
+                          required={true}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Typography>Address</Typography>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <MuiTextField
+                          name="address"
+                          id="address"
+                          label={"Street Address"}
+                          required={true}
+                        />
+                      </Grid>
+                      <Grid item xs={4}>
+                        <MuiTextField
+                          name="unitApt"
+                          id="unitApt"
+                          label={"Unit / Apt"}
+                          required={true}
+                        />
+                      </Grid>
+                      <Grid item xs={4}>
+                        <MuiTextField
+                          name="city"
+                          id="city"
+                          label={"City"}
+                          required={true}
+                        />
+                      </Grid>
+                      <Grid item xs={4}>
+                        <MuiTextField
+                          name="state"
+                          id="state"
+                          label={"State"}
+                          required={true}
+                        />
+                      </Grid>
+                      <Grid item xs={4}>
+                        <MuiTextField
+                          name="country"
+                          id="country"
+                          label={"Country"}
+                          required={true}
+                        />
+                      </Grid>
+                      <Grid item xs={12} />
+                      <Grid item xs={12}>
+                        <Button
+                          color="primary"
+                          variant="contained"
+                          type="submit"
+                          sx={{ textTransform: "capitalize", float: "right" }}
+                        >
+                          Create New Project
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Form>
+                </Formik>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+      </Grid>
+    </>
+  );
+};
+export default memo(MyProjects);
+
+// const tableData = [
+//   {
+//     name: "McDonald’s Renovation",
+//     type: "Med Com.",
+//     status: "Pre-Con",
+//     projectManager: "Jim Willis",
+//     location: "Tampa, Fl",
+//     amount: "01873",
+//   },
+//   {
+//     name: "McDonald’s Renovation",
+//     type: "Med Com.",
+//     status: "Pre-Con",
+//     projectManager: "Jim Willis",
+//     location: "Tampa, Fl",
+//     amount: "01873",
+//   },
+//   {
+//     name: "McDonald’s Renovation",
+//     type: "Med Com.",
+//     status: "Pre-Con",
+//     projectManager: "Jim Willis",
+//     location: "Tampa, Fl",
+//     amount: "01873",
+//   },
+// ];
+
+{
+  /* <Grid container spacing={3}>
         <Grid item xs={12}>
           <Grid conatiner spacing={2}>
             <Grid
@@ -233,34 +392,5 @@ const MyProjects = () => {
             </Card>
           </Grid>
         ))}
-      </Grid> */}
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Paper elevation={0} className={classes.projectHeader}>
-            <Typography className={classes.projectText}>
-              Project Directory
-            </Typography>
-            <Typography className={classes.ongoingText}>
-              Create or Select on Ongoing Projects
-            </Typography>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={8}>
-          <Paper
-            elevation={2}
-            sx={{ height: "100%", backgroundColor: "#E5E5EA", padding: "10px" }}
-          >
-            <ProjectTable columns={columns} data={tableData} />
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <Paper
-            elevation={2}
-            sx={{ height: "100%", backgroundColor: "#E5E5EA" }}
-          ></Paper>
-        </Grid>
-      </Grid>
-    </>
-  );
-};
-export default memo(MyProjects);
+      </Grid> */
+}
