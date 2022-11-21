@@ -40,8 +40,17 @@ const GeneralTab = () => {
   const { userDetails, setUserDetails } = useContext(GlobalState);
 
   const handleSaveEditFiles = (values, setSubmitting, resetForm) => {
-    setSubmitting(true);
-          console.log("values", values.city);
+    // setSubmitting(true);
+    let obj = userDetails;
+    obj.email = values.email;
+    obj.phoneNumber = values.phoneNo;
+    obj.companyInformation.companycurrentAddress.street = values.address2;
+    obj.companyInformation.companycurrentAddress.city = values.city;
+    obj.companyInformation.companycurrentAddress.state = values.state;
+    obj.companyInformation.companycurrentAddress.zipcode = values.zipCode;
+    setUserDetails(obj);
+    console.log(obj, 'kkkk')
+          
   };
   return (
     <>
@@ -53,7 +62,7 @@ const GeneralTab = () => {
           city: userDetails?.companyInformation?.companycurrentAddress?.city || "",
           state: userDetails?.companyInformation?.companycurrentAddress?.state || "",
           zipCode: userDetails?.companyInformation?.companycurrentAddress?.zipcode || "",
-          fullName: `${userDetails?.firstName || ""} ${userDetails?.lastName || ""}`,
+          // fullName: `${userDetails?.firstName || ""} ${userDetails?.lastName || ""}`,
           phoneNumber: userDetails?.phoneNumber || "",
         }}
         enableReinitialize
