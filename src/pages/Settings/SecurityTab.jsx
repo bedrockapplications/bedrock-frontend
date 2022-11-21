@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState, useContext  } from "react";
+import { GlobalState } from "../../Context/Context";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { makeStyles } from "@mui/styles";
@@ -16,6 +17,7 @@ import {
 import Avatar from "@mui/material/Avatar";
 import MuiTextField from "../../components/Formik/MuiTextField";
 
+
 const useStyle = makeStyles(() => ({
   companyText: {
     fontSize: "18px",
@@ -28,6 +30,7 @@ const useStyle = makeStyles(() => ({
 
 const SecurityTab = () => {
   const classes = useStyle();
+  const { userDetails, setUserDetails } = useContext(GlobalState);
   return (
     <>
       <Formik
@@ -47,12 +50,14 @@ const SecurityTab = () => {
                 flexGrow: "1",
                 padding: "7px",
                 // height: "65vh",
-                height: "calc(100vh - 220px)",
+                // height: "calc(100vh - 220px)",
               }}
             >
               <Grid container spacing={4}>
                 <Grid item xs={12} sm={12} md={12}>
-                  <Paper sx={{ height: "calc(100vh - 240px)" }}>
+                  <Paper 
+                  // sx={{ height: "calc(100vh - 240px)" }}
+                  >
                     <Typography className={classes.companyText}>
                       Change Your Password
                     </Typography>
@@ -99,7 +104,7 @@ const SecurityTab = () => {
                                 type="password"
                               />
                             </Grid>
-                            <Grid item xs={12}>
+                            <Grid item xs={12} align="right">
                               <Button
                                 variant="contained"
                                 type="submit"

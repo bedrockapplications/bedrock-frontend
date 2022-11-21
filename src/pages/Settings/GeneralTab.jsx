@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import { makeStyles } from "@mui/styles";
@@ -40,7 +40,17 @@ const GeneralTab = () => {
   const { userDetails, setUserDetails } = useContext(GlobalState);
 
   const handleSaveEditFiles = (values, setSubmitting, resetForm) => {
-    setSubmitting(true);
+    // setSubmitting(true);
+    let obj = userDetails;
+    obj.email = values.email;
+    obj.phoneNumber = values.phoneNo;
+    obj.companyInformation.companycurrentAddress.street = values.address2;
+    obj.companyInformation.companycurrentAddress.city = values.city;
+    obj.companyInformation.companycurrentAddress.state = values.state;
+    obj.companyInformation.companycurrentAddress.zipcode = values.zipCode;
+    setUserDetails(obj);
+    console.log(obj, 'kkkk')
+          
   };
   return (
     <>
@@ -48,11 +58,17 @@ const GeneralTab = () => {
         initialValues={{
           email: userDetails?.email || "",
           phoneNo: userDetails?.phoneNumber || "",
+          address2: userDetails?.companyInformation?.companycurrentAddress?.street || "",
+          city: userDetails?.companyInformation?.companycurrentAddress?.city || "",
+          state: userDetails?.companyInformation?.companycurrentAddress?.state || "",
+          zipCode: userDetails?.companyInformation?.companycurrentAddress?.zipcode || "",
+          // fullName: `${userDetails?.firstName || ""} ${userDetails?.lastName || ""}`,
+          phoneNumber: userDetails?.phoneNumber || "",
         }}
         enableReinitialize
         validationSchema={""}
         onSubmit={(values, { setSubmitting, resetForm }) => {
-          console.log("values", values);
+          handleSaveEditFiles(values, setSubmitting, resetForm);
         }}
       >
         {({ values, isValid, isSubmitting, setFieldValue }) => (
@@ -64,7 +80,7 @@ const GeneralTab = () => {
                 flexGrow: "1",
                 padding: "7px",
                 // height: "65vh",
-                height: "calc(100vh - 220px)",
+                // height: "calc(100vh - 220px)",
               }}
             >
               <Grid container spacing={2}>
@@ -72,11 +88,10 @@ const GeneralTab = () => {
                   <Paper
                     sx={{
                       textAlign: "center",
-                      padding: "1rem 2rem",
-                      height: "calc(100vh - 240px)",
+                      padding: "3rem 2rem",
                       display: "flex",
                       flexDirection: "column",
-                      justifyContent: "space-evenly",
+                      justifyContent: "space-between",
                       alignItems: "center",
                     }}
                   >
@@ -89,27 +104,34 @@ const GeneralTab = () => {
                       {userDetails?.email}
                     </Typography>
                     <Typography>Your plan: Premium</Typography>
-                    <Typography sx={{ fontWeight: "700" }}>
+                    <Typography sx={{ fontWeight: "700", marginBottom:"1rem" }}>
                       Remove Picture
                     </Typography>
-                    <MuiTextField
-                      name="email"
-                      id="email"
-                      label="email"
-                      required
-                    />
-                    <MuiTextField
-                      name="phoneNo"
-                      id="phoneNo"
-                      label="Phone Number"
-                      required
-                    />
+                    <Grid container spacing={3.5}>
+                      <Grid item xs={12}>
+                        <MuiTextField
+                          name="email"
+                          id="email"
+                          label="email"
+                          required
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <MuiTextField
+                          name="phoneNo"
+                          id="phoneNo"
+                          label="Phone Number"
+                          required
+                        />
+                      </Grid>
+                    </Grid>
                   </Paper>
                 </Grid>
                 <Grid item xs={12} sm={12} md={8}>
                   <Paper
                     sx={{
-                      height: "calc(100vh - 240px)",
+                      // height: "calc(100vh - 240px)",
+                      padding:"0.5rem 0"
                     }}
                   >
                     <Typography className={classes.companyText}>
@@ -118,8 +140,8 @@ const GeneralTab = () => {
                     <Divider />
                     <Box
                       sx={{
-                        padding: "7px 1rem",
-                        height: "calc(100vh - 282px)",
+                        padding: "1rem",
+                        // height: "calc(100vh - 282px)",
                         display: "flex",
                         flexDirection: "column",
                         justifyContent: "space-evenly",
@@ -127,11 +149,11 @@ const GeneralTab = () => {
                     >
                       <Grid container spacing={2}>
                         <Grid item xs={8}>
-                          <Typography
+                          {/* <Typography
                             sx={{ marginBottom: "5px", fontWeight: "600" }}
                           >
                             Address
-                          </Typography>
+                          </Typography> */}
                           <Grid container spacing={3}>
                             <Grid item xs={12}>
                               <MuiTextField
@@ -178,17 +200,17 @@ const GeneralTab = () => {
                           </Grid>
                         </Grid>
                         <Grid item xs={4}>
-                          <Typography
+                          {/* <Typography
                             sx={{ marginBottom: "5px", fontWeight: "600" }}
                           >
                             Position / Title
-                          </Typography>
+                          </Typography> */}
                           <Grid container spacing={3}>
                             <Grid item xs={12}>
                               <MuiTextField
                                 name="type"
                                 id="type"
-                                label="Type"
+                                label="Position / Title"
                               />
                             </Grid>
                           </Grid>
@@ -196,29 +218,30 @@ const GeneralTab = () => {
                       </Grid>
                       <Typography
                         className={classes.companyText}
-                        sx={{ padding: "0 !important" }}
+                        sx={{ padding: "1rem 0px !important" }}
                       >
                         Emergency Contact
                       </Typography>
                       <Grid container spacing={2}>
                         <Grid item xs={3}>
-                          <Typography
+                          {/* <Typography
                             sx={{ marginBottom: "5px", fontWeight: "600" }}
                           >
                             Full Name
-                          </Typography>
+                          </Typography> */}
                           <MuiTextField
                             name="fullName"
                             id="fullName"
                             label="Full Name"
+                            onChange={(e) => console.log(e.target.value, "jjjjj")}
                           />
                         </Grid>
                         <Grid item xs={3}>
-                          <Typography
+                          {/* <Typography
                             sx={{ marginBottom: "5px", fontWeight: "600" }}
                           >
                             Phone Number
-                          </Typography>
+                          </Typography> */}
                           <MuiTextField
                             name="phoneNumber"
                             id="phoneNumber"
@@ -226,22 +249,23 @@ const GeneralTab = () => {
                           />
                         </Grid>
                         <Grid item xs={3}>
-                          <Typography
+                          {/* <Typography
                             sx={{ marginBottom: "5px", fontWeight: "600" }}
                           >
                             Relationship
-                          </Typography>
+                          </Typography> */}
                           <MuiTextField
                             name="relationship"
                             id="relationship"
                             label="Relationship"
                           />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} align="right">
                           <Button
                             variant="contained"
                             type="submit"
                             size="small"
+                            // onClick={() => handleSubmit()}
                           >
                             {t("submit")}
                           </Button>
