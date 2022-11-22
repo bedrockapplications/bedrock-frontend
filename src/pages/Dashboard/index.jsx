@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo, useRef } from "react";
+import React, { useEffect, useState, memo, useRef, useContext } from "react";
 
 import { getMeetingsList, deleteMeetingApi } from "../../services/request";
 
@@ -26,6 +26,7 @@ import {
   TextField,
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import MuiDialog from "../../components/MuiDialog";
 import { useTranslation } from "react-i18next";
 import noDataImg from "../../Images/NoData.png";
@@ -42,6 +43,7 @@ import * as Yup from "yup";
 import MuiFileUpload from "../../components/Formik/MuiFileUpload";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import InputAdornment from "@mui/material/InputAdornment";
+import { GlobalState } from "../../Context/Context";
 
 const useStyle = makeStyles(() => ({
   employeeImg: {
@@ -125,6 +127,14 @@ const useStyle = makeStyles(() => ({
     lineHeight: "18px",
     color: "#FFF",
   },
+  flow:{
+    animation: "slide-left .4s forwards",
+    transform: "translateX(20%)",
+  },
+  flowright:{
+    animation: "slide-right .4s forwards",
+    transform: "translateX(-50%)",
+  }
 }));
 
 const validationSchema = Yup.object().shape({
@@ -172,6 +182,7 @@ const Dashboard = () => {
   const userId = localStorage.getItem("userId");
   const userFirstName = localStorage.getItem("userFirstName");
   const classes = useStyle();
+  const { selectedChat, setSelectedChat } = useContext(GlobalState);
   const [show, setShow] = useState("Direct Contact");
   const [taskDetails, setTaskDetails] = useState(null);
   const [detailsList, setDetailsList] = useState([]);
@@ -290,7 +301,9 @@ const Dashboard = () => {
         <Grid item xs={12}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12} md={8} lg={8}>
-              <Paper sx={{ p: "0.75rem", backgroundColor: "#f3f2f7" }}>
+              <Paper sx={{ p: "0.75rem", backgroundColor: "#E5E5EA" }}>
+                {Object.keys(selectedChat).length === 0 ?
+                <Box className={classes.flowright}>
                 <Stack
                   direction="row"
                   justifyContent="space-between"
@@ -373,6 +386,28 @@ const Dashboard = () => {
                     </Box>
                   )}
                 </Box>
+                </Box>
+                :
+                <Box className={classes.flow} sx={{background:"#E5E5EA"}}>
+                  <Stack
+                  direction="row"
+                  // justifyContent="space-between"
+                  alignItems="center"
+                >
+                    <IconButton
+                      size="small"
+                      onClick={(event) => setSelectedChat({})}
+                    >
+                      <ArrowBackIosIcon />
+                    </IconButton>
+                    <Typography className={classes.titleText}>
+                      {Object.keys(selectedChat).length > 0 ? `${selectedChat.name} | ${selectedChat.role}` : ""}
+                    </Typography>
+                  </Stack>
+                  <Box sx={{ height: "55vh", overflowY: "auto", margin: "0.5vh 2rem", background: "#F2F2F7", p:"0.75rem", borderRadius:"5px" }}></Box>
+                </Box>
+                }
+                
               </Paper>
             </Grid>
             <Grid item xs={12} sm={12} md={4} lg={4}>

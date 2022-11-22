@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import Divider from "@mui/material/Divider";
@@ -9,6 +9,7 @@ import { Grid, Typography } from "@mui/material";
 import Profile from "../../Images/avatar.png";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@mui/styles";
+import { GlobalState } from "../../Context/Context";
 
 const useStyle = makeStyles(() => ({
   titleText: {
@@ -41,6 +42,7 @@ const DirectContact = (props) => {
   const classes = useStyle();
   const { t } = useTranslation();
   const { list } = props;
+  const { selectedChat, setSelectedChat } = useContext(GlobalState);
   return (
     <>
       <Grid container spacing={1}>
@@ -63,6 +65,10 @@ const DirectContact = (props) => {
                 bgcolor: "#e6e5ea",
                 borderRadius: "5px",
                 marginBottom: "10px",
+                cursor:"pointer"
+              }}
+              onClick={() => {
+                setSelectedChat(item);
               }}
             >
               <ListItem alignItems="center">
