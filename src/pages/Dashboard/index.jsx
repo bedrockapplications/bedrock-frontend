@@ -113,6 +113,12 @@ const useStyle = makeStyles(() => ({
     lineHeight: "36px",
     color: "#3A3A3C",
   },
+  chatTitle:{
+    fontWeight: "700",
+    fontSize: "1.2rem",
+    lineHeight: "36px",
+    color: "#3A3A3C",
+  },
   personText: {
     fontSize: "1.5rem",
     fontWeight: "700",
@@ -409,7 +415,7 @@ const Dashboard = () => {
                       <ArrowBackIosIcon />
                     </IconButton>
                     <Avatar alt="" src={Profile} className={classes.avatar} />
-                    <Typography className={classes.titleText}>
+                    <Typography className={classes.chatTitle}>
                       {Object.keys(selectedChat).length > 0 ? `${selectedChat.name} | ${selectedChat.role}` : ""}
                     </Typography>
                   </Stack>
