@@ -44,6 +44,8 @@ import MuiFileUpload from "../../components/Formik/MuiFileUpload";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import InputAdornment from "@mui/material/InputAdornment";
 import { GlobalState } from "../../Context/Context";
+import Avatar from "@mui/material/Avatar";
+import Profile from "../../Images/avatar.png";
 
 const useStyle = makeStyles(() => ({
   employeeImg: {
@@ -134,7 +136,13 @@ const useStyle = makeStyles(() => ({
   flowright:{
     animation: "slide-right .4s forwards",
     transform: "translateX(-50%)",
-  }
+  },
+  avatar: {
+    borderRadius: "15px",
+    border: "3px solid #000",
+    filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
+    margin: "0px 10px"
+  },
 }));
 
 const validationSchema = Yup.object().shape({
@@ -333,7 +341,7 @@ const Dashboard = () => {
                     </IconButton>
                   </Box>
                 </Stack>
-                <Box sx={{ height: "55vh", overflowY: "auto", p: "5px" }}>
+                <Box sx={{ height: "57vh", overflowY: "auto", p: "5px" }}>
                   {detailsList.length > 0 ? (
                     detailsList?.map((item, i) => (
                       <Box
@@ -400,11 +408,12 @@ const Dashboard = () => {
                     >
                       <ArrowBackIosIcon />
                     </IconButton>
+                    <Avatar alt="" src={Profile} className={classes.avatar} />
                     <Typography className={classes.titleText}>
                       {Object.keys(selectedChat).length > 0 ? `${selectedChat.name} | ${selectedChat.role}` : ""}
                     </Typography>
                   </Stack>
-                  <Box sx={{ height: "55vh", overflowY: "auto", margin: "0.5vh 2rem", background: "#F2F2F7", p:"0.75rem", borderRadius:"5px" }}></Box>
+                  <Box sx={{ height: "55vh", overflowY: "auto", margin: "1vh 2rem", background: "#F2F2F7", p:"0.75rem", borderRadius:"5px" }}></Box>
                 </Box>
                 }
                 
@@ -415,7 +424,7 @@ const Dashboard = () => {
                 sx={{
                   p: "0.75rem",
                   backgroundColor: "#f3f2f7",
-                  height: "64vh",
+                  height: "66vh",
                 }}
               >
                 {show === "Direct Contact" ? (
