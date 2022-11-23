@@ -50,32 +50,29 @@ const MyProjects = () => {
   const [projectsList, setProjectsList] = useState([]);
 
   const handleCreateNewProject = (values, setSubmitting, resetForm) => {
-    let formData = new FormData();
-    formData.append("projectName", values.projectName);
-    formData.append("Address", values.address);
-    formData.append("City", values.city);
-    formData.append("State", values.state);
-    formData.append("Zipcode", 500082);
-    formData.append("StartDate", new Date());
-
     let payload = {
       projectName: values.projectName,
+      ClientPhNumber: "",
       Address: values.address,
       City: values.city,
       State: values.state,
-      Zipcode: 500082,
+      Zipcode: values.Zipcode,
       StartDate: new Date(),
+      userId: uId,
     };
-
+    setSubmitting(true);
     createNewProjectApi(payload)
       .then((res) => {
         if (res.status === 200) {
           console.log("res", res.data);
           getProjects();
+          resetForm();
+          setSubmitting(false);
         }
       })
       .catch((error) => {
         const errorObj = error;
+        setSubmitting(false);
         console.log("errorObj", errorObj);
       });
   };
@@ -201,7 +198,7 @@ const MyProjects = () => {
                   initialValues={{
                     projectName: "",
                     address: "",
-                    unitApt: "",
+                    Zipcode: "",
                     city: "",
                     state: "",
                     country: "",
@@ -236,9 +233,9 @@ const MyProjects = () => {
                       </Grid>
                       <Grid item xs={4}>
                         <MuiTextField
-                          name="unitApt"
-                          id="unitApt"
-                          label={"Unit / Apt"}
+                          name="Zipcode"
+                          id="Zipcode"
+                          label={"Zipcode"}
                           required={true}
                         />
                       </Grid>
