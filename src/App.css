@@ -1398,3 +1398,13 @@ p span.round::after {
   transition: border 0.24s ease-in-out;
   cursor: pointer;
 }
+
+
+@keyframes slide-left {
+  100% { transform: translateX(0%); }
+}
+
+@keyframes slide-right {
+  100% { transform: translateX(0%); }
+}
+

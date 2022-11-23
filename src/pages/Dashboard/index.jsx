@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo, useRef } from "react";
+import React, { useEffect, useState, memo, useRef, useContext } from "react";
 
 import { getMeetingsList, deleteMeetingApi } from "../../services/request";
 
@@ -26,6 +26,7 @@ import {
   TextField,
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import MuiDialog from "../../components/MuiDialog";
 import { useTranslation } from "react-i18next";
 import noDataImg from "../../Images/NoData.png";
@@ -42,6 +43,9 @@ import * as Yup from "yup";
 import MuiFileUpload from "../../components/Formik/MuiFileUpload";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import InputAdornment from "@mui/material/InputAdornment";
+import { GlobalState } from "../../Context/Context";
+import Avatar from "@mui/material/Avatar";
+import Profile from "../../Images/avatar.png";
 
 const useStyle = makeStyles(() => ({
   employeeImg: {
@@ -109,6 +113,12 @@ const useStyle = makeStyles(() => ({
     lineHeight: "36px",
     color: "#3A3A3C",
   },
+  chatTitle:{
+    fontWeight: "700",
+    fontSize: "1.2rem",
+    lineHeight: "36px",
+    color: "#3A3A3C",
+  },
   personText: {
     fontSize: "1.5rem",
     fontWeight: "700",
@@ -124,6 +134,20 @@ const useStyle = makeStyles(() => ({
     fontStyle: "normal",
     lineHeight: "18px",
     color: "#FFF",
+  },
+  flow:{
+    animation: "slide-left .4s forwards",
+    transform: "translateX(20%)",
+  },
+  flowright:{
+    animation: "slide-right .4s forwards",
+    transform: "translateX(-50%)",
+  },
+  avatar: {
+    borderRadius: "15px",
+    border: "3px solid #000",
+    filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
+    margin: "0px 10px"
   },
 }));
 
@@ -172,6 +196,7 @@ const Dashboard = () => {
   const userId = localStorage.getItem("userId");
   const userFirstName = localStorage.getItem("userFirstName");
   const classes = useStyle();
+  const { selectedChat, setSelectedChat } = useContext(GlobalState);
   const [show, setShow] = useState("Direct Contact");
   const [taskDetails, setTaskDetails] = useState(null);
   const [detailsList, setDetailsList] = useState([]);
@@ -290,7 +315,9 @@ const Dashboard = () => {
         <Grid item xs={12}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12} md={8} lg={8}>
-              <Paper sx={{ p: "0.75rem", backgroundColor: "#f3f2f7" }}>
+              <Paper sx={{ p: "0.75rem", backgroundColor: "#E5E5EA" }}>
+                {Object.keys(selectedChat).length === 0 ?
+                <Box className={classes.flowright}>
                 <Stack
                   direction="row"
                   justifyContent="space-between"
@@ -320,7 +347,7 @@ const Dashboard = () => {
                     </IconButton>
                   </Box>
                 </Stack>
-                <Box sx={{ height: "55vh", overflowY: "auto", p: "5px" }}>
+                <Box sx={{ height: "57vh", overflowY: "auto", p: "5px" }}>
                   {detailsList.length > 0 ? (
                     detailsList?.map((item, i) => (
                       <Box
@@ -373,6 +400,29 @@ const Dashboard = () => {
                     </Box>
                   )}
                 </Box>
+                </Box>
+                :
+                <Box className={classes.flow} sx={{background:"#E5E5EA"}}>
+                  <Stack
+                  direction="row"
+                  // justifyContent="space-between"
+                  alignItems="center"
+                >
+                    <IconButton
+                      size="small"
+                      onClick={(event) => setSelectedChat({})}
+                    >
+                      <ArrowBackIosIcon />
+                    </IconButton>
+                    <Avatar alt="" src={Profile} className={classes.avatar} />
+                    <Typography className={classes.chatTitle}>
+                      {Object.keys(selectedChat).length > 0 ? `${selectedChat.name} | ${selectedChat.role}` : ""}
+                    </Typography>
+                  </Stack>
+                  <Box sx={{ height: "55vh", overflowY: "auto", margin: "1vh 2rem", background: "#F2F2F7", p:"0.75rem", borderRadius:"5px" }}></Box>
+                </Box>
+                }
+                
               </Paper>
             </Grid>
             <Grid item xs={12} sm={12} md={4} lg={4}>
@@ -380,7 +430,7 @@ const Dashboard = () => {
                 sx={{
                   p: "0.75rem",
                   backgroundColor: "#f3f2f7",
-                  height: "64vh",
+                  height: "66vh",
                 }}
               >
                 {show === "Direct Contact" ? (
