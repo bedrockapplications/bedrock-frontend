@@ -7,8 +7,8 @@ export const allMessages = [
         id:0,
     },
     {
-        sender:localStorage.getItem("userName"),
-        reciever:"Fuad Hossain",
+        sender:"Fuad Hossain",
+        reciever:localStorage.getItem("userName"),
         message:"Hi sir, Good Morning.",
         time:"9:01 am",
         id:1,
