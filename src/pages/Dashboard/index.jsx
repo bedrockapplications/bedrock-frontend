@@ -1,8 +1,11 @@
 import React, { useEffect, useState, memo, useRef, useContext } from "react";
 
 import { getMeetingsList, deleteMeetingApi } from "../../services/request";
+import { allMessages } from "./messages";
 
 import employee from "../../Images/employee.png";
+import send from "../../Images/send.svg";
+import attach from "../../Images/attach.svg";
 import cloud from "../../Images/CLoud.png";
 import crane from "../../Images/crane.png";
 import { makeStyles } from "@mui/styles";
@@ -149,6 +152,42 @@ const useStyle = makeStyles(() => ({
     filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
     margin: "0px 10px"
   },
+  messageBox:{
+    height: "42vh",
+    overflow:"hidden scroll",
+  },
+  messageInputBox:{
+    height: "10vh",
+    display:"flex",
+    justifyContent:"space-between",
+    alignItems:"center",
+  },
+  msgInput:{
+    width:"100%",
+    height:"100%",
+    padding:"10px 15px",
+    border:"none",
+    fontWeight: "700",
+    fontSize: "14px",
+    lineHeight: "18px",
+    color: "#3A3A3C",
+    background: "#FFFFFF",
+    borderRadius: "5px",
+    outline:"none",
+  },
+  msgicon:{
+    height:"33px",
+    width:"33px",
+    cursor:"pointer",
+    "&:hover":{
+      transform: "scale(1.1)",
+      transition: "cubic-bezier(0.215, 0.610, 0.355, 1)",
+    }
+  },
+  upload:{
+    display:"none"
+  }
+
 }));
 
 const validationSchema = Yup.object().shape({
@@ -169,9 +208,9 @@ const contactList = [
     mobile: "1234567890",
   },
   {
-    name: "Ganesh",
+    name: "Rajesh",
     role: "Architect",
-    mail: "ganesh123@gmail.com",
+    mail: "Rajesh456@gmail.com",
     mobile: "1234567890",
   },
   {
@@ -204,6 +243,7 @@ const Dashboard = () => {
   const [cancleItem, setCancleItem] = useState(null);
   const [contactDetails, setContactDetails] = useState([]);
   const [openForm, setOpenForm] = useState(false);
+  const [msgInput, setMsgInput] = useState("");
 
   const handleShowDetails = (item) => {
     if (item) {
@@ -419,7 +459,56 @@ const Dashboard = () => {
                       {Object.keys(selectedChat).length > 0 ? `${selectedChat.name} | ${selectedChat.role}` : ""}
                     </Typography>
                   </Stack>
-                  <Box sx={{ height: "55vh", overflowY: "auto", margin: "1vh 2rem", background: "#F2F2F7", p:"0.75rem", borderRadius:"5px" }}></Box>
+                  <Box sx={{ height: "55vh", overflowY: "auto", margin: "1vh 2rem", background: "#F2F2F7", p:"0.75rem", borderRadius:"5px", display:"flex", flexDirection:"column", justifyContent:"space-around" }}>
+                    <Box className={classes.messageBox}>
+                      {allMessages.filter(element => {
+                          return(
+                              element.sender === selectedChat.name || element.reciever === selectedChat.name
+                          )
+                      }).map((each, i) => {
+                        return(
+                          <Box sx={{textAlign: each.sender === selectedChat.name ? "left" : "Right", display:"flex", flexDirection:"column", alignItems: each.sender === selectedChat.name ? "flex-start" : "flex-end"}}>
+                            <Box sx={{background: each.sender === selectedChat.name ? "#3A3A3C" : "white", color: each.sender === selectedChat.name ? "white" : "#3A3A3C", padding:"10px 15px", borderRadius:"5px", margin:"10px", width:"fit-content"}}>{each.message}</Box>
+                            <Box sx={{margin:"0px 10px", color:"#3A3A3C"}}>{each.time}</Box>
+                          </Box>
+                        )
+                      })
+                    }
+                    </Box>
+                    <Box className={classes.messageInputBox}>
+                      <Grid container spacing={1} sx={{display:"flex", justifyContent:"space-between", alignItems:"center", height:"100%", width:"100%"}}>
+                        <Grid item xs={10}>
+                          <input
+                            value={msgInput}
+                            onChange={(e) => setMsgInput(e.target.value)}
+                            className={classes.msgInput}
+                            type="text"
+                            placeholder="Send Message"
+                          />
+                        </Grid>
+                        <Grid item xs={1}>
+                          {/* <img
+                            src={attach}
+                            alt=""
+                            className={classes.msgicon}
+                          /> */}
+                           <label for="file-input">
+                            <img src={attach} alt=""
+                            className={classes.msgicon}/>
+                          </label>
+
+                          <input className={classes.upload} id="file-input" type="file" />
+                        </Grid>
+                        <Grid item xs={1}>
+                          <img
+                            src={send}
+                            alt=""
+                            className={classes.msgicon}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Box>
+                  </Box>
                 </Box>
                 }
                 
