@@ -1414,3 +1414,15 @@ p span.round::after {
   100% { transform: translateX(0%); }
 }
 
+.react-emoji-picker--wrapper{
+  height: 35vh !important;
+  bottom: 15px !important;
+}
+
+.emoji-mart-scroll{
+  padding: 0 6px 30px 6px !important;
+}
+
+.react-input-emoji--button__show svg {
+  fill: #48484A !important;
+}

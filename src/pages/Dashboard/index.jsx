@@ -1,4 +1,5 @@
 import React, { useEffect, useState, memo, useRef, useContext } from "react";
+import InputEmoji from 'react-input-emoji'
 
 import { getMeetingsList, deleteMeetingApi } from "../../services/request";
 import { allMessages } from "./messages";
@@ -245,6 +246,10 @@ const Dashboard = () => {
   const [openForm, setOpenForm] = useState(false);
   const [msgInput, setMsgInput] = useState("");
 
+  useEffect(() => {
+    console.log(msgInput)
+  }, [msgInput])
+
   const handleShowDetails = (item) => {
     if (item) {
       setTaskDetails({ ...item });
@@ -478,12 +483,20 @@ const Dashboard = () => {
                     <Box className={classes.messageInputBox}>
                       <Grid container spacing={1} sx={{display:"flex", justifyContent:"space-between", alignItems:"center", height:"100%", width:"100%"}}>
                         <Grid item xs={10}>
-                          <input
+                          {/* <input
                             value={msgInput}
                             onChange={(e) => setMsgInput(e.target.value)}
                             className={classes.msgInput}
                             type="text"
                             placeholder="Send Message"
+                          /> */}
+                          <InputEmoji
+                            value={msgInput}
+                            onChange={setMsgInput}
+                            // cleanOnEnter
+                            // onEnter={handleOnEnter}
+                            placeholder="Send Message"
+                            className={classes.msgInput}
                           />
                         </Grid>
                         <Grid item xs={1}>
