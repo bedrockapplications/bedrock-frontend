@@ -2,6 +2,12 @@
 /* @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"); */
 @import url("https://fonts.googleapis.com/css?family=Poppins");
 
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -1408,3 +1414,15 @@ p span.round::after {
   100% { transform: translateX(0%); }
 }
 
+.react-emoji-picker--wrapper{
+  height: 35vh !important;
+  bottom: 15px !important;
+}
+
+.emoji-mart-scroll{
+  padding: 0 6px 30px 6px !important;
+}
+
+.react-input-emoji--button__show svg {
+  fill: #48484A !important;
+}
