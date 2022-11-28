@@ -38,6 +38,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import favicon from "../Images/Bedrock_Rock_-removebg-preview.png";
 import { WindowSharp } from "@mui/icons-material";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
@@ -86,7 +87,7 @@ const useStyle = makeStyles(() => ({
     background: "#48484A",
     opacity: "0.95",
     color: "#FFFFFF",
-  }
+  },
 }));
 
 const LanguagesList = [
@@ -103,6 +104,7 @@ const sideLinks = [
     link: "/myprojects",
   },
   { icon: <DescriptionIcon />, label: "document_manager", link: "/docManager" },
+  { icon: <PersonAddIcon />, label: "User Creation", link: "/userCreation" },
 ];
 
 const openedMixin = (theme) => ({
@@ -212,7 +214,7 @@ export default function MiniDrawer(props) {
   const handleLogout = () => {
     localStorage.clear();
     window.location.reload();
-  }
+  };
 
   const GetDateAndTime = () => {
     setInterval(() => {
@@ -355,11 +357,11 @@ export default function MiniDrawer(props) {
               sx: {
                 overflow: "visible",
                 bgcolor: "#48484A",
-                color:"#FFFFFF",
+                color: "#FFFFFF",
                 filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
                 mt: 0.3,
                 ml: -0.8,
-                opacity:0.95,
+                opacity: 0.95,
                 "& .MuiAvatar-root": {
                   width: 32,
                   height: 32,
@@ -383,7 +385,9 @@ export default function MiniDrawer(props) {
             transformOrigin={{ horizontal: "right", vertical: "top" }}
             anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
           >
-            <MenuItem onClick={() => history.push("/settings")}>Settings</MenuItem>
+            <MenuItem onClick={() => history.push("/settings")}>
+              Settings
+            </MenuItem>
             <MenuItem onClick={handleLogout}>Sign Out</MenuItem>
           </Menu>
         </Toolbar>
