@@ -228,7 +228,6 @@ const DocumentManager = () => {
   };
 
   const handleSearch = (searchValue) => {
-    console.log("searchValue", searchValue);
     setSearch(searchValue);
     GetDocumentsLists(0, 10, selectedProjected, searchValue);
   };
@@ -275,7 +274,7 @@ const DocumentManager = () => {
                 </FormControl>
               </Box>
               <Box sx={{ width: "450px" }}>
-                {/* <TextField
+                <TextField
                   id="search"
                   name="search"
                   placeholder={t(`document.search_all_documents`)}
@@ -291,9 +290,9 @@ const DocumentManager = () => {
                       </InputAdornment>
                     ),
                   }}
-                /> */}
+                />
 
-                <Autocomplete
+                {/* <Autocomplete
                   id="search"
                   freeSolo
                   value={search}
@@ -316,7 +315,7 @@ const DocumentManager = () => {
                       }}
                     />
                   )}
-                />
+                /> */}
               </Box>
               <Box sx={{ width: "258px" }}>
                 <Button
