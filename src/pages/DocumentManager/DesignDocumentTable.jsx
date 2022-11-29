@@ -20,6 +20,7 @@ import TablePagination from "@mui/material/TablePagination";
 import { makeStyles } from "@mui/styles";
 import SortingTableHeader from "./SortingTableHeaders";
 import { getComparator, stableSort } from "./SortingTableHeaders";
+import SubmittalsDialog from "./SubmittlasModel";
 
 const useStyle = makeStyles(() => ({
   headerText: {
@@ -84,6 +85,8 @@ const DesignDocumentTable = (props) => {
   const [dense, setDense] = React.useState(false);
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
+  const [openSubmittals, setOpenSubmittals] = useState(false);
+  const [submittalsData, setSubmittalsData] = useState(null);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -140,6 +143,15 @@ const DesignDocumentTable = (props) => {
     GetDocumentsLists(0, event.target.value, selectedProjected, search);
   };
 
+  const handleCloseSubmittals = () => {
+    setOpenSubmittals(false);
+  };
+
+  const handleOpenSubmittals = (item) => {
+    setSubmittalsData(item);
+    setOpenSubmittals(true);
+  };
+
   return (
     <>
       <Paper sx={{ width: "100%", border: "3px solid #3A3A3C" }}>
@@ -173,7 +185,11 @@ const DesignDocumentTable = (props) => {
                       >
                         <EditIcon fontSize="small" />
                       </IconButton>
-                      <IconButton size="small" color="primary">
+                      <IconButton
+                        size="small"
+                        color="primary"
+                        onClick={() => handleOpenSubmittals(item)}
+                      >
                         <EmailIcon fontSize="small" />
                       </IconButton>
                       <IconButton
@@ -213,6 +229,11 @@ const DesignDocumentTable = (props) => {
         data={editData}
         projectOptions={projectOptions}
         GetDocumentsLists={GetDocumentsLists}
+      />
+      <SubmittalsDialog
+        data={submittalsData}
+        open={openSubmittals}
+        handleCloseSubmittals={handleCloseSubmittals}
       />
     </>
   );

@@ -20,6 +20,7 @@ import { makeStyles } from "@mui/styles";
 import { GlobalState } from "../../Context/Context";
 import SortingTableHeader from "./SortingTableHeaders";
 import { getComparator, stableSort } from "./SortingTableHeaders";
+import SubmittalsDialog from "./SubmittlasModel";
 
 const useStyle = makeStyles(() => ({
   headerText: {
@@ -84,9 +85,10 @@ const SubmittalsDocTable = (props) => {
   const [deleteItem, setDeleteItem] = useState({});
   const [editOpen, setEditOpen] = useState(false);
   const [editData, setEditData] = useState({});
-
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
+  const [openSubmittals, setOpenSubmittals] = useState(false);
+  const [submittalsData, setSubmittalsData] = useState(null);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -143,6 +145,15 @@ const SubmittalsDocTable = (props) => {
     GetDocumentsLists(0, event.target.value, selectedProjected, search);
   };
 
+  const handleCloseSubmittals = () => {
+    setOpenSubmittals(false);
+  };
+
+  const handleOpenSubmittals = (item) => {
+    setSubmittalsData(item);
+    setOpenSubmittals(true);
+  };
+
   return (
     <>
       <Paper sx={{ width: "100%", border: "3px solid #3A3A3C" }}>
@@ -175,7 +186,11 @@ const SubmittalsDocTable = (props) => {
                       >
                         <EditIcon fontSize="small" />
                       </IconButton>
-                      <IconButton size="small" color="primary">
+                      <IconButton
+                        size="small"
+                        color="primary"
+                        onClick={() => handleOpenSubmittals(item)}
+                      >
                         <EmailIcon fontSize="small" />
                       </IconButton>
                       <IconButton
@@ -214,6 +229,11 @@ const SubmittalsDocTable = (props) => {
         data={editData}
         projectOptions={projectOptions}
         GetDocumentsLists={GetDocumentsLists}
+      />
+      <SubmittalsDialog
+        data={submittalsData}
+        open={openSubmittals}
+        handleCloseSubmittals={handleCloseSubmittals}
       />
     </>
   );

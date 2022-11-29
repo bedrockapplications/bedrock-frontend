@@ -4,7 +4,7 @@ import { Field } from "formik";
 import PropTypes from "prop-types";
 
 const RenderTextArea = (props) => {
-  const { name, id, label, field, disabled, error } = props;
+  const { name, id, label, field, disabled, error, rows } = props;
   return (
     <TextField
       {...field}
@@ -18,7 +18,7 @@ const RenderTextArea = (props) => {
       fullWidth
       autoComplete="off"
       multiline
-      rows={3}
+      rows={rows}
       required
     />
   );
@@ -43,6 +43,7 @@ MuiTextArea.propTypes = {
   label: PropTypes.string,
   disabled: PropTypes.bool,
   error: PropTypes.bool,
+  rows: PropTypes.number,
 };
 
 MuiTextArea.defaultProps = {
@@ -51,6 +52,7 @@ MuiTextArea.defaultProps = {
   label: "Name",
   disabled: false,
   error: false,
+  rows: 3,
 };
 
 export default MuiTextArea;

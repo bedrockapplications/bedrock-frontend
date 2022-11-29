@@ -7,6 +7,7 @@ import ProjectTable from "../../components/MuiTable";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import MuiTextField from "../../components/Formik/MuiTextField";
+import { useTranslation } from "react-i18next";
 
 // import ProjectDataTable from "./ProjectDataTable";
 // import CardMedia from "@mui/material/CardMedia";
@@ -46,6 +47,7 @@ let disableFilter = {
 
 const MyProjects = () => {
   const classes = useStyle();
+  const { t } = useTranslation();
   const uId = localStorage.getItem("userId");
   const [projectsList, setProjectsList] = useState([]);
 
@@ -80,7 +82,7 @@ const MyProjects = () => {
   const columns = [
     {
       name: "projectName",
-      label: "Name",
+      label: `${t("myProject.name")}`,
       options: {
         ...disableFilter,
         customBodyRender: (value) => (value ? value : `---`),
@@ -88,7 +90,7 @@ const MyProjects = () => {
     },
     {
       name: "type",
-      label: "Type",
+      label: `${t("myProject.type")}`,
       options: {
         ...disableFilter,
         customBodyRender: (value) => (value ? value : `---`),
@@ -96,7 +98,7 @@ const MyProjects = () => {
     },
     {
       name: "status",
-      label: "Status",
+      label: `${t("myProject.status")}`,
       options: {
         ...disableFilter,
         customBodyRender: (value) => (value ? value : `---`),
@@ -104,7 +106,7 @@ const MyProjects = () => {
     },
     {
       name: "projectManager",
-      label: "Project Manager",
+      label: `${t("myProject.projectManager")}`,
       options: {
         ...disableFilter,
         customBodyRender: (value) => (value ? value : `---`),
@@ -112,7 +114,7 @@ const MyProjects = () => {
     },
     {
       name: "State",
-      label: "Location",
+      label: `${t("myProject.location")}`,
       options: {
         ...disableFilter,
         customBodyRender: (value) => (value ? value : `---`),
@@ -167,10 +169,10 @@ const MyProjects = () => {
         <Grid item xs={12}>
           <Paper elevation={0} className={classes.projectHeader}>
             <Typography className={classes.projectText}>
-              Project Directory
+              {t("myProject.projectDirectory")}
             </Typography>
             <Typography className={classes.ongoingText}>
-              Create or Select on Ongoing Projects
+              {t("myProject.createSelect")}
             </Typography>
           </Paper>
         </Grid>
@@ -216,18 +218,18 @@ const MyProjects = () => {
                         <MuiTextField
                           name="projectName"
                           id="projectName"
-                          label={"Project Name"}
+                          label={t("myProject.projectName")}
                           required={true}
                         />
                       </Grid>
                       <Grid item xs={12}>
-                        <Typography>Address</Typography>
+                        <Typography>{t("myProject.address")}</Typography>
                       </Grid>
                       <Grid item xs={12}>
                         <MuiTextField
                           name="address"
                           id="address"
-                          label={"Street Address"}
+                          label={t("myProject.streetAddress")}
                           required={true}
                         />
                       </Grid>
@@ -235,7 +237,7 @@ const MyProjects = () => {
                         <MuiTextField
                           name="Zipcode"
                           id="Zipcode"
-                          label={"Zipcode"}
+                          label={t("myProject.zipCode")}
                           required={true}
                         />
                       </Grid>
@@ -243,7 +245,7 @@ const MyProjects = () => {
                         <MuiTextField
                           name="city"
                           id="city"
-                          label={"City"}
+                          label={t("myProject.city")}
                           required={true}
                         />
                       </Grid>
@@ -251,7 +253,7 @@ const MyProjects = () => {
                         <MuiTextField
                           name="state"
                           id="state"
-                          label={"State"}
+                          label={t("myProject.state")}
                           required={true}
                         />
                       </Grid>
@@ -259,7 +261,7 @@ const MyProjects = () => {
                         <MuiTextField
                           name="country"
                           id="country"
-                          label={"Country"}
+                          label={t("myProject.country")}
                           required={true}
                         />
                       </Grid>
@@ -271,7 +273,7 @@ const MyProjects = () => {
                           type="submit"
                           sx={{ textTransform: "capitalize", float: "right" }}
                         >
-                          Create New Project
+                          {t("myProject.createNewProject")}
                         </Button>
                       </Grid>
                     </Grid>
