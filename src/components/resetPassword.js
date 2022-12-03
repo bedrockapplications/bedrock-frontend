@@ -47,7 +47,7 @@ const ResetPassword = () => {
       email: email,
       password: password,
     };
-    return fetch("http://ec2-174-129-118-55.compute-1.amazonaws.com:3000/api/user/resetpassword/", {
+    return fetch("http://54.88.168.1:3000/api/user/resetpassword/", {
       method: "PUT",
       headers: new Headers({
         Accept: "application/json",

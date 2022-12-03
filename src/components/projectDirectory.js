@@ -14,7 +14,7 @@ const ProjectDirectory = (props) => {
   useEffect(() => {
     const getUserDetails = () => {
       return fetch(
-        "http://ec2-174-129-118-55.compute-1.amazonaws.com:3000/api/project/getprojects?userId=" + userId,
+        "http://54.88.168.1:3000/api/project/getprojects?userId=" + userId,
         {
           method: "GET",
         }

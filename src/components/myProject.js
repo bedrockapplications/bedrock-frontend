@@ -14,7 +14,7 @@ const MyProject = () => {
     // getProjectDetails(param.id);
     const getProjectDetails = () => {
         return fetch(
-            "http://ec2-174-129-118-55.compute-1.amazonaws.com:3000/api/project/getprojectdetailsbyid?_id=" + param.id,
+            "http://54.88.168.1:3000/api/project/getprojectdetailsbyid?_id=" + param.id,
             {
                 method: "GET",
             }

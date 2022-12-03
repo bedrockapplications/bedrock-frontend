@@ -79,7 +79,7 @@ const CreateProject = () => {
     doc.forEach((x) => {
       formdata.append("Documents", x);
     });
-    fetch("http://ec2-174-129-118-55.compute-1.amazonaws.com:3000/api/project/upload/", {
+    fetch("http://54.88.168.1:3000/api/project/upload/", {
       method: "POST",
       body: formdata,
     })
