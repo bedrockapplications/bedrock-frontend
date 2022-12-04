@@ -44,7 +44,7 @@ const ForgotPassword = () => {
 
   const SecurityValidation = async (email, schname, brncty) => {
     return fetch(
-      "http://54.88.168.1:3000/api/user/securitycheck?email=" +
+      `${process.env.REACT_APP_API_URL}/user/securitycheck?email=` +
         email +
         "&schoolName=" +
         schname +

@@ -46,7 +46,7 @@ const Login = () => {
       email: email,
       password: password,
     };
-    fetch("http://54.88.168.1:3000/api/user/login", {
+    fetch(`${process.env.REACT_APP_API_URL}/user/login`, {
       method: "POST",
       headers: new Headers({
         Accept: "application/json",
@@ -72,7 +72,7 @@ const Login = () => {
   };
 
   const getUserDetails = async (id) => {
-    return fetch("http://54.88.168.1:3000/api/user/details?_id=" + id, {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/details?_id=` + id, {
       method: "GET",
     })
       .then((response) => response.json())

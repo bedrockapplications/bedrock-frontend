@@ -14,7 +14,7 @@ const MyProject = () => {
     // getProjectDetails(param.id);
     const getProjectDetails = () => {
         return fetch(
-            "http://54.88.168.1:3000/api/project/getprojectdetailsbyid?_id=" + param.id,
+            `${process.env.REACT_APP_API_URL}/project/getprojectdetailsbyid?_id=` + param.id,
             {
                 method: "GET",
             }

@@ -12,9 +12,10 @@ const ProjectDirectory = (props) => {
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
+    console.log(process.env.REACT_APP_API_URL, "kkkk")
     const getUserDetails = () => {
       return fetch(
-        "http://54.88.168.1:3000/api/project/getprojects?userId=" + userId,
+        `${process.env.REACT_APP_API_URL}/project/getprojects?userId=` + userId,
         {
           method: "GET",
         }

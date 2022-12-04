@@ -47,7 +47,7 @@ const ResetPassword = () => {
       email: email,
       password: password,
     };
-    return fetch("http://54.88.168.1:3000/api/user/resetpassword/", {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/resetpassword/`, {
       method: "PUT",
       headers: new Headers({
         Accept: "application/json",
