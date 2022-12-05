@@ -19,7 +19,8 @@ import ListItemText from "@mui/material/ListItemText";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import DescriptionIcon from "@mui/icons-material/Description";
-import Bedrock_Black from "../Images/Bedrock Black.png";
+// import Bedrock_Black from "../Images/Bedrock Black.png";
+import Bedrock_Black from "../Images/BedrockWhiteFull.png";
 import Avatar from "@mui/material/Avatar";
 import userProfile from "../Images/avatar.png";
 import notification from "../Images/notification.png";
@@ -98,13 +99,13 @@ const LanguagesList = [
 
 const sideLinks = [
   { icon: <DashboardIcon />, label: "dashboard", link: "/dashboard" },
+  { icon: <DescriptionIcon />, label: "document_manager", link: "/docManager" },
   {
     icon: <EngineeringIcon />,
     label: "my_projects",
     link: "/myprojects",
   },
-  { icon: <DescriptionIcon />, label: "document_manager", link: "/docManager" },
-  { icon: <PersonAddIcon />, label: "User Creation", link: "/userCreation" },
+  // { icon: <PersonAddIcon />, label: "User Creation", link: "/userCreation" },
 ];
 
 const openedMixin = (theme) => ({

@@ -42,7 +42,7 @@ const DirectContact = (props) => {
   const classes = useStyle();
   const { t } = useTranslation();
   const { list } = props;
-  const { selectedChat, setSelectedChat } = useContext(GlobalState);
+  const { selectedChat, setSelectedChat, setPopen } = useContext(GlobalState);
   return (
     <>
       <Grid container spacing={1}>
@@ -68,6 +68,7 @@ const DirectContact = (props) => {
                 cursor:"pointer"
               }}
               onClick={() => {
+                setPopen(true);
                 setSelectedChat(item);
               }}
             >
