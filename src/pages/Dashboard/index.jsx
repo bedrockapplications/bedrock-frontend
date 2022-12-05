@@ -796,9 +796,11 @@ const Dashboard = () => {
                   enableReinitialize
                   validationSchema={userValidationSchema}
                   onSubmit={(values, { setSubmitting, resetForm }) => {
+                    console.log("values", values);
                     handleCreateNewUser(values, setSubmitting, resetForm);
                   }}
                 >
+                  {({ values, isValid, isSubmitting, setFieldValue }) => (
                   <Form>
                     <Grid container spacing={2}>
                       <Grid item xs={6}>
@@ -874,6 +876,7 @@ const Dashboard = () => {
                       </Grid>
                     </Grid>
                   </Form>
+                  )}
                 </Formik>
             </Grid>
           </Grid>

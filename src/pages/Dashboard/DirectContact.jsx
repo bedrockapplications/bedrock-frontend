@@ -100,7 +100,7 @@ const DirectContact = (props) => {
           {list?.map((item, i) => (
             <List
               disablePadding
-              key={item?.name + i}
+              key={item?.firstName + i}
               sx={{
                 width: "100%",
                 bgcolor: "#e6e5ea",

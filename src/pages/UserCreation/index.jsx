@@ -67,13 +67,13 @@ const data = [
 ];
 
 const userValidationSchema = Yup.object().shape({
-  firstName: Yup.string().min(2).max(20).required().nullable(),
-  lastName: Yup.string().min(2).max(20).required().nullable(),
+  firstName: Yup.string().min(2).max(20).nullable(),
+  lastName: Yup.string().min(2).max(20).nullable(),
   email: Yup.string().email("Invalid email").required("Required"),
   password: Yup.string().min(2).max(20).required('Password is required').nullable(),
-  role: Yup.string().required().nullable(),
-  phNumber: Yup.string().min(10).required().nullable(),
-  address: Yup.string().min(2).max(20).required().nullable(),
+  role: Yup.string().nullable(),
+  phNumber: Yup.string().min(10).nullable(),
+  address: Yup.string().min(2).max(20).nullable(),
 });
 
 const UserCreation = () => {
@@ -203,7 +203,7 @@ const UserCreation = () => {
                           name="Firstname"
                           id="Firstname"
                           label={"First Name"}
-                          required={true}
+                          // required={true}
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -211,7 +211,7 @@ const UserCreation = () => {
                           name="Lastname"
                           id="Lastname"
                           label={"Last Name"}
-                          required={true}
+                          // required={true}
                         />
                       </Grid>
 
@@ -238,7 +238,7 @@ const UserCreation = () => {
                           id="role"
                           label={"Role"}
                           options={[]}
-                          required={true}
+                          // required={true}
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -246,7 +246,7 @@ const UserCreation = () => {
                           name="phNumber"
                           id="phNumber"
                           label={"Phone Number"}
-                          required={true}
+                          // required={true}
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -254,7 +254,7 @@ const UserCreation = () => {
                           name="address"
                           id="address"
                           label={"Address"}
-                          required={true}
+                          // required={true}
                         />
                       </Grid>
 
