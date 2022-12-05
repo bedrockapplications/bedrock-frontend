@@ -1,11 +1,19 @@
 import React from "react";
+import axios from 'axios';
 import logo from "../Images/Bedrock Rock .png";
 import Footer from "../components/footer";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 const Welcome = () => {
     const { t } = useTranslation();
+
+    /// test api
+    useEffect(() => {
+        const response = axios.get("https://api2.binance.com/api/v3/ticker/24hr");
+        console.log(response, "kkk")
+    }, [])
     return (
         <>
             <div className="welcome_container">
