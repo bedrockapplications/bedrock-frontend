@@ -26,6 +26,7 @@ const useStyle = makeStyles(() => ({
     width: "100%",
     display: "flex",
     justifyContent: "center",
+    marginTop:"-15px",
   },
   premiumtitle: {
     width: "100%",
