@@ -50,6 +50,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import { GlobalState } from "../../Context/Context";
 import Avatar from "@mui/material/Avatar";
 import Profile from "../../Images/avatar.png";
+import PremiumDailog from "../../components/premiumDailog";
 
 const useStyle = makeStyles(() => ({
   employeeImg: {
@@ -236,7 +237,7 @@ const Dashboard = () => {
   const userId = localStorage.getItem("userId");
   const userFirstName = localStorage.getItem("userFirstName");
   const classes = useStyle();
-  const { selectedChat, setSelectedChat } = useContext(GlobalState);
+  const { selectedChat, setSelectedChat, popen } = useContext(GlobalState);
   const [show, setShow] = useState("Direct Contact");
   const [taskDetails, setTaskDetails] = useState(null);
   const [detailsList, setDetailsList] = useState([]);
@@ -361,7 +362,7 @@ const Dashboard = () => {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12} md={8} lg={8}>
               <Paper sx={{ p: "0.75rem", backgroundColor: "#E5E5EA" }}>
-                {Object.keys(selectedChat).length === 0 ?
+                {/* {Object.keys(selectedChat).length === 0 ? */}
                 <Box className={classes.flowright}>
                 <Stack
                   direction="row"
@@ -446,7 +447,7 @@ const Dashboard = () => {
                   )}
                 </Box>
                 </Box>
-                :
+                {/* :
                 <Box className={classes.flow} sx={{background:"#E5E5EA"}}>
                   <Stack
                   direction="row"
@@ -483,13 +484,7 @@ const Dashboard = () => {
                     <Box className={classes.messageInputBox}>
                       <Grid container spacing={1} sx={{display:"flex", justifyContent:"space-between", alignItems:"center", height:"100%", width:"100%"}}>
                         <Grid item xs={10}>
-                          {/* <input
-                            value={msgInput}
-                            onChange={(e) => setMsgInput(e.target.value)}
-                            className={classes.msgInput}
-                            type="text"
-                            placeholder="Send Message"
-                          /> */}
+                          
                           <InputEmoji
                             value={msgInput}
                             onChange={setMsgInput}
@@ -500,11 +495,7 @@ const Dashboard = () => {
                           />
                         </Grid>
                         <Grid item xs={1}>
-                          {/* <img
-                            src={attach}
-                            alt=""
-                            className={classes.msgicon}
-                          /> */}
+                          
                            <label for="file-input">
                             <img src={attach} alt=""
                             className={classes.msgicon}/>
@@ -523,7 +514,7 @@ const Dashboard = () => {
                     </Box>
                   </Box>
                 </Box>
-                }
+                } */}
                 
               </Paper>
             </Grid>
@@ -762,6 +753,12 @@ const Dashboard = () => {
           </Grid>
         </DialogContent>
       </MuiDialog>
+      <>
+        { popen ?
+        <PremiumDailog />
+        :""
+        }
+      </>
     </>
   );
 };

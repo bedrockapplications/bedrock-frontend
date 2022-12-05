@@ -10,6 +10,7 @@ const ContextProvider = (props) => {
   const [userDetails, setUserDetails] = useState({});
   const [search, setSearch] = useState("");
   const [selectedChat, setSelectedChat] = useState({});
+  const [popen, setPopen] = useState(false);
   return (
     <GlobalState.Provider
       value={{
@@ -25,7 +26,8 @@ const ContextProvider = (props) => {
         setUserDetails,
         search,
         setSearch,
-        selectedChat, setSelectedChat
+        selectedChat, setSelectedChat,
+        popen, setPopen
       }}
     >
       {props.children}

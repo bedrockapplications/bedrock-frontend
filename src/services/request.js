@@ -27,7 +27,6 @@ export const deleteMeetingApi = async (tId) => {
 //Task Api End
 
 export const getAllProjectList = async (uId) => {
-  console.log(process.env.REACT_APP_API_URL, "kkkk")
   return axios.get(`/project/getprojects?userId=${uId}`);
 };
 
