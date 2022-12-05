@@ -11,6 +11,7 @@ const ContextProvider = (props) => {
   const [search, setSearch] = useState("");
   const [selectedChat, setSelectedChat] = useState({});
   const [popen, setPopen] = useState(false);
+  const [openUserForm, setOpenUserForm] = useState(false);
   return (
     <GlobalState.Provider
       value={{
@@ -27,7 +28,8 @@ const ContextProvider = (props) => {
         search,
         setSearch,
         selectedChat, setSelectedChat,
-        popen, setPopen
+        popen, setPopen,
+        openUserForm, setOpenUserForm,
       }}
     >
       {props.children}

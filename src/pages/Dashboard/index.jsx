@@ -51,6 +51,7 @@ import { GlobalState } from "../../Context/Context";
 import Avatar from "@mui/material/Avatar";
 import Profile from "../../Images/avatar.png";
 import PremiumDailog from "../../components/premiumDailog";
+import MuiSelectField from "../../components/Formik/MuiSelectField";
 
 const useStyle = makeStyles(() => ({
   employeeImg: {
@@ -192,6 +193,16 @@ const useStyle = makeStyles(() => ({
 
 }));
 
+const userValidationSchema = Yup.object().shape({
+  firstName: Yup.string().min(2).max(20).required().nullable(),
+  lastName: Yup.string().min(2).max(20).required().nullable(),
+  email: Yup.string().email("Invalid email").required("Required"),
+  password: Yup.string().min(2).max(20).required('Password is required').nullable(),
+  role: Yup.string().required().nullable(),
+  phNumber: Yup.string().min(10).required().nullable(),
+  address: Yup.string().min(2).max(20).required().nullable(),
+});
+
 const validationSchema = Yup.object().shape({
   taskName: Yup.string().required().nullable(),
   startDate: Yup.string().required().nullable(),
@@ -237,7 +248,7 @@ const Dashboard = () => {
   const userId = localStorage.getItem("userId");
   const userFirstName = localStorage.getItem("userFirstName");
   const classes = useStyle();
-  const { selectedChat, setSelectedChat, popen } = useContext(GlobalState);
+  const { selectedChat, setSelectedChat, popen, openUserForm, setOpenUserForm } = useContext(GlobalState);
   const [show, setShow] = useState("Direct Contact");
   const [taskDetails, setTaskDetails] = useState(null);
   const [detailsList, setDetailsList] = useState([]);
@@ -270,6 +281,10 @@ const Dashboard = () => {
 
   const handleCloseForm = () => {
     setOpenForm(false);
+  };
+
+  const handleCloseUserForm = () => {
+    setOpenUserForm(false);
   };
 
   const getAllTasksList = () => {
@@ -317,6 +332,19 @@ const Dashboard = () => {
   const handleClick = () => {
     // 👇️ open file input box on click of other element
     inputRef.current.click();
+  };
+
+  const handleCreateNewUser = (values, setSubmitting, resetForm) => {
+    console.log("values", values.email);
+    let obj = {
+      firstName:"swaroop", 
+      lastName:"Ravuri", 
+      email:values.email, 
+      password:"swaroop123@",
+      phoneNumber:"9949957772",
+      ownerId:"638dfd5d341004a22e73e577"
+    }
+    console.log(obj, "jjjj")
   };
 
   return (
@@ -740,6 +768,113 @@ const Dashboard = () => {
                   </Form>
                 )}
               </Formik>
+            </Grid>
+          </Grid>
+        </DialogContent>
+      </MuiDialog>
+      <MuiDialog
+        open={openUserForm}
+        handleClose={handleCloseUserForm}
+        id={"createUser"}
+        title={"Create Contact"}
+        maxWidth={"sm"}
+      >
+        <Divider />
+        <DialogContent>
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+            <Formik
+                  initialValues={{
+                    Firstname: "",
+                    Lastname: "",
+                    email: "",
+                    password: "",
+                    // role: "",
+                    phNumber: "",
+                    // address: "",
+                  }}
+                  enableReinitialize
+                  validationSchema={userValidationSchema}
+                  onSubmit={(values, { setSubmitting, resetForm }) => {
+                    handleCreateNewUser(values, setSubmitting, resetForm);
+                  }}
+                >
+                  <Form>
+                    <Grid container spacing={2}>
+                      <Grid item xs={6}>
+                        <MuiTextField
+                          name="Firstname"
+                          id="Firstname"
+                          label={"First Name"}
+                          required={true}
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <MuiTextField
+                          name="Lastname"
+                          id="Lastname"
+                          label={"Last Name"}
+                          required={true}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12}>
+                        <MuiTextField
+                          name="email"
+                          id="email"
+                          label={"Email"}
+                          required={true}
+                        />
+                      </Grid>
+
+                      <Grid item xs={6}>
+                        <MuiTextField
+                          name="password"
+                          id="password"
+                          label={"Password"}
+                          required={true}
+                        />
+                      </Grid>
+                      {/* <Grid item xs={12}>
+                        <MuiSelectField
+                          name="role"
+                          id="role"
+                          label={"Role"}
+                          options={["Owner", "User"]}
+                          required={true}
+                        />
+                      </Grid> */}
+                      <Grid item xs={6}>
+                        <MuiTextField
+                          name="phNumber"
+                          id="phNumber"
+                          label={"Phone Number"}
+                          required={true}
+                        />
+                      </Grid>
+                      {/* <Grid item xs={6}>
+                        <MuiTextField
+                          name="address"
+                          id="address"
+                          label={"Address"}
+                          required={true}
+                        />
+                      </Grid> */}
+
+                      <Grid item xs={12} />
+                      <Grid item xs={12}>
+                        <Button
+                          color="primary"
+                          variant="contained"
+                          type="submit"
+                          sx={{ textTransform: "capitalize", float: "right" }}
+                        >
+                          Create New User
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Form>
+                </Formik>
             </Grid>
           </Grid>
         </DialogContent>

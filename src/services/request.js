@@ -70,3 +70,16 @@ export const getSearchFileList = (userId, projectId, categoryType) => {
 export const deleteDocumentApi = (deleteItem) => {
   return axios.delete(`/document/deleteDocument/${deleteItem}`);
 };
+
+// contacts apis
+
+export const getContactsList = async (ownerId, role) => {
+  return axios.get(
+    `/user/findrolebasedusers?ownerId=${ownerId}&role=${role}`
+  );
+};
+
+export const createContactApi = async (payload) => {
+  return axios.post(`/user/saveContractors`, payload, { headers });
+};
+

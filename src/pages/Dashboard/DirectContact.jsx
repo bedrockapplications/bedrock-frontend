@@ -11,6 +11,9 @@ import { useTranslation } from "react-i18next";
 import { makeStyles } from "@mui/styles";
 import { GlobalState } from "../../Context/Context";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
+import logo from "../../Images/Bedrock Rock .png";
+import { useEffect } from "react";
+import { getContactsList } from "../../services/request";
 
 
 const useStyle = makeStyles(() => ({
@@ -43,9 +46,34 @@ const useStyle = makeStyles(() => ({
 const DirectContact = (props) => {
   const classes = useStyle();
   const { t } = useTranslation();
-  const { list } = props;
-  const { selectedChat, setSelectedChat, setPopen } = useContext(GlobalState);
+  // const { list } = props;
+  const [list, setList] = useState([]);
+  const { selectedChat, setSelectedChat, setPopen, openUserForm, setOpenUserForm } = useContext(GlobalState);
+
+  useEffect(() => {
+    let ownerId = localStorage.getItem("userId");
+    let role = localStorage.getItem("role")
+    if(role === "Owner"){
+      getContactsList(ownerId, "Contractor")
+        .then((res) => {
+          if (res.status === 200) {
+            console.log(res)
+            if (res?.data?.length > 0) {
+              setList([...res?.data]);
+            } else {
+              setList([]);
+            }
+          }
+        })
+        .catch((error) => {
+          let errorObj = error;
+          console.log(errorObj);
+        });
+    }
+  }, [])
   return (
+    <>
+    {localStorage.getItem("role") === "Owner" ?
     <>
       <Grid container spacing={1}>
         <Grid item xs={11}>
@@ -57,9 +85,9 @@ const DirectContact = (props) => {
             <IconButton
               color="primary"
               size="small"
-              // onClick={handleHideDetails}
+              onClick={() => setOpenUserForm(true)}
             >
-              <Tooltip title={t("direct_contacts")}>
+              <Tooltip title={"create contact"}>
                 <ContactPageIcon />
               </Tooltip>
             </IconButton>
@@ -94,14 +122,14 @@ const DirectContact = (props) => {
                     <>
                       <Typography
                         className={classes.nameText}
-                      >{`${item?.name} | ${item?.role}`}</Typography>
+                      >{`${item?.firstName} ${item?.lastName} | ${item?.role}`}</Typography>
                     </>
                   }
                   secondary={
                     <>
                       <Typography
                         className={classes.emailText}
-                      >{`${item?.mail}`}</Typography>
+                      >{`${item?.email} | Ph No: ${item?.phoneNumber}`}</Typography>
                     </>
                   }
                 ></ListItemText>
@@ -110,6 +138,19 @@ const DirectContact = (props) => {
           ))}
         </Grid>
       </Grid>
+    </>
+    :
+    <>
+      <Grid container spacing={1} sx={{display:"flex", flexDirection:"column", justifyContent:"center", alignItems:"center", textAlign:"center"}}>
+        <Grid item xs={8} sx={{mt:5}}>
+          <Avatar alt="" src={logo} sx={{height:"200px", width:"200px", borderRadius:"0px"}}/>
+        </Grid>
+        <Grid item xs={8} sx={{mt:1, fontSize:"20px", fontWeight:"700"}}>
+          Welcome to BedRock!
+        </Grid>
+      </Grid>
+    </>
+    }
     </>
   );
 };
