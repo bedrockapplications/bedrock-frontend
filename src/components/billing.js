@@ -78,7 +78,7 @@ const Billing = () => {
       },
     };
     console.log("final data", reqbody);
-    fetch("http://ec2-174-129-118-55.compute-1.amazonaws.com:3000/api/user/save/", {
+    fetch(`${process.env.REACT_APP_API_URL}/user/save/`, {
       method: "POST",
       headers: new Headers({
         Accept: "application/json",

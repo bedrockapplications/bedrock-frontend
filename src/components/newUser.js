@@ -49,7 +49,7 @@ const NewUser = () => {
   };
 
   const getUserEmail = async (email) => {
-    return fetch("http://ec2-174-129-118-55.compute-1.amazonaws.com:3000/api/user/finduser?email=" + email, {
+    return fetch(`${process.env.REACT_APP_API_URL}/user/finduser?email=` + email, {
       method: "GET",
     })
       .then((response) => response.json())
