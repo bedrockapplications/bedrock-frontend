@@ -88,30 +88,30 @@ const MyProjects = () => {
         customBodyRender: (value) => (value ? value : `---`),
       },
     },
-    {
-      name: "type",
-      label: `${t("myProject.type")}`,
-      options: {
-        ...disableFilter,
-        customBodyRender: (value) => (value ? value : `---`),
-      },
-    },
-    {
-      name: "status",
-      label: `${t("myProject.status")}`,
-      options: {
-        ...disableFilter,
-        customBodyRender: (value) => (value ? value : `---`),
-      },
-    },
-    {
-      name: "projectManager",
-      label: `${t("myProject.projectManager")}`,
-      options: {
-        ...disableFilter,
-        customBodyRender: (value) => (value ? value : `---`),
-      },
-    },
+    // {
+    //   name: "type",
+    //   label: `${t("myProject.type")}`,
+    //   options: {
+    //     ...disableFilter,
+    //     customBodyRender: (value) => (value ? value : `---`),
+    //   },
+    // },
+    // {
+    //   name: "status",
+    //   label: `${t("myProject.status")}`,
+    //   options: {
+    //     ...disableFilter,
+    //     customBodyRender: (value) => (value ? value : `---`),
+    //   },
+    // },
+    // {
+    //   name: "projectManager",
+    //   label: `${t("myProject.projectManager")}`,
+    //   options: {
+    //     ...disableFilter,
+    //     customBodyRender: (value) => (value ? value : `---`),
+    //   },
+    // },
     {
       name: "State",
       label: `${t("myProject.location")}`,
@@ -122,7 +122,7 @@ const MyProjects = () => {
     },
     {
       name: "Zipcode",
-      label: "#",
+      label: "ZipCode",
       options: {
         ...disableFilter,
         customBodyRender: (value) => (value ? value : `---`),
