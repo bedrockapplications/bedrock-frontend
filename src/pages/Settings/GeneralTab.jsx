@@ -88,7 +88,7 @@ const GeneralTab = () => {
                   <Paper
                     sx={{
                       textAlign: "center",
-                      padding: "3rem 2rem",
+                      padding: "1.65rem 2rem",
                       display: "flex",
                       flexDirection: "column",
                       justifyContent: "space-between",
@@ -98,10 +98,10 @@ const GeneralTab = () => {
                     <Avatar
                       alt="Remy Sharp"
                       src=""
-                      sx={{ width: 100, height: 100 }}
+                      sx={{ width: 80, height: 80 }}
                     />
                     <Typography className={classes.userName}>
-                      {userDetails?.email}
+                      {userDetails? `${userDetails.firstName} ${userDetails.lastName}` : ""}
                     </Typography>
                     <Typography>Your plan: Premium</Typography>
                     <Typography sx={{ fontWeight: "700", marginBottom:"1rem" }}>
@@ -114,6 +114,7 @@ const GeneralTab = () => {
                           id="email"
                           label="email"
                           required
+                          disabled="true"
                         />
                       </Grid>
                       <Grid item xs={12}>
@@ -155,18 +156,18 @@ const GeneralTab = () => {
                             Address
                           </Typography> */}
                           <Grid container spacing={3}>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                               <MuiTextField
                                 name="address1"
                                 id="address1"
                                 label="Address Line 1"
                               />
-                            </Grid>
+                            </Grid> */}
                             <Grid item xs={8}>
                               <MuiTextField
                                 name="address2"
                                 id="address2"
-                                label="Address Line 2"
+                                label="Address"
                               />
                             </Grid>
                             <Grid item xs={4}>
@@ -199,12 +200,7 @@ const GeneralTab = () => {
                             </Grid>
                           </Grid>
                         </Grid>
-                        <Grid item xs={4}>
-                          {/* <Typography
-                            sx={{ marginBottom: "5px", fontWeight: "600" }}
-                          >
-                            Position / Title
-                          </Typography> */}
+                        {/* <Grid item xs={4}>
                           <Grid container spacing={3}>
                             <Grid item xs={12}>
                               <MuiTextField
@@ -214,7 +210,7 @@ const GeneralTab = () => {
                               />
                             </Grid>
                           </Grid>
-                        </Grid>
+                        </Grid> */}
                       </Grid>
                       <Typography
                         className={classes.companyText}

@@ -5,11 +5,13 @@ import Divider from "@mui/material/Divider";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
-import { Grid, Typography } from "@mui/material";
+import { Grid, Typography, IconButton, Tooltip } from "@mui/material";
 import Profile from "../../Images/avatar.png";
 import { useTranslation } from "react-i18next";
 import { makeStyles } from "@mui/styles";
 import { GlobalState } from "../../Context/Context";
+import ContactPageIcon from "@mui/icons-material/ContactPage";
+
 
 const useStyle = makeStyles(() => ({
   titleText: {
@@ -46,11 +48,22 @@ const DirectContact = (props) => {
   return (
     <>
       <Grid container spacing={1}>
-        <Grid item xs={12}>
+        <Grid item xs={11}>
           <Typography className={classes.titleText}>
             {t("direct_contacts")}
           </Typography>
-        </Grid>
+          </Grid>
+          <Grid item xs={1}>
+            <IconButton
+              color="primary"
+              size="small"
+              // onClick={handleHideDetails}
+            >
+              <Tooltip title={t("direct_contacts")}>
+                <ContactPageIcon />
+              </Tooltip>
+            </IconButton>
+          </Grid>
         <Grid
           item
           xs={12}

@@ -115,18 +115,18 @@ const BillingTab = () => {
                             Billing Address
                           </Typography>
                           <Grid container spacing={3}>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                               <MuiTextField
                                 name="address1"
                                 id="address1"
                                 label="Address Line 1"
                               />
-                            </Grid>
+                            </Grid> */}
                             <Grid item xs={8}>
                               <MuiTextField
                                 name="address2"
                                 id="address2"
-                                label="Address Line 2"
+                                label="Address"
                               />
                             </Grid>
                             <Grid item xs={4}>

@@ -349,9 +349,9 @@ const Dashboard = () => {
               <Typography className={classes.personText}>
                 {t("hi", { name: userFirstName })}
               </Typography>
-              <Typography className={classes.messageText}>
+              {/* <Typography className={classes.messageText}>
                 {t("you_completed")}
-              </Typography>
+              </Typography> */}
             </Grid>
             <Grid item xs={2} sx={{ width: "6rem", textAlign: "end" }}>
               <img src={crane} alt="crane" className={classes.craneImg} />
@@ -380,15 +380,6 @@ const Dashboard = () => {
                     >
                       <Tooltip title={t("create_task")}>
                         <AddCircleIcon />
-                      </Tooltip>
-                    </IconButton>
-                    <IconButton
-                      color="primary"
-                      size="small"
-                      onClick={handleHideDetails}
-                    >
-                      <Tooltip title={t("direct_contacts")}>
-                        <ContactPageIcon />
                       </Tooltip>
                     </IconButton>
                   </Box>

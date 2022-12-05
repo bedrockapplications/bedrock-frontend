@@ -21,6 +21,7 @@ import { GlobalState } from "../../Context/Context";
 import SortingTableHeader from "./SortingTableHeaders";
 import { getComparator, stableSort } from "./SortingTableHeaders";
 import SubmittalsDialog from "./SubmittlasModel";
+import PremiumDailog from "../../components/premiumDailog";
 
 const useStyle = makeStyles(() => ({
   headerText: {
@@ -79,6 +80,8 @@ const SubmittalsDocTable = (props) => {
     selectedProjected,
     setSelectedProjected,
     search,
+    popen,
+    setPopen
   } = useContext(GlobalState);
 
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -152,6 +155,7 @@ const SubmittalsDocTable = (props) => {
   const handleOpenSubmittals = (item) => {
     setSubmittalsData(item);
     setOpenSubmittals(true);
+    setPopen(true);
   };
 
   return (
@@ -230,11 +234,17 @@ const SubmittalsDocTable = (props) => {
         projectOptions={projectOptions}
         GetDocumentsLists={GetDocumentsLists}
       />
-      <SubmittalsDialog
+      {/* <SubmittalsDialog
         data={submittalsData}
         open={openSubmittals}
         handleCloseSubmittals={handleCloseSubmittals}
-      />
+      /> */}
+      <>
+        { popen ?
+        <PremiumDailog />
+        :""
+        }
+      </>
     </>
   );
 };

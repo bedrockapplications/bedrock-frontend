@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import DocumentTable from "../../components/MuiTable";
 import { IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
@@ -21,6 +21,7 @@ import { makeStyles } from "@mui/styles";
 import SortingTableHeader from "./SortingTableHeaders";
 import { getComparator, stableSort } from "./SortingTableHeaders";
 import SubmittalsDialog from "./SubmittlasModel";
+import PremiumDailog from "../../components/premiumDailog";
 
 const useStyle = makeStyles(() => ({
   headerText: {
@@ -76,6 +77,8 @@ const DesignDocumentTable = (props) => {
     setSelectedProjected,
     search,
     setSearch,
+    popen,
+    setPopen,
   } = useContext(GlobalState);
 
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -87,6 +90,10 @@ const DesignDocumentTable = (props) => {
   const [orderBy, setOrderBy] = React.useState("");
   const [openSubmittals, setOpenSubmittals] = useState(false);
   const [submittalsData, setSubmittalsData] = useState(null);
+
+  useEffect(() =>{
+    console.log(popen, "kkkkk")
+  }, [])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -150,6 +157,7 @@ const DesignDocumentTable = (props) => {
   const handleOpenSubmittals = (item) => {
     setSubmittalsData(item);
     setOpenSubmittals(true);
+    setPopen(true);
   };
 
   return (
@@ -230,11 +238,17 @@ const DesignDocumentTable = (props) => {
         projectOptions={projectOptions}
         GetDocumentsLists={GetDocumentsLists}
       />
-      <SubmittalsDialog
+      {/* <SubmittalsDialog
         data={submittalsData}
         open={openSubmittals}
         handleCloseSubmittals={handleCloseSubmittals}
-      />
+      /> */}
+      <>
+        { popen ?
+        <PremiumDailog />
+        :""
+        }
+      </>
     </>
   );
 };
