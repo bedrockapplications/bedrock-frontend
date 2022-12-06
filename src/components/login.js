@@ -85,6 +85,7 @@ const Login = () => {
           localStorage.setItem("userName", uname);
           localStorage.setItem("userFirstName", userFirstName);
           localStorage.setItem("userId", dt._id);
+          localStorage.setItem("role", dt.role);
           loginButtonClicked();
         }
       });

@@ -1,5 +1,5 @@
-import React, { useState, memo, useEffect } from "react";
-import { Button, Grid, Paper, Typography } from "@mui/material";
+import React, { useState, memo, useEffect, useContext } from "react";
+import { Button, Grid, Paper, Typography, IconButton } from "@mui/material";
 import { getAllProjectList, createNewProjectApi } from "../../services/request";
 
 import { makeStyles } from "@mui/styles";
@@ -8,7 +8,9 @@ import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import MuiTextField from "../../components/Formik/MuiTextField";
 import { useTranslation } from "react-i18next";
-
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { GlobalState } from "../../Context/Context";
+import PremiumDailog from "../../components/premiumDailog";
 // import ProjectDataTable from "./ProjectDataTable";
 // import CardMedia from "@mui/material/CardMedia";
 // import { CardActionArea } from "@mui/material";
@@ -50,6 +52,9 @@ const MyProjects = () => {
   const { t } = useTranslation();
   const uId = localStorage.getItem("userId");
   const [projectsList, setProjectsList] = useState([]);
+  const [selectedRowData, setSelectedRowData] = useState({});
+  const {popen, setPopen} = useContext(GlobalState);
+
 
   const handleCreateNewProject = (values, setSubmitting, resetForm) => {
     let payload = {
@@ -88,30 +93,30 @@ const MyProjects = () => {
         customBodyRender: (value) => (value ? value : `---`),
       },
     },
-    {
-      name: "type",
-      label: `${t("myProject.type")}`,
-      options: {
-        ...disableFilter,
-        customBodyRender: (value) => (value ? value : `---`),
-      },
-    },
-    {
-      name: "status",
-      label: `${t("myProject.status")}`,
-      options: {
-        ...disableFilter,
-        customBodyRender: (value) => (value ? value : `---`),
-      },
-    },
-    {
-      name: "projectManager",
-      label: `${t("myProject.projectManager")}`,
-      options: {
-        ...disableFilter,
-        customBodyRender: (value) => (value ? value : `---`),
-      },
-    },
+    // {
+    //   name: "type",
+    //   label: `${t("myProject.type")}`,
+    //   options: {
+    //     ...disableFilter,
+    //     customBodyRender: (value) => (value ? value : `---`),
+    //   },
+    // },
+    // {
+    //   name: "status",
+    //   label: `${t("myProject.status")}`,
+    //   options: {
+    //     ...disableFilter,
+    //     customBodyRender: (value) => (value ? value : `---`),
+    //   },
+    // },
+    // {
+    //   name: "projectManager",
+    //   label: `${t("myProject.projectManager")}`,
+    //   options: {
+    //     ...disableFilter,
+    //     customBodyRender: (value) => (value ? value : `---`),
+    //   },
+    // },
     {
       name: "State",
       label: `${t("myProject.location")}`,
@@ -122,13 +127,21 @@ const MyProjects = () => {
     },
     {
       name: "Zipcode",
-      label: "#",
+      label: "ZipCode",
       options: {
         ...disableFilter,
         customBodyRender: (value) => (value ? value : `---`),
       },
     },
   ];
+
+  const options = {
+    onRowClick: (rowData, rowMeta) => {
+      let selectedItem = projectsList[rowMeta?.dataIndex];
+      // console.log("selectedItem", selectedItem);
+      setSelectedRowData(selectedItem)
+    },
+  };
 
   const arrayBufferToBase64 = (buffer) => {
     let binary = "";
@@ -181,7 +194,11 @@ const MyProjects = () => {
             elevation={2}
             sx={{ height: "100%", backgroundColor: "#E5E5EA", padding: "10px" }}
           >
-            <ProjectTable columns={columns} data={projectsList} />
+            <ProjectTable
+              columns={columns}
+              data={projectsList}
+              options={options}
+            />
           </Paper>
         </Grid>
         <Grid item xs={12} md={4}>
@@ -190,12 +207,20 @@ const MyProjects = () => {
             sx={{ height: "100%", backgroundColor: "#E5E5EA", padding: "1rem" }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+              <Grid item xs={1} sx={{display: Object.keys(selectedRowData).length === 0 ? "none" : "block"}}>
+                  <IconButton
+                    size="small"
+                    onClick={(event) => setSelectedRowData({})}
+                  >
+                    <ArrowBackIosIcon />
+                  </IconButton>
+              </Grid>
+              <Grid item xs={11}>
                 <Typography className={classes.projectText}>
-                  Create Project
+                  {Object.keys(selectedRowData).length === 0 ?  "Create Project" : "Project Details"}
                 </Typography>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sx={{display: Object.keys(selectedRowData).length === 0 ? "block" : "none"}}>
                 <Formik
                   initialValues={{
                     projectName: "",
@@ -229,7 +254,7 @@ const MyProjects = () => {
                         <MuiTextField
                           name="address"
                           id="address"
-                          label={t("myProject.streetAddress")}
+                          label={t("myProject.address")}
                           required={true}
                         />
                       </Grid>
@@ -280,10 +305,42 @@ const MyProjects = () => {
                   </Form>
                 </Formik>
               </Grid>
+              <Grid item xs={12} sx={{display: Object.keys(selectedRowData).length === 0 ? "none" : "block", ml:5}}>
+                <Typography sx={{mt:1}}>
+                  {`ProjectName : ${selectedRowData?.projectName}`}
+                </Typography>
+                <Typography sx={{fontWeight:"700", mt:2, mb:2, fontSize:"17px"}}>
+                  Project Location :
+                </Typography>
+                <Typography sx={{mt:1}}>
+                  {` Address : ${selectedRowData?.Address}`}
+                </Typography>
+                <Typography sx={{mt:1}}>
+                  {` City : ${selectedRowData?.City}`}
+                </Typography>
+                <Typography sx={{mt:1}}>
+                  {` State : ${selectedRowData?.State}`}
+                </Typography>
+                <Typography sx={{mt:1}}>
+                  {` Zipcode : ${selectedRowData?.Zipcode}`}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sx={{display: Object.keys(selectedRowData).length === 0 ? "none" : "block", mt:5}}>
+              <Button
+                  color="primary"
+                  variant="contained"
+                  type="submit"
+                  sx={{ textTransform: "capitalize", float: "right" }}
+                  onClick={() => setPopen(true)}
+                >
+                  Project DashBoard
+                </Button>
+              </Grid>
             </Grid>
           </Paper>
         </Grid>
       </Grid>
+      <>{popen ? <PremiumDailog /> : ""}</>
     </>
   );
 };

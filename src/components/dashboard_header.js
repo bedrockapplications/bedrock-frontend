@@ -67,9 +67,9 @@ const DashboardHeader = ({ userName }) => {
             </div>
             <div className='d_flex '>
                 <ul className='right_align d_flex'>
-                    <li>
+                    {/* <li>
                         <p className='meeting'>Architect Meeting <span>in 1h 12m</span></p>
-                    </li>
+                    </li> */}
                     <li>
                         <img className='notification_img' src={notification} alt='notification' />
                     </li>

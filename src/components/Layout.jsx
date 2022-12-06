@@ -20,7 +20,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import EngineeringIcon from "@mui/icons-material/Engineering";
 import DescriptionIcon from "@mui/icons-material/Description";
 // import Bedrock_Black from "../Images/Bedrock Black.png";
-import Bedrock_Black from "../Images/BedrockWhiteFull.png";
+import Bedrock_Black from "../Images/BedrockWhiteFull.svg";
 import Avatar from "@mui/material/Avatar";
 import userProfile from "../Images/avatar.png";
 import notification from "../Images/notification.png";
@@ -322,20 +322,20 @@ export default function MiniDrawer(props) {
               width: "40%",
               display: { xs: "none", md: "flex" },
               alignItems: "center",
-              justifyContent: "space-around",
+              justifyContent: "end",
             }}
           >
-            <Typography color="primary" className={classes.timeText}>
+            {/* <Typography color="primary" className={classes.timeText}>
               Architect Meeting in 1h 12m
-            </Typography>
+            </Typography> */}
             <IconButton>
               <img alt="" src={notification} width="24px" height={"24px"} />
             </IconButton>
-            <Typography className={classes.userText}>{userName}</Typography>
+            <Typography sx={{ml:5}} className={classes.userText}>{userName}</Typography>
             <IconButton
               onClick={handleAccountClick}
               size="small"
-              sx={{ ml: 2 }}
+              sx={{ ml: 5}}
               aria-controls={openAccount ? "account-menu" : undefined}
               aria-haspopup="true"
               aria-expanded={openAccount ? "true" : undefined}
