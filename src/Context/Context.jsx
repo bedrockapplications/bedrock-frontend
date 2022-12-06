@@ -12,6 +12,7 @@ const ContextProvider = (props) => {
   const [selectedChat, setSelectedChat] = useState({});
   const [popen, setPopen] = useState(false);
   const [openUserForm, setOpenUserForm] = useState(false);
+  const [list, setList] = useState([]);
   return (
     <GlobalState.Provider
       value={{
@@ -30,6 +31,7 @@ const ContextProvider = (props) => {
         selectedChat, setSelectedChat,
         popen, setPopen,
         openUserForm, setOpenUserForm,
+        list, setList,
       }}
     >
       {props.children}

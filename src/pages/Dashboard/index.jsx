@@ -1,7 +1,7 @@
 import React, { useEffect, useState, memo, useRef, useContext } from "react";
 import InputEmoji from "react-input-emoji";
 
-import { getMeetingsList, deleteMeetingApi } from "../../services/request";
+import { getMeetingsList, deleteMeetingApi, createContactApi, getContactsList } from "../../services/request";
 import { allMessages } from "./messages";
 
 import employee from "../../Images/employee.png";
@@ -257,6 +257,7 @@ const Dashboard = () => {
     popen,
     openUserForm,
     setOpenUserForm,
+    list, setList
   } = useContext(GlobalState);
   const [show, setShow] = useState("Direct Contact");
   const [taskDetails, setTaskDetails] = useState(null);
@@ -350,9 +351,40 @@ const Dashboard = () => {
       email: values.email,
       password: values.password,
       phoneNumber: values.phNumber,
-      ownerId: "638dfd5d341004a22e73e577",
+      ownerId: localStorage.getItem("userId"),
     };
-    console.log("obj", obj);
+    console.log(obj)
+    createContactApi(obj)
+        .then((res) => {
+          console.log(res)
+          if (res.status === 200) {
+            let ownerId = localStorage.getItem("userId");
+            let role = localStorage.getItem("role");
+            if(role === "Owner"){
+              getContactsList(ownerId, "Contractor")
+                .then((res) => {
+                  if (res.status === 200) {
+                    console.log(res)
+                    if (res?.data?.length > 0) {
+                      setList([...res?.data]);
+                    } else {
+                      setList([]);
+                    }
+                    setOpenUserForm(false)
+                  }
+                })
+                .catch((error) => {
+                  let errorObj = error;
+                  console.log(errorObj);
+                  setOpenUserForm(false)
+                });
+            }
+          }
+        })
+        .catch((error) => {
+          let errorObj = error;
+          console.log(errorObj);
+        });
   };
 
   // const handleCreateNewUser = (values, setSubmitting, resetForm) => {
@@ -814,7 +846,7 @@ const Dashboard = () => {
                   phNumber: "",
                 }}
                 onSubmit={(values, { setSubmitting, resetForm }) => {
-                  console.log("values", values);
+                  // console.log("values", values);
                   handleCreateNewUser(values, setSubmitting, resetForm);
                 }}
               >

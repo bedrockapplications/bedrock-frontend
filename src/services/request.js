@@ -80,6 +80,6 @@ export const getContactsList = async (ownerId, role) => {
 };
 
 export const createContactApi = async (payload) => {
-  return axios.post(`/user/saveContractors`, payload, { headers });
+  return axios.post(`/user/saveContractors`, payload);
 };
 

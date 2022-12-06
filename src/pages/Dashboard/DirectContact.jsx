@@ -47,8 +47,7 @@ const DirectContact = (props) => {
   const classes = useStyle();
   const { t } = useTranslation();
   // const { list } = props;
-  const [list, setList] = useState([]);
-  const { selectedChat, setSelectedChat, setPopen, openUserForm, setOpenUserForm } = useContext(GlobalState);
+  const { selectedChat, setSelectedChat, setPopen, openUserForm, setOpenUserForm, list, setList } = useContext(GlobalState);
 
   useEffect(() => {
     let ownerId = localStorage.getItem("userId");
