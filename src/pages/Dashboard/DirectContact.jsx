@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import { makeStyles } from "@mui/styles";
 import { GlobalState } from "../../Context/Context";
 import ContactPageIcon from "@mui/icons-material/ContactPage";
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import logo from "../../Images/Bedrock Rock .png";
 import { useEffect } from "react";
 import { getContactsList } from "../../services/request";
@@ -87,7 +88,7 @@ const DirectContact = (props) => {
               onClick={() => setOpenUserForm(true)}
             >
               <Tooltip title={"create contact"}>
-                <ContactPageIcon />
+                <PersonAddIcon />
               </Tooltip>
             </IconButton>
           </Grid>
