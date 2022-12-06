@@ -1,5 +1,5 @@
 import React, { useEffect, useState, memo, useRef, useContext } from "react";
-import InputEmoji from 'react-input-emoji'
+import InputEmoji from "react-input-emoji";
 
 import { getMeetingsList, deleteMeetingApi } from "../../services/request";
 import { allMessages } from "./messages";
@@ -30,7 +30,7 @@ import {
   TextField,
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import MuiDialog from "../../components/MuiDialog";
 import { useTranslation } from "react-i18next";
 import noDataImg from "../../Images/NoData.png";
@@ -119,7 +119,7 @@ const useStyle = makeStyles(() => ({
     lineHeight: "36px",
     color: "#3A3A3C",
   },
-  chatTitle:{
+  chatTitle: {
     fontWeight: "700",
     fontSize: "1.2rem",
     lineHeight: "36px",
@@ -141,11 +141,11 @@ const useStyle = makeStyles(() => ({
     lineHeight: "18px",
     color: "#FFF",
   },
-  flow:{
+  flow: {
     animation: "slide-left .4s forwards",
     transform: "translateX(20%)",
   },
-  flowright:{
+  flowright: {
     animation: "slide-right .4s forwards",
     transform: "translateX(-50%)",
   },
@@ -153,51 +153,54 @@ const useStyle = makeStyles(() => ({
     borderRadius: "15px",
     border: "3px solid #000",
     filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
-    margin: "0px 10px"
+    margin: "0px 10px",
   },
-  messageBox:{
+  messageBox: {
     height: "42vh",
-    overflow:"hidden scroll",
+    overflow: "hidden scroll",
   },
-  messageInputBox:{
+  messageInputBox: {
     height: "10vh",
-    display:"flex",
-    justifyContent:"space-between",
-    alignItems:"center",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
-  msgInput:{
-    width:"100%",
-    height:"100%",
-    padding:"10px 15px",
-    border:"none",
+  msgInput: {
+    width: "100%",
+    height: "100%",
+    padding: "10px 15px",
+    border: "none",
     fontWeight: "700",
     fontSize: "14px",
     lineHeight: "18px",
     color: "#3A3A3C",
     background: "#FFFFFF",
     borderRadius: "5px",
-    outline:"none",
+    outline: "none",
   },
-  msgicon:{
-    height:"33px",
-    width:"33px",
-    cursor:"pointer",
-    "&:hover":{
+  msgicon: {
+    height: "33px",
+    width: "33px",
+    cursor: "pointer",
+    "&:hover": {
       transform: "scale(1.1)",
       transition: "cubic-bezier(0.215, 0.610, 0.355, 1)",
-    }
+    },
   },
-  upload:{
-    display:"none"
-  }
-
+  upload: {
+    display: "none",
+  },
 }));
 
 const userValidationSchema = Yup.object().shape({
   firstName: Yup.string().min(2).max(20).required().nullable(),
   lastName: Yup.string().min(2).max(20).required().nullable(),
   email: Yup.string().email("Invalid email").required("Required"),
-  password: Yup.string().min(2).max(20).required('Password is required').nullable(),
+  password: Yup.string()
+    .min(2)
+    .max(20)
+    .required("Password is required")
+    .nullable(),
   role: Yup.string().required().nullable(),
   phNumber: Yup.string().min(10).required().nullable(),
   address: Yup.string().min(2).max(20).required().nullable(),
@@ -248,7 +251,13 @@ const Dashboard = () => {
   const userId = localStorage.getItem("userId");
   const userFirstName = localStorage.getItem("userFirstName");
   const classes = useStyle();
-  const { selectedChat, setSelectedChat, popen, openUserForm, setOpenUserForm } = useContext(GlobalState);
+  const {
+    selectedChat,
+    setSelectedChat,
+    popen,
+    openUserForm,
+    setOpenUserForm,
+  } = useContext(GlobalState);
   const [show, setShow] = useState("Direct Contact");
   const [taskDetails, setTaskDetails] = useState(null);
   const [detailsList, setDetailsList] = useState([]);
@@ -259,8 +268,8 @@ const Dashboard = () => {
   const [msgInput, setMsgInput] = useState("");
 
   useEffect(() => {
-    console.log(msgInput)
-  }, [msgInput])
+    console.log(msgInput);
+  }, [msgInput]);
 
   const handleShowDetails = (item) => {
     if (item) {
@@ -335,17 +344,29 @@ const Dashboard = () => {
   };
 
   const handleCreateNewUser = (values, setSubmitting, resetForm) => {
-    console.log("values", values.email);
     let obj = {
-      firstName:"swaroop", 
-      lastName:"Ravuri", 
-      email:values.email, 
-      password:"swaroop123@",
-      phoneNumber:"9949957772",
-      ownerId:"638dfd5d341004a22e73e577"
-    }
-    console.log(obj, "jjjj")
+      firstName: values.Firstname,
+      lastName: values.Lastname,
+      email: values.email,
+      password: values.password,
+      phoneNumber: values.phNumber,
+      ownerId: "638dfd5d341004a22e73e577",
+    };
+    console.log("obj", obj);
   };
+
+  // const handleCreateNewUser = (values, setSubmitting, resetForm) => {
+  //   console.log("values", values.email);
+  //   let obj = {
+  //     firstName: "swaroop",
+  //     lastName: "Ravuri",
+  //     email: values.email,
+  //     password: "swaroop123@",
+  //     phoneNumber: "9949957772",
+  //     ownerId: "638dfd5d341004a22e73e577",
+  //   };
+  //   console.log(obj, "jjjj");
+  // };
 
   return (
     <>
@@ -392,79 +413,81 @@ const Dashboard = () => {
               <Paper sx={{ p: "0.75rem", backgroundColor: "#E5E5EA" }}>
                 {/* {Object.keys(selectedChat).length === 0 ? */}
                 <Box className={classes.flowright}>
-                <Stack
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Typography className={classes.titleText}>
-                    {t("today's_tasks")}
-                  </Typography>
-                  <Box>
-                    <IconButton
-                      color="primary"
-                      size="small"
-                      onClick={handleShowTaskForm}
-                    >
-                      <Tooltip title={t("create_task")}>
-                        <AddCircleIcon />
-                      </Tooltip>
-                    </IconButton>
-                  </Box>
-                </Stack>
-                <Box sx={{ height: "57vh", overflowY: "auto", p: "5px" }}>
-                  {detailsList.length > 0 ? (
-                    detailsList?.map((item, i) => (
-                      <Box
-                        className={classes.taskList}
-                        sx={{
-                          backgroundColor:
-                            item?._id === taskDetails?._id ? "#fff" : "#e6e5ea",
-                        }}
-                        key={item?.meetingTitle}
-                        onClick={() => handleShowDetails(item)}
+                  <Stack
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                  >
+                    <Typography className={classes.titleText}>
+                      {t("today's_tasks")}
+                    </Typography>
+                    <Box>
+                      <IconButton
+                        color="primary"
+                        size="small"
+                        onClick={handleShowTaskForm}
                       >
-                        <Stack
-                          direction="row"
-                          justifyContent="flex-start"
-                          alignItems="center"
-                          spacing={2}
-                        >
-                          <IconButton
-                            size="small"
-                            onClick={(event) => handleCancleTask(event, item)}
-                          >
-                            <CancelIcon />
-                          </IconButton>
-                          <Box className={classes.timeWapper}>
-                            <Typography className={classes.timeText}>
-                              {item.startTime}
-                            </Typography>
-                          </Box>
-                          <Box>
-                            <Typography className={classes.taskTitle}>
-                              {item.title}
-                            </Typography>
-                            <Typography className={classes.taskSubTitle}>
-                              {item.description}
-                            </Typography>
-                          </Box>
-                        </Stack>
-                      </Box>
-                    ))
-                  ) : (
-                    <Box
-                      sx={{
-                        height: "100%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                      }}
-                    >
-                      <img src={noDataImg} alt="" />
+                        <Tooltip title={t("create_task")}>
+                          <AddCircleIcon />
+                        </Tooltip>
+                      </IconButton>
                     </Box>
-                  )}
-                </Box>
+                  </Stack>
+                  <Box sx={{ height: "57vh", overflowY: "auto", p: "5px" }}>
+                    {detailsList.length > 0 ? (
+                      detailsList?.map((item, i) => (
+                        <Box
+                          className={classes.taskList}
+                          sx={{
+                            backgroundColor:
+                              item?._id === taskDetails?._id
+                                ? "#fff"
+                                : "#e6e5ea",
+                          }}
+                          key={item?.meetingTitle}
+                          onClick={() => handleShowDetails(item)}
+                        >
+                          <Stack
+                            direction="row"
+                            justifyContent="flex-start"
+                            alignItems="center"
+                            spacing={2}
+                          >
+                            <IconButton
+                              size="small"
+                              onClick={(event) => handleCancleTask(event, item)}
+                            >
+                              <CancelIcon />
+                            </IconButton>
+                            <Box className={classes.timeWapper}>
+                              <Typography className={classes.timeText}>
+                                {item.startTime}
+                              </Typography>
+                            </Box>
+                            <Box>
+                              <Typography className={classes.taskTitle}>
+                                {item.title}
+                              </Typography>
+                              <Typography className={classes.taskSubTitle}>
+                                {item.description}
+                              </Typography>
+                            </Box>
+                          </Stack>
+                        </Box>
+                      ))
+                    ) : (
+                      <Box
+                        sx={{
+                          height: "100%",
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                      >
+                        <img src={noDataImg} alt="" />
+                      </Box>
+                    )}
+                  </Box>
                 </Box>
                 {/* :
                 <Box className={classes.flow} sx={{background:"#E5E5EA"}}>
@@ -534,7 +557,6 @@ const Dashboard = () => {
                   </Box>
                 </Box>
                 } */}
-                
               </Paper>
             </Grid>
             <Grid item xs={12} sm={12} md={4} lg={4}>
@@ -781,9 +803,118 @@ const Dashboard = () => {
       >
         <Divider />
         <DialogContent>
-          <Grid container spacing={3}>
+          <Grid container spacing={2}>
             <Grid item xs={12}>
-            <Formik
+              <Formik
+                initialValues={{
+                  Firstname: "",
+                  Lastname: "",
+                  email: "",
+                  password: "",
+                  phNumber: "",
+                }}
+                onSubmit={(values, { setSubmitting, resetForm }) => {
+                  console.log("values", values);
+                  handleCreateNewUser(values, setSubmitting, resetForm);
+                }}
+              >
+                {({ values, isValid, isSubmitting, setFieldValue }) => (
+                  <Form>
+                    <Grid container spacing={2}>
+                      <Grid item xs={6}>
+                        <MuiTextField
+                          name="Firstname"
+                          id="Firstname"
+                          label={"First Name"}
+                          required={true}
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <MuiTextField
+                          name="Lastname"
+                          id="Lastname"
+                          label={"Last Name"}
+                          required={true}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <MuiTextField
+                          name="email"
+                          id="email"
+                          label={"Email"}
+                          required={true}
+                        />
+                      </Grid>
+
+                      <Grid item xs={6}>
+                        <MuiTextField
+                          name="password"
+                          id="password"
+                          label={"Password"}
+                          required={true}
+                        />
+                      </Grid>
+                      <Grid item xs={6}>
+                        <MuiTextField
+                          name="phNumber"
+                          id="phNumber"
+                          label={"Phone Number"}
+                          required={true}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Button
+                          color="primary"
+                          variant="contained"
+                          type="submit"
+                          sx={{ textTransform: "capitalize", float: "right" }}
+                        >
+                          Create New User
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Form>
+                )}
+              </Formik>
+            </Grid>
+          </Grid>
+        </DialogContent>
+      </MuiDialog>
+      <>{popen ? <PremiumDailog /> : ""}</>
+    </>
+  );
+};
+export default Dashboard;
+
+// const list = [
+//   {
+//     time: "8:00 AM",
+//     meetingTitle: "City of Atlanta Inspection",
+//     subTitle: "Meet them at the gallery first; then take them to lunch",
+//     isChecked: false,
+//   },
+//   {
+//     time: "10:00 AM",
+//     meetingTitle: "Fire Dept Inspection",
+//     subTitle: "",
+//     isChecked: false,
+//   },
+//   {
+//     time: "3:00 PM",
+//     meetingTitle: "Prepare for Full Team Meeting Tomorrow",
+//     subTitle: "",
+//     isChecked: false,
+//   },
+//   {
+//     time: "6:00 PM",
+//     meetingTitle: "Complete Daily Log before Closing Out",
+//     subTitle: "",
+//     isChecked: false,
+//   },
+// ];
+
+{
+  /* <Formik
                   initialValues={{
                     Firstname: "",
                     Lastname: "",
@@ -845,77 +976,39 @@ const Dashboard = () => {
                           options={["Owner", "User"]}
                           required={true}
                         />
-                      </Grid> */}
-                      <Grid item xs={6}>
-                        <MuiTextField
-                          name="phNumber"
-                          id="phNumber"
-                          label={"Phone Number"}
-                          required={true}
-                        />
-                      </Grid>
-                      {/* <Grid item xs={6}>
+                      </Grid> */
+}
+// <Grid item xs={6}>
+//   <MuiTextField
+//     name="phNumber"
+//     id="phNumber"
+//     label={"Phone Number"}
+//     required={true}
+//   />
+// </Grid>
+{
+  /* <Grid item xs={6}>
                         <MuiTextField
                           name="address"
                           id="address"
                           label={"Address"}
                           required={true}
                         />
-                      </Grid> */}
+                      </Grid> */
+}
 
-                      <Grid item xs={12} />
-                      <Grid item xs={12}>
-                        <Button
-                          color="primary"
-                          variant="contained"
-                          type="submit"
-                          sx={{ textTransform: "capitalize", float: "right" }}
-                        >
-                          Create New User
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </Form>
-                  )}
-                </Formik>
-            </Grid>
-          </Grid>
-        </DialogContent>
-      </MuiDialog>
-      <>
-        { popen ?
-        <PremiumDailog />
-        :""
-        }
-      </>
-    </>
-  );
-};
-export default Dashboard;
-
-// const list = [
-//   {
-//     time: "8:00 AM",
-//     meetingTitle: "City of Atlanta Inspection",
-//     subTitle: "Meet them at the gallery first; then take them to lunch",
-//     isChecked: false,
-//   },
-//   {
-//     time: "10:00 AM",
-//     meetingTitle: "Fire Dept Inspection",
-//     subTitle: "",
-//     isChecked: false,
-//   },
-//   {
-//     time: "3:00 PM",
-//     meetingTitle: "Prepare for Full Team Meeting Tomorrow",
-//     subTitle: "",
-//     isChecked: false,
-//   },
-//   {
-//     time: "6:00 PM",
-//     meetingTitle: "Complete Daily Log before Closing Out",
-//     subTitle: "",
-//     isChecked: false,
-//   },
-// ];
+//       <Grid item xs={12} />
+//       <Grid item xs={12}>
+//         <Button
+//           color="primary"
+//           variant="contained"
+//           type="submit"
+//           sx={{ textTransform: "capitalize", float: "right" }}
+//         >
+//           Create New User
+//         </Button>
+//       </Grid>
+//     </Grid>
+//   </Form>
+//   )}
+// </Formik> */}

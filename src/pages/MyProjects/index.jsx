@@ -130,6 +130,13 @@ const MyProjects = () => {
     },
   ];
 
+  const options = {
+    onRowClick: (rowData, rowMeta) => {
+      let selectedItem = projectsList[rowMeta?.dataIndex];
+      console.log("selectedItem", selectedItem);
+    },
+  };
+
   const arrayBufferToBase64 = (buffer) => {
     let binary = "";
     let bytes = new Uint8Array(buffer);
@@ -181,7 +188,11 @@ const MyProjects = () => {
             elevation={2}
             sx={{ height: "100%", backgroundColor: "#E5E5EA", padding: "10px" }}
           >
-            <ProjectTable columns={columns} data={projectsList} />
+            <ProjectTable
+              columns={columns}
+              data={projectsList}
+              options={options}
+            />
           </Paper>
         </Grid>
         <Grid item xs={12} md={4}>
