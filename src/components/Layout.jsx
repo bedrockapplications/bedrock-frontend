@@ -32,7 +32,7 @@ import CircleIcon from "@mui/icons-material/Circle";
 import { NavLink as RouterLink } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
-import { Button } from "@mui/material";
+import { Button, Badge } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import TranslateIcon from "@mui/icons-material/Translate";
 import Menu from "@mui/material/Menu";
@@ -40,6 +40,7 @@ import MenuItem from "@mui/material/MenuItem";
 import favicon from "../Images/Bedrock_Rock_-removebg-preview.png";
 import { WindowSharp } from "@mui/icons-material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
@@ -189,17 +190,31 @@ export default function MiniDrawer(props) {
   const [dayState, setDayState] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [account, setAccount] = React.useState(null);
+  const [notification, setNotification] = React.useState(null);
   const [selected, setSelectedIndex] = React.useState(
     LanguagesList?.filter(
       (lang) => lang?.local === localStorage?.getItem("i18nextLng")
     )[0]
   );
-  const openLang = Boolean(anchorEl);
 
+  const openLang = Boolean(anchorEl);
   const openAccount = Boolean(account);
+  const openNotification = Boolean(notification);
+
+
   const handleAccountClick = (event) => {
     setAccount(event.currentTarget);
   };
+
+  const handleNotificationClick = (event) => {
+    setNotification(event.currentTarget);
+  };
+
+  const handleCloseNotification = () => {
+    setNotification(null);
+  };
+
+
   const handleClose = () => {
     setAccount(null);
   };
@@ -328,9 +343,66 @@ export default function MiniDrawer(props) {
             {/* <Typography color="primary" className={classes.timeText}>
               Architect Meeting in 1h 12m
             </Typography> */}
-            <IconButton>
+            {/* <IconButton>
               <img alt="" src={notification} width="24px" height={"24px"} />
-            </IconButton>
+            </IconButton> */}
+            <Tooltip title="You Have 4 New Notifications!">
+              <IconButton
+              onClick={handleNotificationClick}
+              size="small"
+              sx={{ ml: 5}}
+              aria-controls={openNotification ? "notification-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={openNotification ? "true" : undefined}
+              >
+                <Badge badgeContent={4} color="error">
+                  <NotificationsIcon color="action" />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+            <Menu
+            anchorEl={notification}
+            id="notification-menu"
+            open={openNotification}
+            onClose={handleCloseNotification}
+            onClick={handleCloseNotification}
+            PaperProps={{
+              elevation: 0,
+              sx: {
+                overflow: "visible",
+                bgcolor: "#48484A",
+                color: "#FFFFFF",
+                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                mt: 0.3,
+                opacity: 0.95,
+                "& .MuiAvatar-root": {
+                  width: 32,
+                  height: 32,
+                  mr: 1,
+                },
+                "&:before": {
+                  content: '""',
+                  display: "block",
+                  position: "absolute",
+                  top: 0,
+                  right: 14,
+                  width: 10,
+                  height: 10,
+                  bgcolor: "#48484A",
+                  transform: "translateY(-50%) rotate(45deg)",
+                  zIndex: 0,
+                },
+              },
+            }}
+            transformOrigin={{ horizontal: "right", vertical: "top" }}
+            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+          >
+            <MenuItem>
+              Notification1
+            </MenuItem>
+            <MenuItem>Notification2</MenuItem>
+          </Menu>
+
             <Typography sx={{ml:5}} className={classes.userText}>{userName}</Typography>
             <IconButton
               onClick={handleAccountClick}
