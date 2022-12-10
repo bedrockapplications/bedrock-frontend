@@ -401,6 +401,8 @@ export default function MiniDrawer(props) {
               Notification1
             </MenuItem>
             <MenuItem>Notification2</MenuItem>
+            <MenuItem>Notification3</MenuItem>
+            <MenuItem>Notification4</MenuItem>
           </Menu>
 
             <Typography sx={{ml:5}} className={classes.userText}>{userName}</Typography>
