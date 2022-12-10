@@ -40,7 +40,9 @@ import MenuItem from "@mui/material/MenuItem";
 import favicon from "../Images/Bedrock_Rock_-removebg-preview.png";
 import { WindowSharp } from "@mui/icons-material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { getMeetingsList } from "../services/request";
+import moment from "moment";
 
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
@@ -191,6 +193,8 @@ export default function MiniDrawer(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [account, setAccount] = React.useState(null);
   const [notification, setNotification] = React.useState(null);
+  const [taskList, setTaskList] = React.useState([]);
+
   const [selected, setSelectedIndex] = React.useState(
     LanguagesList?.filter(
       (lang) => lang?.local === localStorage?.getItem("i18nextLng")
@@ -200,7 +204,6 @@ export default function MiniDrawer(props) {
   const openLang = Boolean(anchorEl);
   const openAccount = Boolean(account);
   const openNotification = Boolean(notification);
-
 
   const handleAccountClick = (event) => {
     setAccount(event.currentTarget);
@@ -213,7 +216,6 @@ export default function MiniDrawer(props) {
   const handleCloseNotification = () => {
     setNotification(null);
   };
-
 
   const handleClose = () => {
     setAccount(null);
@@ -260,9 +262,58 @@ export default function MiniDrawer(props) {
     }, 1000);
   };
 
+  //task list api call
+
+  const GetTaskList = () => {
+      let userId = localStorage.getItem("userId");
+      let current = new Date();
+      let time1 = current.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      let time2 = moment(time1, "HH:mm:ss A")
+      let time = moment(time2).format("hh:mm:ss A")
+
+      getMeetingsList(userId, moment(new Date()).format("YYYY-MM-DD"))
+        .then((response) => {
+          if (response.status === 200) {
+            let result = response.data;
+            let noteList = result.filter((item) => {
+              let value = moment(item.startTime, "HH:mm:ss A").subtract(5, "minutes");
+              let subtime = moment(value._d).format("hh:mm:ss A")
+              //value._d.
+              console.log(time, "time")
+              console.log(subtime, "subtime")
+              return time === subtime;
+            });
+            let totalList = taskList
+            console.log(noteList, 'jjj')
+            if(noteList.length > 0) {
+              totalList.push(noteList(0))
+              // totalList = [...noteList, ...taskList]
+              console.log(totalList, 'jjj')
+              setTaskList(totalList)
+            }
+            
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  };
+
   useEffect(() => {
     GetDateAndTime();
   }, []);
+
+useEffect(() => {
+  const MINUTE_MS = 60000;
+  const interval = setInterval(() => {
+    GetTaskList();
+  }, MINUTE_MS);
+
+  // return () => clearInterval(interval); 
+}, [])
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -275,6 +326,7 @@ export default function MiniDrawer(props) {
   };
 
   return (
+
     <Box sx={{ display: "flex" }}>
       <AppBar elevation={0} position="fixed" open={open}>
         <Toolbar>
@@ -348,68 +400,71 @@ export default function MiniDrawer(props) {
             </IconButton> */}
             <Tooltip title="You Have 4 New Notifications!">
               <IconButton
-              onClick={handleNotificationClick}
-              size="small"
-              sx={{ ml: 5}}
-              aria-controls={openNotification ? "notification-menu" : undefined}
-              aria-haspopup="true"
-              aria-expanded={openNotification ? "true" : undefined}
+                onClick={handleNotificationClick}
+                size="small"
+                sx={{ ml: 5 }}
+                aria-controls={
+                  openNotification ? "notification-menu" : undefined
+                }
+                aria-haspopup="true"
+                aria-expanded={openNotification ? "true" : undefined}
               >
-                <Badge badgeContent={4} color="error">
+                <Badge badgeContent={taskList.length} color="error">
                   <NotificationsIcon color="action" />
                 </Badge>
               </IconButton>
             </Tooltip>
             <Menu
-            anchorEl={notification}
-            id="notification-menu"
-            open={openNotification}
-            onClose={handleCloseNotification}
-            onClick={handleCloseNotification}
-            PaperProps={{
-              elevation: 0,
-              sx: {
-                overflow: "visible",
-                bgcolor: "#48484A",
-                color: "#FFFFFF",
-                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                mt: 0.3,
-                opacity: 0.95,
-                "& .MuiAvatar-root": {
-                  width: 32,
-                  height: 32,
-                  mr: 1,
-                },
-                "&:before": {
-                  content: '""',
-                  display: "block",
-                  position: "absolute",
-                  top: 0,
-                  right: 14,
-                  width: 10,
-                  height: 10,
+              anchorEl={notification}
+              id="notification-menu"
+              open={openNotification}
+              onClose={handleCloseNotification}
+              onClick={handleCloseNotification}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: "visible",
                   bgcolor: "#48484A",
-                  transform: "translateY(-50%) rotate(45deg)",
-                  zIndex: 0,
+                  color: "#FFFFFF",
+                  filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                  mt: 0.3,
+                  opacity: 0.95,
+                  "& .MuiAvatar-root": {
+                    width: 32,
+                    height: 32,
+                    mr: 1,
+                  },
+                  "&:before": {
+                    content: '""',
+                    display: "block",
+                    position: "absolute",
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: "#48484A",
+                    transform: "translateY(-50%) rotate(45deg)",
+                    zIndex: 0,
+                  },
                 },
-              },
-            }}
-            transformOrigin={{ horizontal: "right", vertical: "top" }}
-            anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-          >
-            <MenuItem>
-              Notification1
-            </MenuItem>
-            <MenuItem>Notification2</MenuItem>
-            <MenuItem>Notification3</MenuItem>
-            <MenuItem>Notification4</MenuItem>
-          </Menu>
+              }}
+              transformOrigin={{ horizontal: "right", vertical: "top" }}
+              anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            >
+              {taskList.map((each, i) => 
+              (
+                <MenuItem>{`Your Meeting Regarding ${each.title} will be starting on ${each.startTime}`}</MenuItem>
+              ))}
+              
+            </Menu>
 
-            <Typography sx={{ml:5}} className={classes.userText}>{userName}</Typography>
+            <Typography sx={{ ml: 5 }} className={classes.userText}>
+              {userName}
+            </Typography>
             <IconButton
               onClick={handleAccountClick}
               size="small"
-              sx={{ ml: 5}}
+              sx={{ ml: 5 }}
               aria-controls={openAccount ? "account-menu" : undefined}
               aria-haspopup="true"
               aria-expanded={openAccount ? "true" : undefined}
