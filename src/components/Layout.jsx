@@ -273,6 +273,8 @@ export default function MiniDrawer(props) {
       localStorage.getItem("listItem") !== null
         ? JSON.parse(localStorage.getItem("listItem"))
         : [];
+    console.log("listData", listData);
+    console.log("taskList", taskList);
     setTaskList(listData);
     let time = new Date().toLocaleTimeString("en-US", {
       hour: "2-digit",
@@ -293,8 +295,9 @@ export default function MiniDrawer(props) {
           });
           if (finalData?.length > 0) {
             let filteredList = [...listData, ...finalData];
+            console.log("filteredList", filteredList);
             localStorage.setItem("listItem", JSON.stringify(filteredList));
-            setTaskList([...listData, ...finalData]);
+            setTaskList([...filteredList]);
           }
         }
       })
@@ -307,14 +310,15 @@ export default function MiniDrawer(props) {
     GetDateAndTime();
   }, []);
 
-  useEffect(() => {
-    const MINUTE_MS = 60000;
-    const interval = setInterval(() => {
-      GetTaskList();
-    }, MINUTE_MS);
+  // useEffect(() => {
+  //   const MINUTE_MS = 60000;
+  //   const interval = setInterval(() => {
+  //     console.log("abcd");
+  //     GetTaskList();
+  //   }, MINUTE_MS);
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

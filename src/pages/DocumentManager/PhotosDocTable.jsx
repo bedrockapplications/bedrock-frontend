@@ -76,7 +76,7 @@ const PhotosDocTable = (props) => {
     setSelectedProjected,
     search,
     popen,
-    setPopen
+    setPopen,
   } = useContext(GlobalState);
 
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -173,7 +173,11 @@ const PhotosDocTable = (props) => {
               {stableSort(data, getComparator(order, orderBy))?.map(
                 (item, i) => (
                   <TableRow key={item._id}>
-                    <TableCell align="right">{item?.fileName}</TableCell>
+                    <TableCell align="right">
+                      <a href={item?.filePath} download={item?.fileName}>
+                        {item?.fileName}
+                      </a>
+                    </TableCell>
                     <TableCell align="right">{item?.contentType}</TableCell>
                     <TableCell align="right">
                       {item?.projectId?.projectName}
@@ -238,12 +242,7 @@ const PhotosDocTable = (props) => {
         open={openSubmittals}
         handleCloseSubmittals={handleCloseSubmittals}
       /> */}
-      <>
-        { popen ?
-        <PremiumDailog />
-        :""
-        }
-      </>
+      <>{popen ? <PremiumDailog /> : ""}</>
     </>
   );
 };
