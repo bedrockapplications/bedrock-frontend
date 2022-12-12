@@ -43,7 +43,7 @@ import MuiTextField from "../../components/Formik/MuiTextField";
 const useStyle = makeStyles(() => ({
   bgPaper: {
     backgroundColor: "#3A3A3C",
-    padding: "1.375rem 0rem 1.813rem 2.438rem",
+    padding: "1.375rem 2.438rem 1.813rem 2.438rem",
     borderRadius: "10px",
   },
   documentText: {
@@ -240,14 +240,8 @@ const DocumentManager = () => {
             <Typography className={classes.documentText}>
               {t("document.document_manager")}
             </Typography>
-            <Stack
-              direction="row"
-              alignItems="center"
-              justifyContent="flex-start"
-              spacing={3}
-              sx={{ paddingTop: "5px" }}
-            >
-              <Box sx={{ width: "253px" }}>
+            <Grid container spacing={4}>
+              <Grid item xs={12} md={2.5} lg={2.5}>
                 <FormControl fullWidth size="small" placeholder="Sort By">
                   <InputLabel id="projectId"></InputLabel>
                   <Select
@@ -272,8 +266,8 @@ const DocumentManager = () => {
                     ))}
                   </Select>
                 </FormControl>
-              </Box>
-              <Box sx={{ width: "450px" }}>
+              </Grid>
+              <Grid item xs={12} md={5} lg={5}>
                 <TextField
                   id="search"
                   name="search"
@@ -291,33 +285,8 @@ const DocumentManager = () => {
                     ),
                   }}
                 />
-
-                {/* <Autocomplete
-                  id="search"
-                  freeSolo
-                  value={search}
-                  options={searchOptions?.map((option) => option)}
-                  onChange={(event, newValue) => handleSearch(newValue)}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label=""
-                      size="small"
-                      className={classes.autoField}
-                      placeholder={t(`document.search_all_documents`)}
-                      InputProps={{
-                        ...params.InputProps,
-                        endAdornment: (
-                          <InputAdornment position="end">
-                            <SearchIcon />
-                          </InputAdornment>
-                        ),
-                      }}
-                    />
-                  )}
-                /> */}
-              </Box>
-              <Box sx={{ width: "258px" }}>
+              </Grid>
+              <Grid item xs={12} md={2.5} lg={2.5}>
                 <Button
                   fullWidth
                   className={classes.addBtn}
@@ -327,8 +296,8 @@ const DocumentManager = () => {
                 >
                   {t("document.new_file")}
                 </Button>
-              </Box>
-            </Stack>
+              </Grid>
+            </Grid>
           </Paper>
         </Grid>
       </Grid>
@@ -408,32 +377,81 @@ const DocumentManager = () => {
 export default memo(DocumentManager);
 
 // Dont remove this code
+
 {
-  /* <Grid container spacing={4}>
-              <Grid item xs={12} md={2.5} lg={2.5}>
+  /* <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="flex-start"
+              spacing={3}
+              sx={{ paddingTop: "5px" }}
+            >
+              <Box sx={{ width: "253px" }}>
                 <FormControl fullWidth size="small" placeholder="Sort By">
-                  <InputLabel id="sortBy"></InputLabel>
+                  <InputLabel id="projectId"></InputLabel>
                   <Select
-                    labelId="sortBy"
-                    id="sortBy"
-                    value={sortBy}
+                    labelId="projectId"
+                    id="projectId"
+                    value={selectedProjected}
                     label=""
-                    onChange={handleSortBy}
+                    displayEmpty
+                    onChange={handleChangeProject}
+                    renderValue={
+                      selectedProjected !== ""
+                        ? undefined
+                        : () => <Placeholder>Select Project</Placeholder>
+                    }
                     sx={{ backgroundColor: "#fff", borderRadius: "10px" }}
                   >
-                    {sortOptions.map((item, i) => (
-                      <MenuItem key={item + i} value={item}>
-                        {item}
+                    <MenuItem value={""}>ALL</MenuItem>
+                    {projectOptions?.map((item, i) => (
+                      <MenuItem key={item + i} value={item.value}>
+                        {item.label}
                       </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
-              </Grid>
-              <Grid item xs={12} md={5} lg={5}>
-                <Autocomplete
+              </Box>
+              <Box sx={{ width: "450px" }}>
+                <TextField
+                  id="search"
+                  name="search"
+                  placeholder={t(`document.search_all_documents`)}
+                  variant="outlined"
+                  sx={{ backgroundColor: "#fff", borderRadius: "10px" }}
+                  fullWidth
+                  size="small"
+                  onChange={(e) => handleSearch(e.target.value)}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <SearchIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Box>
+              <Box sx={{ width: "258px" }}>
+                <Button
+                  fullWidth
+                  className={classes.addBtn}
+                  startIcon={<AddIcon />}
+                  size="small"
+                  onClick={() => setOpenFileModel(true)}
+                >
+                  {t("document.new_file")}
+                </Button>
+              </Box>
+            </Stack> */
+}
+
+{
+  /* <Autocomplete
                   id="search"
                   freeSolo
-                  options={[]?.map((option) => option?.title)}
+                  value={search}
+                  options={searchOptions?.map((option) => option)}
+                  onChange={(event, newValue) => handleSearch(newValue)}
                   renderInput={(params) => (
                     <TextField
                       {...params}
@@ -451,18 +469,5 @@ export default memo(DocumentManager);
                       }}
                     />
                   )}
-                />
-              </Grid>
-              <Grid item xs={12} md={2.5} lg={2.5}>
-                <Button
-                  fullWidth
-                  className={classes.addBtn}
-                  startIcon={<AddIcon />}
-                  size="small"
-                  onClick={() => setOpenFileModel(true)}
-                >
-                  {t("document.new_file")}
-                </Button>
-              </Grid>
-            </Grid> */
+                /> */
 }

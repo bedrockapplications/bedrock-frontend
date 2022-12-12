@@ -25,14 +25,13 @@ import Avatar from "@mui/material/Avatar";
 import userProfile from "../Images/avatar.png";
 import notification from "../Images/notification.png";
 import { makeStyles } from "@mui/styles";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import CircleIcon from "@mui/icons-material/Circle";
 import { NavLink as RouterLink } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
 import { useTranslation } from "react-i18next";
-import { Button } from "@mui/material";
+import { Button, Badge } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import TranslateIcon from "@mui/icons-material/Translate";
 import Menu from "@mui/material/Menu";
@@ -40,6 +39,10 @@ import MenuItem from "@mui/material/MenuItem";
 import favicon from "../Images/Bedrock_Rock_-removebg-preview.png";
 import { WindowSharp } from "@mui/icons-material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { getMeetingsList } from "../services/request";
+import moment from "moment";
+import { GlobalState } from "../Context/Context";
 
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
@@ -189,17 +192,34 @@ export default function MiniDrawer(props) {
   const [dayState, setDayState] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [account, setAccount] = React.useState(null);
+  const [notification, setNotification] = React.useState(null);
+
   const [selected, setSelectedIndex] = React.useState(
     LanguagesList?.filter(
       (lang) => lang?.local === localStorage?.getItem("i18nextLng")
     )[0]
   );
-  const openLang = Boolean(anchorEl);
 
+  const { taskList, setTaskList } = useContext(GlobalState);
+
+  const openLang = Boolean(anchorEl);
   const openAccount = Boolean(account);
+  const openNotification = Boolean(notification);
+
   const handleAccountClick = (event) => {
     setAccount(event.currentTarget);
   };
+
+  const handleNotificationClick = (event) => {
+    setNotification(event.currentTarget);
+  };
+
+  const handleCloseNotification = () => {
+    setTaskList([]);
+    localStorage.removeItem("listItem");
+    setNotification(null);
+  };
+
   const handleClose = () => {
     setAccount(null);
   };
@@ -245,9 +265,60 @@ export default function MiniDrawer(props) {
     }, 1000);
   };
 
+  //task list api call
+
+  const GetTaskList = () => {
+    let userId = localStorage.getItem("userId");
+    let listData =
+      localStorage.getItem("listItem") !== null
+        ? JSON.parse(localStorage.getItem("listItem"))
+        : [];
+    console.log("listData", listData);
+    console.log("taskList", taskList);
+    setTaskList(listData);
+    let time = new Date().toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    let current = moment(time, "HH:mm:ss A").format("hh:mm:ss A");
+    getMeetingsList(userId, moment(new Date()).format("YYYY-MM-DD"))
+      .then((res) => {
+        if (res.status === 200) {
+          let data = res.data;
+          let finalData = data?.filter((item) => {
+            let start_time = moment(item.startTime, "HH:mm:ss A").subtract(
+              5,
+              "minutes"
+            );
+            let finalTime = moment(start_time?._d).format("hh:mm:ss A");
+            return finalTime === current;
+          });
+          if (finalData?.length > 0) {
+            let filteredList = [...listData, ...finalData];
+            console.log("filteredList", filteredList);
+            localStorage.setItem("listItem", JSON.stringify(filteredList));
+            setTaskList([...filteredList]);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
+
   useEffect(() => {
     GetDateAndTime();
   }, []);
+
+  // useEffect(() => {
+  //   const MINUTE_MS = 60000;
+  //   const interval = setInterval(() => {
+  //     console.log("abcd");
+  //     GetTaskList();
+  //   }, MINUTE_MS);
+
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -328,14 +399,81 @@ export default function MiniDrawer(props) {
             {/* <Typography color="primary" className={classes.timeText}>
               Architect Meeting in 1h 12m
             </Typography> */}
-            <IconButton>
+            {/* <IconButton>
               <img alt="" src={notification} width="24px" height={"24px"} />
-            </IconButton>
-            <Typography sx={{ml:5}} className={classes.userText}>{userName}</Typography>
+            </IconButton> */}
+            <Tooltip
+              title={`You Have ${
+                taskList !== null ? taskList.length : 0
+              } New Notifications!`}
+            >
+              <IconButton
+                onClick={handleNotificationClick}
+                size="small"
+                sx={{ ml: 5 }}
+                aria-controls={
+                  openNotification ? "notification-menu" : undefined
+                }
+                aria-haspopup="true"
+                aria-expanded={openNotification ? "true" : undefined}
+              >
+                <Badge badgeContent={taskList?.length} color="error">
+                  <NotificationsIcon color="action" />
+                </Badge>
+              </IconButton>
+            </Tooltip>
+            <Menu
+              anchorEl={notification}
+              id="notification-menu"
+              open={openNotification}
+              onClose={handleCloseNotification}
+              onClick={handleCloseNotification}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  overflow: "visible",
+                  bgcolor: "#48484A",
+                  color: "#FFFFFF",
+                  filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                  display: taskList?.length > 0 ? "block" : "none",
+                  mt: 0.3,
+                  opacity: 0.95,
+                  "& .MuiAvatar-root": {
+                    width: 32,
+                    height: 32,
+                    mr: 1,
+                  },
+                  "&:before": {
+                    content: '""',
+                    display: "block",
+                    position: "absolute",
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: "#48484A",
+                    transform: "translateY(-50%) rotate(45deg)",
+                    zIndex: 0,
+                  },
+                },
+              }}
+              transformOrigin={{ horizontal: "right", vertical: "top" }}
+              anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            >
+              {taskList?.map((each, i) => (
+                <MenuItem
+                  key={each?._id}
+                >{`Your Meeting Regarding ${each?.title} will be starting on ${each?.startTime}`}</MenuItem>
+              ))}
+            </Menu>
+
+            <Typography sx={{ ml: 5 }} className={classes.userText}>
+              {userName}
+            </Typography>
             <IconButton
               onClick={handleAccountClick}
               size="small"
-              sx={{ ml: 5}}
+              sx={{ ml: 5 }}
               aria-controls={openAccount ? "account-menu" : undefined}
               aria-haspopup="true"
               aria-expanded={openAccount ? "true" : undefined}

@@ -91,9 +91,9 @@ const DesignDocumentTable = (props) => {
   const [openSubmittals, setOpenSubmittals] = useState(false);
   const [submittalsData, setSubmittalsData] = useState(null);
 
-  useEffect(() =>{
-    console.log(popen, "kkkkk")
-  }, [])
+  // useEffect(() =>{
+  //   console.log(popen, "kkkkk")
+  // }, [])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -177,7 +177,11 @@ const DesignDocumentTable = (props) => {
               {stableSort(data, getComparator(order, orderBy))?.map(
                 (item, i) => (
                   <TableRow key={item._id}>
-                    <TableCell align="right">{item?.fileName}</TableCell>
+                    <TableCell align="right">
+                      <a href={item?.filePath} download={item?.fileName}>
+                        {item?.fileName}
+                      </a>
+                    </TableCell>
                     <TableCell align="right">{item?.contentType}</TableCell>
                     <TableCell align="right">
                       {item?.projectId?.projectName}
@@ -243,12 +247,7 @@ const DesignDocumentTable = (props) => {
         open={openSubmittals}
         handleCloseSubmittals={handleCloseSubmittals}
       /> */}
-      <>
-        { popen ?
-        <PremiumDailog />
-        :""
-        }
-      </>
+      <>{popen ? <PremiumDailog /> : ""}</>
     </>
   );
 };

@@ -113,7 +113,6 @@ const SubmittalsDialog = (props) => {
             enableReinitialize
             validationSchema={""}
             onSubmit={(values, { setSubmitting, resetForm }) => {
-              console.log("values", values);
             }}
           >
             {({ values, isValid, isSubmitting, setFieldValue }) => (
