@@ -267,6 +267,11 @@ export default function MiniDrawer(props) {
 
   const GetTaskList = () => {
     let userId = localStorage.getItem("userId");
+    let listData = localStorage.getItem('listItem') !== null ? JSON.parse(localStorage.getItem('listItem')) : []
+    console.log(taskList, "TaskList")
+    console.log(listData, "listdata")
+
+    setTaskList(listData)
     let time = new Date().toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
@@ -285,10 +290,10 @@ export default function MiniDrawer(props) {
             return finalTime === current;
           });
           if (finalData?.length > 0) {
-            console.log("taskList", [...taskList]);
-            let filteredList = [...taskList, ...finalData];
+            console.log("taskList", [...listData]);
+            let filteredList = [...listData, ...finalData];
             localStorage.setItem("listItem", JSON.stringify(filteredList));
-            setTaskList([...taskList, ...finalData]);
+            setTaskList([...listData, ...finalData]);
           }
         }
       })
@@ -400,7 +405,7 @@ export default function MiniDrawer(props) {
             {/* <IconButton>
               <img alt="" src={notification} width="24px" height={"24px"} />
             </IconButton> */}
-            <Tooltip title="You Have 4 New Notifications!">
+            <Tooltip title={`You Have ${taskList !== null? taskList.length : 0} New Notifications!`}>
               <IconButton
                 onClick={handleNotificationClick}
                 size="small"
