@@ -91,9 +91,9 @@ const DesignDocumentTable = (props) => {
   const [openSubmittals, setOpenSubmittals] = useState(false);
   const [submittalsData, setSubmittalsData] = useState(null);
 
-  useEffect(() =>{
-    console.log(popen, "kkkkk")
-  }, [])
+  // useEffect(() =>{
+  //   console.log(popen, "kkkkk")
+  // }, [])
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";

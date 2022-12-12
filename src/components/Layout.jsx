@@ -215,6 +215,8 @@ export default function MiniDrawer(props) {
   };
 
   const handleCloseNotification = () => {
+    setTaskList([]);
+    localStorage.removeItem("listItem");
     setNotification(null);
   };
 
@@ -267,11 +269,11 @@ export default function MiniDrawer(props) {
 
   const GetTaskList = () => {
     let userId = localStorage.getItem("userId");
-    let listData = localStorage.getItem('listItem') !== null ? JSON.parse(localStorage.getItem('listItem')) : []
-    console.log(taskList, "TaskList")
-    console.log(listData, "listdata")
-
-    setTaskList(listData)
+    let listData =
+      localStorage.getItem("listItem") !== null
+        ? JSON.parse(localStorage.getItem("listItem"))
+        : [];
+    setTaskList(listData);
     let time = new Date().toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
@@ -290,7 +292,6 @@ export default function MiniDrawer(props) {
             return finalTime === current;
           });
           if (finalData?.length > 0) {
-            console.log("taskList", [...listData]);
             let filteredList = [...listData, ...finalData];
             localStorage.setItem("listItem", JSON.stringify(filteredList));
             setTaskList([...listData, ...finalData]);
@@ -302,19 +303,11 @@ export default function MiniDrawer(props) {
       });
   };
 
-  // let totalList = taskList;
-  // if (noteList.length > 0) {
-  //   totalList.push(noteList[0]);
-  //   console.log(totalList, "jjj");
-  //   setTaskList(totalList);
-  // }
-
   useEffect(() => {
-    // GetDateAndTime();
+    GetDateAndTime();
   }, []);
 
   useEffect(() => {
-    console.log("started");
     const MINUTE_MS = 60000;
     const interval = setInterval(() => {
       GetTaskList();
@@ -405,7 +398,11 @@ export default function MiniDrawer(props) {
             {/* <IconButton>
               <img alt="" src={notification} width="24px" height={"24px"} />
             </IconButton> */}
-            <Tooltip title={`You Have ${taskList !== null? taskList.length : 0} New Notifications!`}>
+            <Tooltip
+              title={`You Have ${
+                taskList !== null ? taskList.length : 0
+              } New Notifications!`}
+            >
               <IconButton
                 onClick={handleNotificationClick}
                 size="small"
@@ -434,6 +431,7 @@ export default function MiniDrawer(props) {
                   bgcolor: "#48484A",
                   color: "#FFFFFF",
                   filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                  display: taskList?.length > 0 ? "block" : "none",
                   mt: 0.3,
                   opacity: 0.95,
                   "& .MuiAvatar-root": {
@@ -642,46 +640,3 @@ export default function MiniDrawer(props) {
     </Box>
   );
 }
-
-// let time1 = current.toLocaleTimeString("en-US", {
-//   hour: "2-digit",
-//   minute: "2-digit",
-// });
-// let time2 = moment(time1, "HH:mm:ss A");
-// let time = moment(time2).format("hh:mm:ss A");
-
-// getMeetingsList(userId, moment(new Date()).format("YYYY-MM-DD"))
-//   .then((response) => {
-//     if (response.status === 200) {
-//       let result = response.data;
-//       let noteList = result.filter((item) => {
-//         let value = moment(item.startTime, "HH:mm:ss A").subtract(
-//           5,
-//           "minutes"
-//         );
-//         let subtime = moment(value._d).format("hh:mm:ss A");
-//         console.log("value", value);
-//         console.log("subtime", subtime);
-//         return time === subtime;
-//       });
-
-//       if (noteList.length > 0) {
-//         console.log("taskList", taskList);
-//         let finalList;
-//         let abcd = JSON.parse(localStorage.getItem("list"));
-//         console.log("abcd2", abcd);
-//         if (abcd !== undefined || abcd !== null) {
-//           finalList = [...abcd, noteList[0]];
-//         } else {
-//           finalList = [noteList[0]];
-//         }
-//         localStorage.setItem(JSON.stringify(finalList), "list");
-
-//         // setTaskList([...taskList, noteList[0]]);
-//       }
-
-//     }
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   });
