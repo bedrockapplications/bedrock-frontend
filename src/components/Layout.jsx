@@ -25,8 +25,7 @@ import Avatar from "@mui/material/Avatar";
 import userProfile from "../Images/avatar.png";
 import notification from "../Images/notification.png";
 import { makeStyles } from "@mui/styles";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import CircleIcon from "@mui/icons-material/Circle";
 import { NavLink as RouterLink } from "react-router-dom";
@@ -43,6 +42,7 @@ import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { getMeetingsList } from "../services/request";
 import moment from "moment";
+import { GlobalState } from "../Context/Context";
 
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
@@ -193,13 +193,14 @@ export default function MiniDrawer(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [account, setAccount] = React.useState(null);
   const [notification, setNotification] = React.useState(null);
-  const [taskList, setTaskList] = React.useState([]);
 
   const [selected, setSelectedIndex] = React.useState(
     LanguagesList?.filter(
       (lang) => lang?.local === localStorage?.getItem("i18nextLng")
     )[0]
   );
+
+  const { taskList, setTaskList } = useContext(GlobalState);
 
   const openLang = Boolean(anchorEl);
   const openAccount = Boolean(account);
@@ -265,55 +266,57 @@ export default function MiniDrawer(props) {
   //task list api call
 
   const GetTaskList = () => {
-      let userId = localStorage.getItem("userId");
-      let current = new Date();
-      let time1 = current.toLocaleTimeString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-      let time2 = moment(time1, "HH:mm:ss A")
-      let time = moment(time2).format("hh:mm:ss A")
-
-      getMeetingsList(userId, moment(new Date()).format("YYYY-MM-DD"))
-        .then((response) => {
-          if (response.status === 200) {
-            let result = response.data;
-            let noteList = result.filter((item) => {
-              let value = moment(item.startTime, "HH:mm:ss A").subtract(5, "minutes");
-              let subtime = moment(value._d).format("hh:mm:ss A")
-              //value._d.
-              console.log(time, "time")
-              console.log(subtime, "subtime")
-              return time === subtime;
-            });
-            let totalList = taskList
-            console.log(noteList, 'jjj')
-            if(noteList.length > 0) {
-              totalList.push(noteList(0))
-              // totalList = [...noteList, ...taskList]
-              console.log(totalList, 'jjj')
-              setTaskList(totalList)
-            }
-            
+    let userId = localStorage.getItem("userId");
+    let time = new Date().toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    let current = moment(time, "HH:mm:ss A").format("hh:mm:ss A");
+    getMeetingsList(userId, moment(new Date()).format("YYYY-MM-DD"))
+      .then((res) => {
+        if (res.status === 200) {
+          let data = res.data;
+          let finalData = data?.filter((item) => {
+            let start_time = moment(item.startTime, "HH:mm:ss A").subtract(
+              5,
+              "minutes"
+            );
+            let finalTime = moment(start_time?._d).format("hh:mm:ss A");
+            return finalTime === current;
+          });
+          if (finalData?.length > 0) {
+            console.log("taskList", [...taskList]);
+            let filteredList = [...taskList, ...finalData];
+            localStorage.setItem("listItem", JSON.stringify(filteredList));
+            setTaskList([...taskList, ...finalData]);
           }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
   };
 
+  // let totalList = taskList;
+  // if (noteList.length > 0) {
+  //   totalList.push(noteList[0]);
+  //   console.log(totalList, "jjj");
+  //   setTaskList(totalList);
+  // }
+
   useEffect(() => {
-    GetDateAndTime();
+    // GetDateAndTime();
   }, []);
 
-useEffect(() => {
-  const MINUTE_MS = 60000;
-  const interval = setInterval(() => {
-    GetTaskList();
-  }, MINUTE_MS);
+  useEffect(() => {
+    console.log("started");
+    const MINUTE_MS = 60000;
+    const interval = setInterval(() => {
+      GetTaskList();
+    }, MINUTE_MS);
 
-  // return () => clearInterval(interval); 
-}, [])
+    return () => clearInterval(interval);
+  }, []);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -326,7 +329,6 @@ useEffect(() => {
   };
 
   return (
-
     <Box sx={{ display: "flex" }}>
       <AppBar elevation={0} position="fixed" open={open}>
         <Toolbar>
@@ -409,7 +411,7 @@ useEffect(() => {
                 aria-haspopup="true"
                 aria-expanded={openNotification ? "true" : undefined}
               >
-                <Badge badgeContent={taskList.length} color="error">
+                <Badge badgeContent={taskList?.length} color="error">
                   <NotificationsIcon color="action" />
                 </Badge>
               </IconButton>
@@ -451,11 +453,11 @@ useEffect(() => {
               transformOrigin={{ horizontal: "right", vertical: "top" }}
               anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
-              {taskList.map((each, i) => 
-              (
-                <MenuItem>{`Your Meeting Regarding ${each.title} will be starting on ${each.startTime}`}</MenuItem>
+              {taskList?.map((each, i) => (
+                <MenuItem
+                  key={each?._id}
+                >{`Your Meeting Regarding ${each?.title} will be starting on ${each?.startTime}`}</MenuItem>
               ))}
-              
             </Menu>
 
             <Typography sx={{ ml: 5 }} className={classes.userText}>
@@ -635,3 +637,46 @@ useEffect(() => {
     </Box>
   );
 }
+
+// let time1 = current.toLocaleTimeString("en-US", {
+//   hour: "2-digit",
+//   minute: "2-digit",
+// });
+// let time2 = moment(time1, "HH:mm:ss A");
+// let time = moment(time2).format("hh:mm:ss A");
+
+// getMeetingsList(userId, moment(new Date()).format("YYYY-MM-DD"))
+//   .then((response) => {
+//     if (response.status === 200) {
+//       let result = response.data;
+//       let noteList = result.filter((item) => {
+//         let value = moment(item.startTime, "HH:mm:ss A").subtract(
+//           5,
+//           "minutes"
+//         );
+//         let subtime = moment(value._d).format("hh:mm:ss A");
+//         console.log("value", value);
+//         console.log("subtime", subtime);
+//         return time === subtime;
+//       });
+
+//       if (noteList.length > 0) {
+//         console.log("taskList", taskList);
+//         let finalList;
+//         let abcd = JSON.parse(localStorage.getItem("list"));
+//         console.log("abcd2", abcd);
+//         if (abcd !== undefined || abcd !== null) {
+//           finalList = [...abcd, noteList[0]];
+//         } else {
+//           finalList = [noteList[0]];
+//         }
+//         localStorage.setItem(JSON.stringify(finalList), "list");
+
+//         // setTaskList([...taskList, noteList[0]]);
+//       }
+
+//     }
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   });
