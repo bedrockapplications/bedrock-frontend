@@ -61,13 +61,11 @@ function a11yProps(index) {
 }
 
 const Settings = () => {
-
   const classes = useStyle();
   const { t } = useTranslation();
 
-  const {userDetails, setUserDetails} = useContext(GlobalState);
+  const { userDetails, setUserDetails } = useContext(GlobalState);
   const [tabValue, setTabValue] = useState(0);
-
 
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
@@ -76,18 +74,17 @@ const Settings = () => {
   const handleUserDetails = () => {
     let id = localStorage.userId;
     getUserDetails(id).then((res) => {
-      if(res.status === 200 && (res.data.hasOwnProperty('email'))){
-        setUserDetails(res.data)
+      if (res.status === 200 && res.data.hasOwnProperty("email")) {
+        setUserDetails(res.data);
+      } else {
+        console.log(res.data.message);
       }
-      else{
-        console.log(res.data.message)
-      }
-    })
-  }
+    });
+  };
 
   useEffect(() => {
     handleUserDetails();
-  }, [])
+  }, []);
 
   return (
     <>
@@ -136,7 +133,7 @@ const Settings = () => {
             />
           </Tabs>
           <TabPanel value={tabValue} index={0}>
-              <GeneralTab />
+            <GeneralTab />
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
             <BillingTab />

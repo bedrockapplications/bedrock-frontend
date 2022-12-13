@@ -18,6 +18,7 @@ import MuiTextField from "../../components/Formik/MuiTextField";
 import { Direction } from "react-data-table-component";
 import { useTranslation } from "react-i18next";
 import { GlobalState } from "../../Context/Context";
+import { updateUserDetails } from "../../services/request";
 
 const useStyle = makeStyles(() => ({
   companyText: {
@@ -40,6 +41,11 @@ const GeneralTab = () => {
   const { userDetails, setUserDetails } = useContext(GlobalState);
 
   const handleSaveEditFiles = (values, setSubmitting, resetForm) => {
+    let emergencyDetails = {
+      fullName: values?.fullName,
+      contactNum: values.contactNum,
+      relationship: values.relationship,
+    };
     // setSubmitting(true);
     let obj = userDetails;
     obj.email = values.email;
@@ -48,9 +54,17 @@ const GeneralTab = () => {
     obj.companyInformation.companycurrentAddress.city = values.city;
     obj.companyInformation.companycurrentAddress.state = values.state;
     obj.companyInformation.companycurrentAddress.zipcode = values.zipCode;
+    obj.companyInformation.emergencyContact = { ...emergencyDetails };
     setUserDetails(obj);
-    console.log(obj, 'kkkk')
-          
+    updateUserDetails(obj?._id, obj)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("res", res);
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
   };
   return (
     <>
@@ -58,12 +72,23 @@ const GeneralTab = () => {
         initialValues={{
           email: userDetails?.email || "",
           phoneNo: userDetails?.phoneNumber || "",
-          address2: userDetails?.companyInformation?.companycurrentAddress?.street || "",
-          city: userDetails?.companyInformation?.companycurrentAddress?.city || "",
-          state: userDetails?.companyInformation?.companycurrentAddress?.state || "",
-          zipCode: userDetails?.companyInformation?.companycurrentAddress?.zipcode || "",
-          // fullName: `${userDetails?.firstName || ""} ${userDetails?.lastName || ""}`,
-          phoneNumber: userDetails?.phoneNumber || "",
+          address2:
+            userDetails?.companyInformation?.companycurrentAddress?.street ||
+            "",
+          city:
+            userDetails?.companyInformation?.companycurrentAddress?.city || "",
+          state:
+            userDetails?.companyInformation?.companycurrentAddress?.state || "",
+          zipCode:
+            userDetails?.companyInformation?.companycurrentAddress?.zipcode ||
+            "",
+          fullName:
+            userDetails?.companyInformation?.emergencyContact?.fullName || "",
+          contactNum:
+            userDetails?.companyInformation?.emergencyContact?.contactNum || "",
+          relationship:
+            userDetails?.companyInformation?.emergencyContact?.relationship ||
+            "",
         }}
         enableReinitialize
         validationSchema={""}
@@ -101,10 +126,14 @@ const GeneralTab = () => {
                       sx={{ width: 80, height: 80 }}
                     />
                     <Typography className={classes.userName}>
-                      {userDetails? `${userDetails.firstName} ${userDetails.lastName}` : ""}
+                      {userDetails
+                        ? `${userDetails.firstName} ${userDetails.lastName}`
+                        : ""}
                     </Typography>
                     <Typography>Your plan: Premium</Typography>
-                    <Typography sx={{ fontWeight: "700", marginBottom:"1rem" }}>
+                    <Typography
+                      sx={{ fontWeight: "700", marginBottom: "1rem" }}
+                    >
                       Remove Picture
                     </Typography>
                     <Grid container spacing={3.5}>
@@ -132,7 +161,7 @@ const GeneralTab = () => {
                   <Paper
                     sx={{
                       // height: "calc(100vh - 240px)",
-                      padding:"0.5rem 0"
+                      padding: "0.5rem 0",
                     }}
                   >
                     <Typography className={classes.companyText}>
@@ -229,7 +258,9 @@ const GeneralTab = () => {
                             name="fullName"
                             id="fullName"
                             label="Full Name"
-                            onChange={(e) => console.log(e.target.value, "jjjjj")}
+                            onChange={(e) =>
+                              console.log(e.target.value, "jjjjj")
+                            }
                           />
                         </Grid>
                         <Grid item xs={3}>
@@ -239,8 +270,8 @@ const GeneralTab = () => {
                             Phone Number
                           </Typography> */}
                           <MuiTextField
-                            name="phoneNumber"
-                            id="phoneNumber"
+                            name="contactNum"
+                            id="contactNum"
                             label="Phone Number"
                           />
                         </Grid>

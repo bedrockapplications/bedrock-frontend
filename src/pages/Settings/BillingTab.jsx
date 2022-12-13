@@ -1,4 +1,4 @@
-import React, { useState, useContext  } from "react";
+import React, { useState, useContext } from "react";
 import { GlobalState } from "../../Context/Context";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import MuiTextField from "../../components/Formik/MuiTextField";
+import { updateUserDetails } from "../../services/request";
 
 const useStyle = makeStyles(() => ({
   companyText: {
@@ -30,19 +31,55 @@ const useStyle = makeStyles(() => ({
 const BillingTab = () => {
   const classes = useStyle();
   const { userDetails, setUserDetails } = useContext(GlobalState);
+
+  const handleSaveEditFiles = (values, setSubmitting, resetForm) => {
+    let billerDetails = {
+      fullName: values?.fullName,
+      contactNum: values?.contactNum,
+      billEmail: values?.billEmail,
+    };
+    let obj = userDetails;
+    obj.billingInformation.BillingAddress.street = values.address2;
+    obj.billingInformation.BillingAddress.city = values.city;
+    obj.billingInformation.BillingAddress.state = values.state;
+    obj.billingInformation.BillingAddress.zipcode = values.zipCode;
+    obj.billingInformation.BillingAddress.country = values.country;
+    obj.billingInformation.BillingContact = { ...billerDetails };
+    setUserDetails(obj);
+    updateUserDetails(obj?._id, obj)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("res", res);
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
+
   return (
     <>
       <Formik
         initialValues={{
-          address2: userDetails?.billingInformation?.BillingAddress?.street || "",
+          address2:
+            userDetails?.billingInformation?.BillingAddress?.street || "",
           city: userDetails?.billingInformation?.BillingAddress?.city || "",
           state: userDetails?.billingInformation?.BillingAddress?.state || "",
-          zipCode: userDetails?.billingInformation?.BillingAddress?.zipcode || "",
+          zipCode:
+            userDetails?.billingInformation?.BillingAddress?.zipcode || "",
+          country:
+            userDetails?.billingInformation?.BillingAddress?.country || "",
+          billEmail:
+            userDetails?.billingInformation?.BillingContact?.billEmail || "",
+          contactNum:
+            userDetails?.billingInformation?.BillingContact?.contactNum || "",
+          fullName:
+            userDetails?.billingInformation?.BillingContact?.fullName || "",
         }}
         enableReinitialize
         validationSchema={""}
         onSubmit={(values, { setSubmitting, resetForm }) => {
-          console.log("values", values);
+          handleSaveEditFiles(values, setSubmitting, resetForm);
         }}
       >
         {({ values, isValid, isSubmitting, setFieldValue }) => (
@@ -167,7 +204,11 @@ const BillingTab = () => {
                           >
                             (Billing) E-mail Address
                           </Typography> */}
-                          <MuiTextField name="billingemail" id="billingemail" label="(Billing) E-mail Address" />
+                          <MuiTextField
+                            name="billEmail"
+                            id="billEmail"
+                            label="(Billing) E-mail Address"
+                          />
                         </Grid>
                         <Grid item xs={3}>
                           {/* <Typography
@@ -176,8 +217,8 @@ const BillingTab = () => {
                             (Billing) Phone Number
                           </Typography> */}
                           <MuiTextField
-                            name="billingphoneNumber"
-                            id="billingphoneNumber"
+                            name="contactNum"
+                            id="contactNum"
                             label="(Billing) Phone Number"
                           />
                         </Grid>
@@ -188,12 +229,12 @@ const BillingTab = () => {
                             (Billing) Full Name
                           </Typography> */}
                           <MuiTextField
-                            name="billingfullname"
-                            id="billingfullname"
+                            name="fullName"
+                            id="fullName"
                             label="(Billing) Full Name"
                           />
                         </Grid>
-                        <Grid item xs={12}align="right">
+                        <Grid item xs={12} align="right">
                           <Button
                             variant="contained"
                             type="submit"
