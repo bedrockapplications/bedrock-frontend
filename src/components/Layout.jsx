@@ -310,15 +310,15 @@ export default function MiniDrawer(props) {
     GetDateAndTime();
   }, []);
 
-  // useEffect(() => {
-  //   const MINUTE_MS = 60000;
-  //   const interval = setInterval(() => {
-  //     console.log("abcd");
-  //     GetTaskList();
-  //   }, MINUTE_MS);
+  useEffect(() => {
+    const MINUTE_MS = 60000;
+    const interval = setInterval(() => {
+      console.log("abcd");
+      GetTaskList();
+    }, MINUTE_MS);
 
-  //   return () => clearInterval(interval);
-  // }, []);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -396,9 +396,9 @@ export default function MiniDrawer(props) {
               justifyContent: "end",
             }}
           >
-            {/* <Typography color="primary" className={classes.timeText}>
-              Architect Meeting in 1h 12m
-            </Typography> */}
+            <Typography color="primary" className={classes.timeText}>
+              {taskList && taskList[taskList.length - 1]?.title}
+            </Typography>
             {/* <IconButton>
               <img alt="" src={notification} width="24px" height={"24px"} />
             </IconButton> */}
@@ -431,7 +431,8 @@ export default function MiniDrawer(props) {
               PaperProps={{
                 elevation: 0,
                 sx: {
-                  overflow: "visible",
+                  width: "450px",
+                  overflow: "scroll",
                   bgcolor: "#48484A",
                   color: "#FFFFFF",
                   filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
@@ -461,9 +462,13 @@ export default function MiniDrawer(props) {
               anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
               {taskList?.map((each, i) => (
-                <MenuItem
-                  key={each?._id}
-                >{`Your Meeting Regarding ${each?.title} will be starting on ${each?.startTime}`}</MenuItem>
+                <>
+                  <MenuItem
+                    key={each?._id}
+                    sx={{ fontSize: "12px" }}
+                  >{`Your Meeting Regarding ${each?.title} will be starting on ${each?.startTime}`}</MenuItem>
+                  {/* <Divider sx={{background:"#FFFFFF"}} /> */}
+                </>
               ))}
             </Menu>
 

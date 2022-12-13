@@ -9,6 +9,18 @@ export const getUserDetails = async (id) => {
   return axios.get(`/user/details?_id=${id}`);
 };
 
+export const updateUserDetails = async (id, payload) => {
+  return axios.put(`/user/update/${id}`, payload);
+};
+
+export const getCheckExestingPassword = async (password, id) => {
+  return axios.get(`/user/passwordCheck?password=${password}&_id=${id}`);
+};
+
+export const updateUserPassword = async (payload) => {
+  return axios.put(`/user/resetpassword/`, payload);
+};
+
 //Task Api start
 export const getMeetingsList = async (uId, startDate) => {
   return axios.get(
@@ -56,7 +68,8 @@ export const getAllDocumentListApi = (
   searchValue
 ) => {
   return axios.get(
-    `/document/getDocs?pageNumber=${pageNumber}&limit=${limit}&userId=${userId}&projectId=${projectId}&fileName=${searchValue || ""
+    `/document/getDocs?pageNumber=${pageNumber}&limit=${limit}&userId=${userId}&projectId=${projectId}&fileName=${
+      searchValue || ""
     }`
   );
 };
@@ -74,12 +87,9 @@ export const deleteDocumentApi = (deleteItem) => {
 // contacts apis
 
 export const getContactsList = async (ownerId, role) => {
-  return axios.get(
-    `/user/findrolebasedusers?ownerId=${ownerId}&role=${role}`
-  );
+  return axios.get(`/user/findrolebasedusers?ownerId=${ownerId}&role=${role}`);
 };
 
 export const createContactApi = async (payload) => {
   return axios.post(`/user/saveContractors`, payload);
 };
-

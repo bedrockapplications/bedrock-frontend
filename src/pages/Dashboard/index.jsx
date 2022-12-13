@@ -1,7 +1,12 @@
 import React, { useEffect, useState, memo, useRef, useContext } from "react";
 import InputEmoji from "react-input-emoji";
 
-import { getMeetingsList, deleteMeetingApi, createContactApi, getContactsList } from "../../services/request";
+import {
+  getMeetingsList,
+  deleteMeetingApi,
+  createContactApi,
+  getContactsList,
+} from "../../services/request";
 import { allMessages } from "./messages";
 
 import employee from "../../Images/employee.png";
@@ -42,7 +47,7 @@ import MuiTextArea from "../../components/Formik/MuiTextArea";
 import { createMeetingApi } from "../../services/request";
 import MuiTextField from "../../components/Formik/MuiTextField";
 import moment from "moment";
-import { Formik, Form } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import MuiFileUpload from "../../components/Formik/MuiFileUpload";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
@@ -190,6 +195,23 @@ const useStyle = makeStyles(() => ({
   upload: {
     display: "none",
   },
+  fieldWrappper: {
+    position: "relative",
+  },
+  errorText: {
+    position: "absolute",
+    left: 0,
+    top: "40px",
+    fontSize: "12px",
+    color: "rgb(244, 67, 54)",
+  },
+  noteText: {
+    position: "absolute",
+    left: 0,
+    top: "90px",
+    fontSize: "12px",
+    color: "rgb(244, 67, 54)",
+  },
 }));
 
 const userValidationSchema = Yup.object().shape({
@@ -207,13 +229,16 @@ const userValidationSchema = Yup.object().shape({
 });
 
 const validationSchema = Yup.object().shape({
-  taskName: Yup.string().required().nullable(),
-  startDate: Yup.string().required().nullable(),
-  endDate: Yup.string().required().nullable(),
-  startTime: Yup.string().required().nullable(),
-  endTime: Yup.string().required().nullable(),
-  partiesInvolved: Yup.string().required().nullable(),
-  notes: Yup.string().required().nullable(),
+  taskName: Yup.string().required("Task Name is a required").nullable(),
+  startDate: Yup.string().required("Start Date is a required").nullable(),
+  endDate: Yup.string().required("End Date is a required").nullable(),
+  startTime: Yup.string().required("Start Time is a required").nullable(),
+  endTime: Yup.string().required("End Time is a required").nullable(),
+  partiesInvolved: Yup.string()
+    .required("Parties Involved is a required")
+    .nullable(),
+  notes: Yup.string().required("Notes is a required").nullable(),
+  fileName: Yup.string().required().nullable(),
 });
 
 const contactList = [
@@ -257,7 +282,8 @@ const Dashboard = () => {
     popen,
     openUserForm,
     setOpenUserForm,
-    list, setList
+    list,
+    setList,
   } = useContext(GlobalState);
   const [show, setShow] = useState("Direct Contact");
   const [taskDetails, setTaskDetails] = useState(null);
@@ -353,38 +379,38 @@ const Dashboard = () => {
       phoneNumber: values.phNumber,
       ownerId: localStorage.getItem("userId"),
     };
-    console.log(obj)
+    console.log(obj);
     createContactApi(obj)
-        .then((res) => {
-          console.log(res)
-          if (res.status === 200) {
-            let ownerId = localStorage.getItem("userId");
-            let role = localStorage.getItem("role");
-            if(role === "Owner"){
-              getContactsList(ownerId, "Contractor")
-                .then((res) => {
-                  if (res.status === 200) {
-                    console.log(res)
-                    if (res?.data?.length > 0) {
-                      setList([...res?.data]);
-                    } else {
-                      setList([]);
-                    }
-                    setOpenUserForm(false)
+      .then((res) => {
+        console.log(res);
+        if (res.status === 200) {
+          let ownerId = localStorage.getItem("userId");
+          let role = localStorage.getItem("role");
+          if (role === "Owner") {
+            getContactsList(ownerId, "Contractor")
+              .then((res) => {
+                if (res.status === 200) {
+                  console.log(res);
+                  if (res?.data?.length > 0) {
+                    setList([...res?.data]);
+                  } else {
+                    setList([]);
                   }
-                })
-                .catch((error) => {
-                  let errorObj = error;
-                  console.log(errorObj);
-                  setOpenUserForm(false)
-                });
-            }
+                  setOpenUserForm(false);
+                }
+              })
+              .catch((error) => {
+                let errorObj = error;
+                console.log(errorObj);
+                setOpenUserForm(false);
+              });
           }
-        })
-        .catch((error) => {
-          let errorObj = error;
-          console.log(errorObj);
-        });
+        }
+      })
+      .catch((error) => {
+        let errorObj = error;
+        console.log(errorObj);
+      });
   };
 
   // const handleCreateNewUser = (values, setSubmitting, resetForm) => {
@@ -702,111 +728,187 @@ const Dashboard = () => {
                     });
                 }}
               >
-                {({ values, isValid, isSubmitting, setFieldValue }) => (
+                {({
+                  values,
+                  isValid,
+                  isSubmitting,
+                  setFieldValue,
+                  errors,
+                  touched,
+                }) => (
                   <Form>
                     <Grid container spacing={3}>
                       <Grid item xs={12}>
-                        <MuiTextField
-                          name="taskName"
-                          id="taskName"
-                          label={t("task_name")}
-                          required={true}
-                        />
+                        <Box className={classes.fieldWrappper}>
+                          <MuiTextField
+                            name="taskName"
+                            id="taskName"
+                            label={t("task_name")}
+                            required={true}
+                            error={errors?.taskName && touched?.taskName}
+                          />
+                          <ErrorMessage
+                            name="taskName"
+                            component="div"
+                            className={classes.errorText}
+                          />
+                        </Box>
                       </Grid>
                       <Grid item xs={6}>
-                        <MuiDatePicker
-                          name="startDate"
-                          id="startDate"
-                          label={t("start_date")}
-                          disablePast
-                          value={values?.startDate}
-                          required={true}
-                        />
+                        <Box className={classes.fieldWrappper}>
+                          <MuiDatePicker
+                            name="startDate"
+                            id="startDate"
+                            label={t("start_date")}
+                            disablePast
+                            value={values?.startDate}
+                            required={true}
+                            error={errors?.startDate && touched?.startDate}
+                          />
+                          <ErrorMessage
+                            name="startDate"
+                            component="div"
+                            className={classes.errorText}
+                          />
+                        </Box>
                       </Grid>
                       <Grid item xs={6}>
-                        <MuiDatePicker
-                          name="endDate"
-                          id="endDate"
-                          label={t("end_date")}
-                          disablePast
-                          disabled={values?.startDate === null}
-                          minDate={values?.startDate}
-                          value={values?.endDate}
-                          required={true}
-                        />
+                        <Box className={classes.fieldWrappper}>
+                          <MuiDatePicker
+                            name="endDate"
+                            id="endDate"
+                            label={t("end_date")}
+                            disablePast
+                            disabled={values?.startDate === null}
+                            minDate={values?.startDate}
+                            value={values?.endDate}
+                            required={true}
+                            error={errors?.endDate && touched?.endDate}
+                          />
+                          <ErrorMessage
+                            name="endDate"
+                            component="div"
+                            className={classes.errorText}
+                          />
+                        </Box>
                       </Grid>
                       <Grid item xs={6}>
-                        <MuiTimePicker
-                          name="startTime"
-                          id="startTime"
-                          label={t("start_time")}
-                          disablePast
-                          value={values?.startTime}
-                          required={true}
-                        />
+                        <Box className={classes.fieldWrappper}>
+                          <MuiTimePicker
+                            name="startTime"
+                            id="startTime"
+                            label={t("start_time")}
+                            disablePast
+                            value={values?.startTime}
+                            required={true}
+                            error={errors?.startTime && touched?.startTime}
+                          />
+                          <ErrorMessage
+                            name="startTime"
+                            component="div"
+                            className={classes.errorText}
+                          />
+                        </Box>
                       </Grid>
                       <Grid item xs={6}>
-                        <MuiTimePicker
-                          name="endTime"
-                          id="endTime"
-                          label={t("end_time")}
-                          disablePast
-                          value={values?.endTime}
-                          required={true}
-                        />
+                        <Box className={classes.fieldWrappper}>
+                          <MuiTimePicker
+                            name="endTime"
+                            id="endTime"
+                            label={t("end_time")}
+                            disablePast
+                            value={values?.endTime}
+                            required={true}
+                            error={errors?.endTime && touched?.endTime}
+                          />
+                          <ErrorMessage
+                            name="endTime"
+                            component="div"
+                            className={classes.errorText}
+                          />
+                        </Box>
                       </Grid>
                       <Grid item xs={12}>
-                        <input
-                          id="attachment"
-                          name="attachment"
-                          type="file"
-                          ref={inputRef}
-                          style={{ display: "none" }}
-                          onChange={(event) => {
-                            setFieldValue(
-                              "attachment",
-                              event.currentTarget.files[0]
-                            );
-                            setFieldValue(
-                              "fileName",
-                              event.currentTarget.files[0].name
-                            );
-                          }}
-                        />
-                        <TextField
-                          id="fileName"
-                          name="fileName"
-                          fullWidth
-                          size="small"
-                          label={t("attachments")}
-                          value={values.fileName}
-                          required
-                          inputProps={{ readOnly: true }}
-                          InputProps={{
-                            endAdornment: (
-                              <InputAdornment position="end">
-                                <IconButton size="small" onClick={handleClick}>
-                                  <CloudUploadIcon />
-                                </IconButton>
-                              </InputAdornment>
-                            ),
-                          }}
-                        />
+                        <Box className={classes.fieldWrappper}>
+                          <input
+                            id="attachment"
+                            name="attachment"
+                            type="file"
+                            ref={inputRef}
+                            style={{ display: "none" }}
+                            onChange={(event) => {
+                              setFieldValue(
+                                "attachment",
+                                event.currentTarget.files[0]
+                              );
+                              setFieldValue(
+                                "fileName",
+                                event.currentTarget.files[0].name
+                              );
+                            }}
+                          />
+                          <TextField
+                            id="fileName"
+                            name="fileName"
+                            fullWidth
+                            size="small"
+                            label={t("attachments")}
+                            value={values.fileName}
+                            required
+                            inputProps={{ readOnly: true }}
+                            InputProps={{
+                              endAdornment: (
+                                <InputAdornment position="end">
+                                  <IconButton
+                                    size="small"
+                                    onClick={handleClick}
+                                  >
+                                    <CloudUploadIcon />
+                                  </IconButton>
+                                </InputAdornment>
+                              ),
+                            }}
+                          />
+                          <ErrorMessage
+                            name="fileName"
+                            component="div"
+                            className={classes.errorText}
+                          />
+                        </Box>
                       </Grid>
                       <Grid item xs={12}>
-                        <MuiTextField
-                          name="partiesInvolved"
-                          id="partiesInvolved"
-                          label={t("parties_involved")}
-                          required={true}
-                        />
+                        <Box className={classes.fieldWrappper}>
+                          <MuiTextField
+                            name="partiesInvolved"
+                            id="partiesInvolved"
+                            label={t("parties_involved")}
+                            required={true}
+                            error={
+                              errors?.partiesInvolved &&
+                              touched?.partiesInvolved
+                            }
+                          />
+                          <ErrorMessage
+                            name="partiesInvolved"
+                            component="div"
+                            className={classes.errorText}
+                          />
+                        </Box>
                       </Grid>
                       <Grid item xs={12}>
-                        <MuiTextArea
-                          name="notes"
-                          id="notes"
-                          label={t("notes")}
-                        />
+                        <Box className={classes.fieldWrappper}>
+                          <MuiTextArea
+                            name="notes"
+                            id="notes"
+                            label={t("notes")}
+                            error={errors?.notes && touched?.notes}
+                          />
+                          <ErrorMessage
+                            name="notes"
+                            component="div"
+                            className={classes.noteText}
+                          />
+                        </Box>
                       </Grid>
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
                         <Button

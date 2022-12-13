@@ -3,10 +3,10 @@ import React, { createContext, useState } from "react";
 export const GlobalState = createContext(null);
 
 const ContextProvider = (props) => {
-  // let listData =
-  //   JSON.parse(localStorage.getItem("listItem"))?.length > 0
-  //     ? JSON?.parse(localStorage.getItem("listItem"))
-  //     : [];
+  let listData =
+    JSON.parse(localStorage.getItem("listItem"))?.length > 0
+      ? JSON?.parse(localStorage.getItem("listItem"))
+      : [];
 
   const [isLoading, setIsLoading] = useState(false);
   const [page, setPage] = useState(0);
@@ -18,7 +18,7 @@ const ContextProvider = (props) => {
   const [popen, setPopen] = useState(false);
   const [openUserForm, setOpenUserForm] = useState(false);
   const [list, setList] = useState([]);
-  const [taskList, setTaskList] = useState([]);
+  const [taskList, setTaskList] = useState([...listData]);
 
   return (
     <GlobalState.Provider

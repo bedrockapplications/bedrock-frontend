@@ -1,10 +1,17 @@
 import React, { useState, memo, useEffect, useContext } from "react";
-import { Button, Grid, Paper, Typography, IconButton } from "@mui/material";
+import {
+  Button,
+  Grid,
+  Paper,
+  Typography,
+  IconButton,
+  Box,
+} from "@mui/material";
 import { getAllProjectList, createNewProjectApi } from "../../services/request";
 
 import { makeStyles } from "@mui/styles";
 import ProjectTable from "../../components/MuiTable";
-import { Formik, Form } from "formik";
+import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import MuiTextField from "../../components/Formik/MuiTextField";
 import { useTranslation } from "react-i18next";
@@ -40,6 +47,16 @@ const useStyle = makeStyles(() => ({
     lineHeight: "1.406rem !important",
     fontStyle: "normal",
   },
+  fieldWrappper: {
+    position: "relative",
+  },
+  errorText: {
+    position: "absolute",
+    left: 0,
+    top: "40px",
+    fontSize: "12px",
+    color: "rgb(244, 67, 54)",
+  },
 }));
 
 let disableFilter = {
@@ -47,14 +64,22 @@ let disableFilter = {
   sort: false,
 };
 
+const validationSchema = Yup.object().shape({
+  projectName: Yup.string().required("Project Name is Required").nullable(),
+  address: Yup.string().required("Address is Required").nullable(),
+  Zipcode: Yup.string().required("Zipcode is Required").nullable(),
+  city: Yup.string().required("City is Required").nullable(),
+  state: Yup.string().required("State is Required").nullable(),
+  country: Yup.string().required("Country is Required").nullable(),
+});
+
 const MyProjects = () => {
   const classes = useStyle();
   const { t } = useTranslation();
   const uId = localStorage.getItem("userId");
   const [projectsList, setProjectsList] = useState([]);
   const [selectedRowData, setSelectedRowData] = useState({});
-  const {popen, setPopen} = useContext(GlobalState);
-
+  const { popen, setPopen } = useContext(GlobalState);
 
   const handleCreateNewProject = (values, setSubmitting, resetForm) => {
     let payload = {
@@ -139,7 +164,7 @@ const MyProjects = () => {
     onRowClick: (rowData, rowMeta) => {
       let selectedItem = projectsList[rowMeta?.dataIndex];
       // console.log("selectedItem", selectedItem);
-      setSelectedRowData(selectedItem)
+      setSelectedRowData(selectedItem);
     },
   };
 
@@ -207,20 +232,40 @@ const MyProjects = () => {
             sx={{ height: "100%", backgroundColor: "#E5E5EA", padding: "1rem" }}
           >
             <Grid container spacing={2}>
-              <Grid item xs={1} sx={{display: Object.keys(selectedRowData).length === 0 ? "none" : "block"}}>
-                  <IconButton
-                    size="small"
-                    onClick={(event) => setSelectedRowData({})}
-                  >
-                    <ArrowBackIosIcon />
-                  </IconButton>
+              <Grid
+                item
+                xs={1}
+                sx={{
+                  display:
+                    Object.keys(selectedRowData).length === 0
+                      ? "none"
+                      : "block",
+                }}
+              >
+                <IconButton
+                  size="small"
+                  onClick={(event) => setSelectedRowData({})}
+                >
+                  <ArrowBackIosIcon />
+                </IconButton>
               </Grid>
               <Grid item xs={11}>
                 <Typography className={classes.projectText}>
-                  {Object.keys(selectedRowData).length === 0 ?  "Create Project" : "Project Details"}
+                  {Object.keys(selectedRowData).length === 0
+                    ? "Create Project"
+                    : "Project Details"}
                 </Typography>
               </Grid>
-              <Grid item xs={12} sx={{display: Object.keys(selectedRowData).length === 0 ? "block" : "none"}}>
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  display:
+                    Object.keys(selectedRowData).length === 0
+                      ? "block"
+                      : "none",
+                }}
+              >
                 <Formik
                   initialValues={{
                     projectName: "",
@@ -231,102 +276,174 @@ const MyProjects = () => {
                     country: "",
                   }}
                   enableReinitialize
-                  validationSchema={""}
+                  validationSchema={validationSchema}
                   onSubmit={(values, { setSubmitting, resetForm }) => {
-                    console.log("values", values);
                     handleCreateNewProject(values, setSubmitting, resetForm);
                   }}
                 >
-                  <Form>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12}>
-                        <MuiTextField
-                          name="projectName"
-                          id="projectName"
-                          label={t("myProject.projectName")}
-                          required={true}
-                        />
+                  {({ values, isValid, errors, touched, isSubmitting }) => (
+                    <Form>
+                      <Grid container spacing={3}>
+                        <Grid item xs={12}>
+                          <Box className={classes.fieldWrappper}>
+                            <MuiTextField
+                              name="projectName"
+                              id="projectName"
+                              label={t("myProject.projectName")}
+                              required={true}
+                              error={
+                                errors?.projectName && touched?.projectName
+                              }
+                            />
+                            <ErrorMessage
+                              name="projectName"
+                              component="div"
+                              className={classes.errorText}
+                            />
+                          </Box>
+                        </Grid>
+                        <Grid item xs={12}>
+                          <Typography>{t("myProject.address")}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                          <Box className={classes.fieldWrappper}>
+                            <MuiTextField
+                              name="address"
+                              id="address"
+                              label={t("myProject.address")}
+                              required={true}
+                              error={errors?.address && touched?.address}
+                            />
+                            <ErrorMessage
+                              name="address"
+                              component="div"
+                              className={classes.errorText}
+                            />
+                          </Box>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Box className={classes.fieldWrappper}>
+                            <MuiTextField
+                              name="Zipcode"
+                              id="Zipcode"
+                              label={t("myProject.zipCode")}
+                              required={true}
+                              error={errors?.Zipcode && touched?.Zipcode}
+                            />
+                            <ErrorMessage
+                              name="Zipcode"
+                              component="div"
+                              className={classes.errorText}
+                            />
+                          </Box>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Box className={classes.fieldWrappper}>
+                            <MuiTextField
+                              name="city"
+                              id="city"
+                              label={t("myProject.city")}
+                              required={true}
+                              error={errors?.city && touched?.city}
+                            />
+                            <ErrorMessage
+                              name="city"
+                              component="div"
+                              className={classes.errorText}
+                            />
+                          </Box>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Box className={classes.fieldWrappper}>
+                            <MuiTextField
+                              name="state"
+                              id="state"
+                              label={t("myProject.state")}
+                              required={true}
+                              error={errors?.state && touched?.state}
+                            />
+                            <ErrorMessage
+                              name="state"
+                              component="div"
+                              className={classes.errorText}
+                            />
+                          </Box>
+                        </Grid>
+                        <Grid item xs={6}>
+                          <Box className={classes.fieldWrappper}>
+                            <MuiTextField
+                              name="country"
+                              id="country"
+                              label={t("myProject.country")}
+                              required={true}
+                              error={errors?.country && touched?.country}
+                            />
+                            <ErrorMessage
+                              name="country"
+                              component="div"
+                              className={classes.errorText}
+                            />
+                          </Box>
+                        </Grid>
+                        <Grid item xs={12}>
+                          <Button
+                            color="primary"
+                            variant="contained"
+                            type="submit"
+                            sx={{ textTransform: "capitalize", float: "right" }}
+                          >
+                            {t("myProject.createNewProject")}
+                          </Button>
+                        </Grid>
                       </Grid>
-                      <Grid item xs={12}>
-                        <Typography>{t("myProject.address")}</Typography>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <MuiTextField
-                          name="address"
-                          id="address"
-                          label={t("myProject.address")}
-                          required={true}
-                        />
-                      </Grid>
-                      <Grid item xs={4}>
-                        <MuiTextField
-                          name="Zipcode"
-                          id="Zipcode"
-                          label={t("myProject.zipCode")}
-                          required={true}
-                        />
-                      </Grid>
-                      <Grid item xs={4}>
-                        <MuiTextField
-                          name="city"
-                          id="city"
-                          label={t("myProject.city")}
-                          required={true}
-                        />
-                      </Grid>
-                      <Grid item xs={4}>
-                        <MuiTextField
-                          name="state"
-                          id="state"
-                          label={t("myProject.state")}
-                          required={true}
-                        />
-                      </Grid>
-                      <Grid item xs={4}>
-                        <MuiTextField
-                          name="country"
-                          id="country"
-                          label={t("myProject.country")}
-                          required={true}
-                        />
-                      </Grid>
-                      <Grid item xs={12} />
-                      <Grid item xs={12}>
-                        <Button
-                          color="primary"
-                          variant="contained"
-                          type="submit"
-                          sx={{ textTransform: "capitalize", float: "right" }}
-                        >
-                          {t("myProject.createNewProject")}
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </Form>
+                    </Form>
+                  )}
                 </Formik>
               </Grid>
-              <Grid item xs={12} sx={{display: Object.keys(selectedRowData).length === 0 ? "none" : "block", ml:5}}>
-                <Typography sx={{mt:1}}>
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  display:
+                    Object.keys(selectedRowData).length === 0
+                      ? "none"
+                      : "block",
+                  ml: 5,
+                }}
+              >
+                <Typography sx={{ mt: 1 }}>
                   {`ProjectName : ${selectedRowData?.projectName}`}
                 </Typography>
-                <Typography sx={{fontWeight:"700", mt:2, mb:2, fontSize:"17px"}}>
+                <Typography
+                  sx={{ fontWeight: "700", mt: 2, mb: 2, fontSize: "17px" }}
+                >
                   Project Location :
                 </Typography>
-                <Typography sx={{mt:1}}>
+                <Typography sx={{ mt: 1 }}>
                   {` Address : ${selectedRowData?.Address}`}
                 </Typography>
-                <Typography sx={{mt:1}}>
+                <Typography sx={{ mt: 1 }}>
                   {` City : ${selectedRowData?.City}`}
                 </Typography>
-                <Typography sx={{mt:1}}>
+                <Typography sx={{ mt: 1 }}>
                   {` State : ${selectedRowData?.State}`}
                 </Typography>
-                <Typography sx={{mt:1}}>
+                <Typography sx={{ mt: 1 }}>
                   {` Zipcode : ${selectedRowData?.Zipcode}`}
                 </Typography>
               </Grid>
-              <Grid item xs={12} sx={{display: Object.keys(selectedRowData).length === 0 ? "none" : "block", mt:5}}>
-              <Button
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  display:
+                    Object.keys(selectedRowData).length === 0
+                      ? "none"
+                      : "block",
+                  mt: 5,
+                }}
+              >
+                <Button
                   color="primary"
                   variant="contained"
                   type="submit"
