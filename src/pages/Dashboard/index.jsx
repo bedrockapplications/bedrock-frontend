@@ -284,8 +284,8 @@ const Dashboard = () => {
     setOpenUserForm,
     list,
     setList,
+    show, setShow,
   } = useContext(GlobalState);
-  const [show, setShow] = useState("Direct Contact");
   const [taskDetails, setTaskDetails] = useState(null);
   const [detailsList, setDetailsList] = useState([]);
   const [openCancle, setOpenCancle] = useState(false);
