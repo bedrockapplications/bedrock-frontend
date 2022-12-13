@@ -54,6 +54,7 @@ const GeneralTab = () => {
     obj.companyInformation.companycurrentAddress.city = values.city;
     obj.companyInformation.companycurrentAddress.state = values.state;
     obj.companyInformation.companycurrentAddress.zipcode = values.zipCode;
+    obj.companyInformation.companycurrentAddress.country = values.country;
     obj.companyInformation.emergencyContact = { ...emergencyDetails };
     setUserDetails(obj);
     updateUserDetails(obj?._id, obj)
@@ -81,6 +82,9 @@ const GeneralTab = () => {
             userDetails?.companyInformation?.companycurrentAddress?.state || "",
           zipCode:
             userDetails?.companyInformation?.companycurrentAddress?.zipcode ||
+            "",
+          country:
+            userDetails?.companyInformation?.companycurrentAddress?.country ||
             "",
           fullName:
             userDetails?.companyInformation?.emergencyContact?.fullName || "",
