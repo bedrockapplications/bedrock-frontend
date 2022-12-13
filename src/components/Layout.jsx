@@ -310,15 +310,15 @@ export default function MiniDrawer(props) {
     GetDateAndTime();
   }, []);
 
-  // useEffect(() => {
-  //   const MINUTE_MS = 60000;
-  //   const interval = setInterval(() => {
-  //     console.log("abcd");
-  //     GetTaskList();
-  //   }, MINUTE_MS);
+  useEffect(() => {
+    const MINUTE_MS = 60000;
+    const interval = setInterval(() => {
+      console.log("abcd");
+      GetTaskList();
+    }, MINUTE_MS);
 
-  //   return () => clearInterval(interval);
-  // }, []);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
