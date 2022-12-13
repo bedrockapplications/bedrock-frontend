@@ -4,8 +4,17 @@ import { Field } from "formik";
 import PropTypes from "prop-types";
 
 const RenderTextField = (props) => {
-  const { name, id, label, field, disabled, error, required, handleBlur } =
-    props;
+  const {
+    name,
+    id,
+    label,
+    field,
+    disabled,
+    error,
+    required,
+    handleBlur,
+    type,
+  } = props;
   return (
     <TextField
       {...field}
@@ -20,6 +29,7 @@ const RenderTextField = (props) => {
       autoComplete="off"
       required={required}
       onBlur={handleBlur}
+      type={type}
     />
   );
 };
@@ -45,6 +55,7 @@ MuiTextField.propTypes = {
   error: PropTypes.bool,
   required: PropTypes.bool,
   handleBlure: PropTypes.func,
+  type: PropTypes.string,
 };
 
 MuiTextField.defaultProps = {
@@ -54,6 +65,7 @@ MuiTextField.defaultProps = {
   disabled: false,
   error: false,
   required: false,
+  type: "text",
 };
 
 export default MuiTextField;

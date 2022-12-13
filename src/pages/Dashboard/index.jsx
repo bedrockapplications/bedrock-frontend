@@ -986,6 +986,7 @@ const Dashboard = () => {
                           id="password"
                           label={"Password"}
                           required={true}
+                          type="password"
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -994,6 +995,7 @@ const Dashboard = () => {
                           id="phNumber"
                           label={"Phone Number"}
                           required={true}
+                          type="number"
                         />
                       </Grid>
                       <Grid item xs={12}>
