@@ -28,17 +28,21 @@ const useStyle = makeStyles(() => ({
 }));
 
 const TaskDetails = (props) => {
-  const { show, setShow} = useContext(GlobalState);
+  const { show, setShow, setTaskDetails } = useContext(GlobalState);
   const classes = useStyle();
 
   const { details } = props;
+
   return (
     <Grid container spacing={2}>
-      <Grid
-        item
-        xs={1}
-      >
-        <IconButton size="small" onClick={() => setShow("Direct Contact")}>
+      <Grid item xs={1}>
+        <IconButton
+          size="small"
+          onClick={() => {
+            setTaskDetails(null);
+            setShow("Direct Contact");
+          }}
+        >
           <ArrowBackIosIcon />
         </IconButton>
       </Grid>

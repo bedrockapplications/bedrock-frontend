@@ -284,9 +284,11 @@ const Dashboard = () => {
     setOpenUserForm,
     list,
     setList,
-    show, setShow,
+    show,
+    setShow,
+    taskDetails,
+    setTaskDetails,
   } = useContext(GlobalState);
-  const [taskDetails, setTaskDetails] = useState(null);
   const [detailsList, setDetailsList] = useState([]);
   const [openCancle, setOpenCancle] = useState(false);
   const [cancleItem, setCancleItem] = useState(null);
