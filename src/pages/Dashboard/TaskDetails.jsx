@@ -1,7 +1,9 @@
-import React, { memo } from "react";
+import React, { memo, useContext } from "react";
+import { GlobalState } from "../../Context/Context";
 import { makeStyles } from "@mui/styles";
 import FilePresentOutlinedIcon from "@mui/icons-material/FilePresentOutlined";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Grid, IconButton } from "@mui/material";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 const useStyle = makeStyles(() => ({
   title: {
     fontStyle: "normal",
@@ -26,29 +28,44 @@ const useStyle = makeStyles(() => ({
 }));
 
 const TaskDetails = (props) => {
+  const { show, setShow, setTaskDetails } = useContext(GlobalState);
   const classes = useStyle();
 
   const { details } = props;
+
   return (
-    <>
-      <Typography className={classes.title}>{details?.title}</Typography>
-      {/* <Typography className={classes.text}>
+    <Grid container spacing={2}>
+      <Grid item xs={1}>
+        <IconButton
+          size="small"
+          onClick={() => {
+            setTaskDetails(null);
+            setShow("Direct Contact");
+          }}
+        >
+          <ArrowBackIosIcon />
+        </IconButton>
+      </Grid>
+      <Grid item xs={11}>
+        <Typography className={classes.title}>{details?.title}</Typography>
+        {/* <Typography className={classes.text}>
         Supervisor, Sub-contractor, Owner
       </Typography> */}
-      <Typography className={classes.text}>Attached File:</Typography>
-      <FilePresentOutlinedIcon fontSize="large" />
-      <Typography className={classes.text}>
-        {details?.attachments?.filename}{" "}
-      </Typography>
-      <Typography className={classes.text} sx={{ marginTop: "7px" }}>
-        Notes:
-      </Typography>
-      <Box className={classes.noteContainer}>
+        <Typography className={classes.text}>Attached File:</Typography>
+        <FilePresentOutlinedIcon fontSize="large" />
         <Typography className={classes.text}>
-          {details?.description || "---"}
+          {details?.attachments?.filename}{" "}
         </Typography>
-      </Box>
-    </>
+        <Typography className={classes.text} sx={{ marginTop: "7px" }}>
+          Notes:
+        </Typography>
+        <Box className={classes.noteContainer}>
+          <Typography className={classes.text}>
+            {details?.description || "---"}
+          </Typography>
+        </Box>
+      </Grid>
+    </Grid>
   );
 };
 export default memo(TaskDetails);

@@ -284,9 +284,11 @@ const Dashboard = () => {
     setOpenUserForm,
     list,
     setList,
+    show,
+    setShow,
+    taskDetails,
+    setTaskDetails,
   } = useContext(GlobalState);
-  const [show, setShow] = useState("Direct Contact");
-  const [taskDetails, setTaskDetails] = useState(null);
   const [detailsList, setDetailsList] = useState([]);
   const [openCancle, setOpenCancle] = useState(false);
   const [cancleItem, setCancleItem] = useState(null);
@@ -986,6 +988,7 @@ const Dashboard = () => {
                           id="password"
                           label={"Password"}
                           required={true}
+                          type="password"
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -994,6 +997,7 @@ const Dashboard = () => {
                           id="phNumber"
                           label={"Phone Number"}
                           required={true}
+                          type="number"
                         />
                       </Grid>
                       <Grid item xs={12}>

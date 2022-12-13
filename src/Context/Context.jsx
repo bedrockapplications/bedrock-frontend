@@ -19,10 +19,14 @@ const ContextProvider = (props) => {
   const [openUserForm, setOpenUserForm] = useState(false);
   const [list, setList] = useState([]);
   const [taskList, setTaskList] = useState([...listData]);
+  const [show, setShow] = useState("Direct Contact");
+  const [taskDetails, setTaskDetails] = useState(null);
 
   return (
     <GlobalState.Provider
       value={{
+        show,
+        setShow,
         isLoading,
         setIsLoading,
         page,
@@ -45,6 +49,8 @@ const ContextProvider = (props) => {
         setList,
         taskList,
         setTaskList,
+        taskDetails,
+        setTaskDetails,
       }}
     >
       {props.children}
