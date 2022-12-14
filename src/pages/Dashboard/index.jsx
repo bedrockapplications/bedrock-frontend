@@ -9,10 +9,10 @@ import {
 } from "../../services/request";
 import { allMessages } from "./messages";
 
-import employee from "../../Images/employee.png";
+import employee from "../../Images/employee1.png";
 import send from "../../Images/send.svg";
 import attach from "../../Images/attach.svg";
-import cloud from "../../Images/CLoud.png";
+// import cloud from "../../Images/CLoud.png";
 import crane from "../../Images/crane.png";
 import { makeStyles } from "@mui/styles";
 import TaskDetails from "./TaskDetails";
@@ -66,7 +66,7 @@ const useStyle = makeStyles(() => ({
   employeeImg: {
     width: "10rem",
     height: "6.5rem",
-    background: `url(${cloud})`,
+    // background: `url(${cloud})`,
     backgroundPosition: "center",
     backgroundSize: "cover",
     position: "relative",
@@ -75,6 +75,7 @@ const useStyle = makeStyles(() => ({
     position: "absolute",
     top: "-15px",
     left: "20px",
+    height:"120px",
     width: "inherit",
   },
   craneImg: {
