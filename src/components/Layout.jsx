@@ -342,9 +342,6 @@ export default function MiniDrawer(props) {
             <Typography color="primary" className={classes.timeText}>
               {taskList && taskList[taskList.length - 1]?.title}
             </Typography>
-            {/* <IconButton>
-              <img alt="" src={notification} width="24px" height={"24px"} />
-            </IconButton> */}
             <Tooltip
               title={`You Have ${
                 taskList !== null ? taskList.length : 0

@@ -57,6 +57,8 @@ import Avatar from "@mui/material/Avatar";
 import Profile from "../../Images/avatar.png";
 import PremiumDailog from "../../components/premiumDailog";
 import MuiSelectField from "../../components/Formik/MuiSelectField";
+import FormCreateNewTask from "./FormCreateNewTask";
+import { useCallback } from "react";
 
 const useStyle = makeStyles(() => ({
   employeeImg: {
@@ -228,19 +230,6 @@ const userValidationSchema = Yup.object().shape({
   address: Yup.string().min(2).max(20).required().nullable(),
 });
 
-const validationSchema = Yup.object().shape({
-  taskName: Yup.string().required("Task Name is a required").nullable(),
-  startDate: Yup.string().required("Start Date is a required").nullable(),
-  endDate: Yup.string().required("End Date is a required").nullable(),
-  startTime: Yup.string().required("Start Time is a required").nullable(),
-  endTime: Yup.string().required("End Time is a required").nullable(),
-  partiesInvolved: Yup.string()
-    .required("Parties Involved is a required")
-    .nullable(),
-  notes: Yup.string().required("Notes is a required").nullable(),
-  fileName: Yup.string().required().nullable(),
-});
-
 const contactList = [
   {
     name: "Fuad Hossain",
@@ -300,6 +289,29 @@ const Dashboard = () => {
     console.log(msgInput);
   }, [msgInput]);
 
+  const handleCloseForm = useCallback(() => {
+    setOpenForm(false);
+  }, []);
+
+  const getAllTasksList = useCallback(() => {
+    if (userId) {
+      getMeetingsList(userId, moment(new Date()).format("YYYY-MM-DD"))
+        .then((res) => {
+          if (res.status === 200) {
+            setDetailsList([...res.data]);
+            setContactDetails([...contactList]);
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+    }
+  }, []);
+
+  useEffect(() => {
+    getAllTasksList();
+  }, []);
+
   const handleShowDetails = (item) => {
     if (item) {
       setTaskDetails({ ...item });
@@ -317,32 +329,9 @@ const Dashboard = () => {
     setOpenForm(true);
   };
 
-  const handleCloseForm = () => {
-    setOpenForm(false);
-  };
-
   const handleCloseUserForm = () => {
     setOpenUserForm(false);
   };
-
-  const getAllTasksList = () => {
-    if (userId) {
-      getMeetingsList(userId, moment(new Date()).format("YYYY-MM-DD"))
-        .then((res) => {
-          if (res.status === 200) {
-            setDetailsList([...res.data]);
-            setContactDetails([...contactList]);
-          }
-        })
-        .catch((error) => {
-          console.log("error", error);
-        });
-    }
-  };
-
-  useEffect(() => {
-    getAllTasksList();
-  }, []);
 
   const handleCancleTask = (event, item) => {
     event.stopPropagation();
@@ -365,11 +354,6 @@ const Dashboard = () => {
       .catch((error) => {
         console.log("error", error);
       });
-  };
-
-  const handleClick = () => {
-    // 👇️ open file input box on click of other element
-    inputRef.current.click();
   };
 
   const handleCreateNewUser = (values, setSubmitting, resetForm) => {
@@ -414,19 +398,6 @@ const Dashboard = () => {
         console.log(errorObj);
       });
   };
-
-  // const handleCreateNewUser = (values, setSubmitting, resetForm) => {
-  //   console.log("values", values.email);
-  //   let obj = {
-  //     firstName: "swaroop",
-  //     lastName: "Ravuri",
-  //     email: values.email,
-  //     password: "swaroop123@",
-  //     phoneNumber: "9949957772",
-  //     ownerId: "638dfd5d341004a22e73e577",
-  //   };
-  //   console.log(obj, "jjjj");
-  // };
 
   return (
     <>
@@ -639,6 +610,11 @@ const Dashboard = () => {
           </Grid>
         </Grid>
       </Grid>
+      <FormCreateNewTask
+        open={openForm}
+        handleCloseForm={handleCloseForm}
+        getAllTasksList={getAllTasksList}
+      />
       <MuiDialog
         open={openCancle}
         handleClose={handleCloseCancleModel}
@@ -667,269 +643,7 @@ const Dashboard = () => {
           </Button>
         </DialogActions>
       </MuiDialog>
-      <MuiDialog
-        open={openForm}
-        handleClose={handleCloseForm}
-        id={"createTask"}
-        title={t("create_task")}
-        maxWidth={"sm"}
-      >
-        <Divider />
-        <DialogContent>
-          <Grid container spacing={3}>
-            <Grid item xs={12}>
-              <Formik
-                initialValues={{
-                  taskName: "",
-                  startDate: null,
-                  endDate: null,
-                  startTime: null,
-                  endTime: null,
-                  partiesInvolved: "",
-                  notes: "",
-                  attachment: null,
-                  fileName: "",
-                }}
-                enableReinitialize
-                validationSchema={validationSchema}
-                onSubmit={(values, { setSubmitting, resetForm }) => {
-                  let fileUploaded = values.attachment;
-                  let formData = new FormData();
-                  formData.append("attachment", fileUploaded);
-                  formData.append("title", values.taskName);
-                  formData.append("description", values.notes);
-                  formData.append(
-                    "startDate",
-                    moment(values.startDate).format("YYYY-MM-DD")
-                  );
-                  formData.append(
-                    "endDate",
-                    moment(values.endDate).format("YYYY-MM-DD")
-                  );
-                  formData.append(
-                    "startTime",
-                    moment(values.startTime).format("hh:mm A")
-                  );
-                  formData.append(
-                    "endTime",
-                    moment(values.endTime).format("hh:mm A")
-                  );
-                  formData.append("userId", userId);
-                  createMeetingApi(formData)
-                    .then((res) => {
-                      if (res.status === 200) {
-                        getAllTasksList();
-                        resetForm();
-                        setSubmitting(false);
-                        setOpenForm(false);
-                      }
-                    })
-                    .catch((error) => {
-                      console.log("error", error);
-                      setSubmitting(false);
-                    });
-                }}
-              >
-                {({
-                  values,
-                  isValid,
-                  isSubmitting,
-                  setFieldValue,
-                  errors,
-                  touched,
-                }) => (
-                  <Form>
-                    <Grid container spacing={3}>
-                      <Grid item xs={12}>
-                        <Box className={classes.fieldWrappper}>
-                          <MuiTextField
-                            name="taskName"
-                            id="taskName"
-                            label={t("task_name")}
-                            required={true}
-                            error={errors?.taskName && touched?.taskName}
-                          />
-                          <ErrorMessage
-                            name="taskName"
-                            component="div"
-                            className={classes.errorText}
-                          />
-                        </Box>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Box className={classes.fieldWrappper}>
-                          <MuiDatePicker
-                            name="startDate"
-                            id="startDate"
-                            label={t("start_date")}
-                            disablePast
-                            value={values?.startDate}
-                            required={true}
-                            error={errors?.startDate && touched?.startDate}
-                          />
-                          <ErrorMessage
-                            name="startDate"
-                            component="div"
-                            className={classes.errorText}
-                          />
-                        </Box>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Box className={classes.fieldWrappper}>
-                          <MuiDatePicker
-                            name="endDate"
-                            id="endDate"
-                            label={t("end_date")}
-                            disablePast
-                            disabled={values?.startDate === null}
-                            minDate={values?.startDate}
-                            value={values?.endDate}
-                            required={true}
-                            error={errors?.endDate && touched?.endDate}
-                          />
-                          <ErrorMessage
-                            name="endDate"
-                            component="div"
-                            className={classes.errorText}
-                          />
-                        </Box>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Box className={classes.fieldWrappper}>
-                          <MuiTimePicker
-                            name="startTime"
-                            id="startTime"
-                            label={t("start_time")}
-                            disablePast
-                            value={values?.startTime}
-                            required={true}
-                            error={errors?.startTime && touched?.startTime}
-                          />
-                          <ErrorMessage
-                            name="startTime"
-                            component="div"
-                            className={classes.errorText}
-                          />
-                        </Box>
-                      </Grid>
-                      <Grid item xs={6}>
-                        <Box className={classes.fieldWrappper}>
-                          <MuiTimePicker
-                            name="endTime"
-                            id="endTime"
-                            label={t("end_time")}
-                            disablePast
-                            value={values?.endTime}
-                            required={true}
-                            error={errors?.endTime && touched?.endTime}
-                          />
-                          <ErrorMessage
-                            name="endTime"
-                            component="div"
-                            className={classes.errorText}
-                          />
-                        </Box>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Box className={classes.fieldWrappper}>
-                          <input
-                            id="attachment"
-                            name="attachment"
-                            type="file"
-                            ref={inputRef}
-                            style={{ display: "none" }}
-                            onChange={(event) => {
-                              setFieldValue(
-                                "attachment",
-                                event.currentTarget.files[0]
-                              );
-                              setFieldValue(
-                                "fileName",
-                                event.currentTarget.files[0].name
-                              );
-                            }}
-                          />
-                          <TextField
-                            id="fileName"
-                            name="fileName"
-                            fullWidth
-                            size="small"
-                            label={t("attachments")}
-                            value={values.fileName}
-                            required
-                            inputProps={{ readOnly: true }}
-                            InputProps={{
-                              endAdornment: (
-                                <InputAdornment position="end">
-                                  <IconButton
-                                    size="small"
-                                    onClick={handleClick}
-                                  >
-                                    <CloudUploadIcon />
-                                  </IconButton>
-                                </InputAdornment>
-                              ),
-                            }}
-                          />
-                          <ErrorMessage
-                            name="fileName"
-                            component="div"
-                            className={classes.errorText}
-                          />
-                        </Box>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Box className={classes.fieldWrappper}>
-                          <MuiTextField
-                            name="partiesInvolved"
-                            id="partiesInvolved"
-                            label={t("parties_involved")}
-                            required={true}
-                            error={
-                              errors?.partiesInvolved &&
-                              touched?.partiesInvolved
-                            }
-                          />
-                          <ErrorMessage
-                            name="partiesInvolved"
-                            component="div"
-                            className={classes.errorText}
-                          />
-                        </Box>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Box className={classes.fieldWrappper}>
-                          <MuiTextArea
-                            name="notes"
-                            id="notes"
-                            label={t("notes")}
-                            error={errors?.notes && touched?.notes}
-                          />
-                          <ErrorMessage
-                            name="notes"
-                            component="div"
-                            className={classes.noteText}
-                          />
-                        </Box>
-                      </Grid>
-                      <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button
-                          variant="contained"
-                          type="submit"
-                          size="small"
-                          disabled={!isValid || isSubmitting}
-                        >
-                          {t("create_task")}
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </Form>
-                )}
-              </Formik>
-            </Grid>
-          </Grid>
-        </DialogContent>
-      </MuiDialog>
+
       <MuiDialog
         open={openUserForm}
         handleClose={handleCloseUserForm}
@@ -1050,103 +764,3 @@ export default Dashboard;
 //     isChecked: false,
 //   },
 // ];
-
-{
-  /* <Formik
-                  initialValues={{
-                    Firstname: "",
-                    Lastname: "",
-                    email: "",
-                    password: "",
-                    // role: "",
-                    phNumber: "",
-                    // address: "",
-                  }}
-                  enableReinitialize
-                  validationSchema={userValidationSchema}
-                  onSubmit={(values, { setSubmitting, resetForm }) => {
-                    console.log("values", values);
-                    handleCreateNewUser(values, setSubmitting, resetForm);
-                  }}
-                >
-                  {({ values, isValid, isSubmitting, setFieldValue }) => (
-                  <Form>
-                    <Grid container spacing={2}>
-                      <Grid item xs={6}>
-                        <MuiTextField
-                          name="Firstname"
-                          id="Firstname"
-                          label={"First Name"}
-                          required={true}
-                        />
-                      </Grid>
-                      <Grid item xs={6}>
-                        <MuiTextField
-                          name="Lastname"
-                          id="Lastname"
-                          label={"Last Name"}
-                          required={true}
-                        />
-                      </Grid>
-
-                      <Grid item xs={12}>
-                        <MuiTextField
-                          name="email"
-                          id="email"
-                          label={"Email"}
-                          required={true}
-                        />
-                      </Grid>
-
-                      <Grid item xs={6}>
-                        <MuiTextField
-                          name="password"
-                          id="password"
-                          label={"Password"}
-                          required={true}
-                        />
-                      </Grid>
-                      {/* <Grid item xs={12}>
-                        <MuiSelectField
-                          name="role"
-                          id="role"
-                          label={"Role"}
-                          options={["Owner", "User"]}
-                          required={true}
-                        />
-                      </Grid> */
-}
-// <Grid item xs={6}>
-//   <MuiTextField
-//     name="phNumber"
-//     id="phNumber"
-//     label={"Phone Number"}
-//     required={true}
-//   />
-// </Grid>
-{
-  /* <Grid item xs={6}>
-                        <MuiTextField
-                          name="address"
-                          id="address"
-                          label={"Address"}
-                          required={true}
-                        />
-                      </Grid> */
-}
-
-//       <Grid item xs={12} />
-//       <Grid item xs={12}>
-//         <Button
-//           color="primary"
-//           variant="contained"
-//           type="submit"
-//           sx={{ textTransform: "capitalize", float: "right" }}
-//         >
-//           Create New User
-//         </Button>
-//       </Grid>
-//     </Grid>
-//   </Form>
-//   )}
-// </Formik> */}
