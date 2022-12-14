@@ -45,9 +45,10 @@ const useStyle = makeStyles(() => ({
 }));
 
 const DirectContact = (props) => {
+  const { contactList } = props;
+  const userRole = localStorage.getItem("role");
   const classes = useStyle();
   const { t } = useTranslation();
-  // const { list } = props;
   const {
     selectedChat,
     setSelectedChat,
@@ -58,30 +59,31 @@ const DirectContact = (props) => {
     setList,
   } = useContext(GlobalState);
 
-  useEffect(() => {
-    let ownerId = localStorage.getItem("userId");
-    let role = localStorage.getItem("role");
-    if (role === "Owner") {
-      getContactsList(ownerId, "Contractor")
-        .then((res) => {
-          if (res.status === 200) {
-            console.log(res);
-            if (res?.data?.length > 0) {
-              setList([...res?.data]);
-            } else {
-              setList([]);
-            }
-          }
-        })
-        .catch((error) => {
-          let errorObj = error;
-          console.log(errorObj);
-        });
-    }
-  }, []);
+  // useEffect(() => {
+  //   let ownerId = localStorage.getItem("userId");
+  //   let role = localStorage.getItem("role");
+  //   if (role === "Owner") {
+  //     getContactsList(ownerId, "Contractor")
+  //       .then((res) => {
+  //         if (res.status === 200) {
+  //           console.log(res);
+  //           if (res?.data?.length > 0) {
+  //             setList([...res?.data]);
+  //           } else {
+  //             setList([]);
+  //           }
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         let errorObj = error;
+  //         console.log(errorObj);
+  //       });
+  //   }
+  // }, []);
+
   return (
     <>
-      {localStorage.getItem("role") === "Owner" ? (
+      {userRole === "Owner" ? (
         <>
           <Grid container spacing={1}>
             <Grid item xs={11}>
@@ -105,8 +107,8 @@ const DirectContact = (props) => {
               xs={12}
               sx={{ height: "55vh", overflowY: "auto", paddingRight: "5px" }}
             >
-              {list?.length > 0 ? (
-                list?.map((item, i) => (
+              {contactList?.length > 0 ? (
+                contactList?.map((item, i) => (
                   <List
                     disablePadding
                     key={item?.firstName + i}

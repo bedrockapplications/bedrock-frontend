@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo, useRef, useContext } from "react";
+import React, { useEffect, useState, useContext, useCallback } from "react";
 import InputEmoji from "react-input-emoji";
 
 import {
@@ -40,25 +40,27 @@ import MuiDialog from "../../components/MuiDialog";
 import { useTranslation } from "react-i18next";
 import noDataImg from "../../Images/NoData.png";
 
-//ned to after
-import MuiDatePicker from "../../components/Formik/MuiDatePicker";
-import MuiTimePicker from "../../components/Formik/MuiTimePicker";
-import MuiTextArea from "../../components/Formik/MuiTextArea";
-import { createMeetingApi } from "../../services/request";
 import MuiTextField from "../../components/Formik/MuiTextField";
 import moment from "moment";
 import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import MuiFileUpload from "../../components/Formik/MuiFileUpload";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import InputAdornment from "@mui/material/InputAdornment";
+
 import { GlobalState } from "../../Context/Context";
 import Avatar from "@mui/material/Avatar";
 import Profile from "../../Images/avatar.png";
 import PremiumDailog from "../../components/premiumDailog";
-import MuiSelectField from "../../components/Formik/MuiSelectField";
 import FormCreateNewTask from "./FormCreateNewTask";
-import { useCallback } from "react";
+import CreateUserForm from "./CreateUserForm";
+
+//Please Dont remove this imports
+// import MuiDatePicker from "../../components/Formik/MuiDatePicker";
+// import MuiTimePicker from "../../components/Formik/MuiTimePicker";
+// import MuiTextArea from "../../components/Formik/MuiTextArea";
+// import { createMeetingApi } from "../../services/request";
+// import MuiFileUpload from "../../components/Formik/MuiFileUpload";
+// import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+// import InputAdornment from "@mui/material/InputAdornment";
+// import MuiSelectField from "../../components/Formik/MuiSelectField";
 
 const useStyle = makeStyles(() => ({
   employeeImg: {
@@ -261,8 +263,8 @@ const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 const Dashboard = () => {
   const { t } = useTranslation();
-  const inputRef = useRef(null);
   const userId = localStorage.getItem("userId");
+  let userRole = localStorage.getItem("role");
   const userFirstName = localStorage.getItem("userFirstName");
   const classes = useStyle();
   const {
@@ -293,13 +295,16 @@ const Dashboard = () => {
     setOpenForm(false);
   }, []);
 
+  const handleCloseUserForm = useCallback(() => {
+    setOpenUserForm(false);
+  }, []);
+
   const getAllTasksList = useCallback(() => {
     if (userId) {
       getMeetingsList(userId, moment(new Date()).format("YYYY-MM-DD"))
         .then((res) => {
           if (res.status === 200) {
             setDetailsList([...res.data]);
-            setContactDetails([...contactList]);
           }
         })
         .catch((error) => {
@@ -308,8 +313,29 @@ const Dashboard = () => {
     }
   }, []);
 
+  const getAllContactsList = useCallback(() => {
+    if (userRole === "Owner") {
+      getContactsList(userId, "Contractor")
+        .then((res) => {
+          if (res.status === 200) {
+            if (res.data.length > 0) {
+              setContactDetails([...res.data]);
+            } else {
+              setContactDetails([]);
+            }
+            setOpenUserForm(false);
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+          setOpenUserForm(false);
+        });
+    }
+  }, []);
+
   useEffect(() => {
     getAllTasksList();
+    getAllContactsList();
   }, []);
 
   const handleShowDetails = (item) => {
@@ -327,10 +353,6 @@ const Dashboard = () => {
     // setTaskDetails(null);
     // setShow("Add Task");
     setOpenForm(true);
-  };
-
-  const handleCloseUserForm = () => {
-    setOpenUserForm(false);
   };
 
   const handleCancleTask = (event, item) => {
@@ -353,49 +375,6 @@ const Dashboard = () => {
       })
       .catch((error) => {
         console.log("error", error);
-      });
-  };
-
-  const handleCreateNewUser = (values, setSubmitting, resetForm) => {
-    let obj = {
-      firstName: values.Firstname,
-      lastName: values.Lastname,
-      email: values.email,
-      password: values.password,
-      phoneNumber: values.phNumber,
-      ownerId: localStorage.getItem("userId"),
-    };
-    console.log(obj);
-    createContactApi(obj)
-      .then((res) => {
-        console.log(res);
-        if (res.status === 200) {
-          let ownerId = localStorage.getItem("userId");
-          let role = localStorage.getItem("role");
-          if (role === "Owner") {
-            getContactsList(ownerId, "Contractor")
-              .then((res) => {
-                if (res.status === 200) {
-                  console.log(res);
-                  if (res?.data?.length > 0) {
-                    setList([...res?.data]);
-                  } else {
-                    setList([]);
-                  }
-                  setOpenUserForm(false);
-                }
-              })
-              .catch((error) => {
-                let errorObj = error;
-                console.log(errorObj);
-                setOpenUserForm(false);
-              });
-          }
-        }
-      })
-      .catch((error) => {
-        let errorObj = error;
-        console.log(errorObj);
       });
   };
 
@@ -599,7 +578,7 @@ const Dashboard = () => {
                 }}
               >
                 {show === "Direct Contact" ? (
-                  <DirectContact list={contactDetails} />
+                  <DirectContact contactList={contactDetails} />
                 ) : show === "Add Task" ? (
                   <CreateNewTask getAllTasksList={getAllTasksList} />
                 ) : (
@@ -614,6 +593,10 @@ const Dashboard = () => {
         open={openForm}
         handleCloseForm={handleCloseForm}
         getAllTasksList={getAllTasksList}
+      />
+      <CreateUserForm
+        handleCloseUserForm={handleCloseUserForm}
+        getAllContactsList={getAllContactsList}
       />
       <MuiDialog
         open={openCancle}
@@ -644,7 +627,7 @@ const Dashboard = () => {
         </DialogActions>
       </MuiDialog>
 
-      <MuiDialog
+      {/* <MuiDialog
         open={openUserForm}
         handleClose={handleCloseUserForm}
         id={"createUser"}
@@ -731,7 +714,7 @@ const Dashboard = () => {
             </Grid>
           </Grid>
         </DialogContent>
-      </MuiDialog>
+      </MuiDialog> */}
       <>{popen ? <PremiumDailog /> : ""}</>
     </>
   );

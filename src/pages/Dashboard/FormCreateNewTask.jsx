@@ -65,7 +65,7 @@ const FormCreateNewTask = (props) => {
   const userId = localStorage.getItem("userId");
 
   const handleClick = () => {
-    inputRef.current.click();
+    inputRef?.current?.click();
   };
 
   return (
