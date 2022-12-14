@@ -86,6 +86,8 @@ const Settings = () => {
     handleUserDetails();
   }, []);
 
+  console.log("i am from settings");
+
   return (
     <>
       <Grid container spacing={2}>

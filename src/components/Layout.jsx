@@ -43,6 +43,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import { getMeetingsList } from "../services/request";
 import moment from "moment";
 import { GlobalState } from "../Context/Context";
+import GetDateAndTime from "../components/DigitalClock";
 
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
@@ -55,24 +56,6 @@ const useStyle = makeStyles(() => ({
     textTransform: "capitalize",
     color: `#242b3c`,
     fontWeight: "600 !important",
-  },
-  timeText: {
-    fontStyle: "normal",
-    fontSize: "0.75rem",
-    fontWeight: "400",
-    lineHeight: "18px",
-    color: `#1D242E`,
-    textShadow: "1px 0px #1D242E",
-  },
-  dayText: {
-    fontStyle: "normal",
-    fontSize: "0.875rem",
-    fontWeight: "500",
-    lineHeight: "24px",
-    display: "flex",
-    justifyContent: "flex-start",
-    alignItems: "center",
-    textShadow: "1px 0px #1D242E",
   },
   logo: {
     width: "100%",
@@ -188,8 +171,6 @@ export default function MiniDrawer(props) {
   const classes = useStyle();
   const userName = localStorage.getItem("userName");
   const [open, setOpen] = React.useState(false);
-  const [clockState, setClockState] = useState("");
-  const [dayState, setDayState] = useState("");
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [account, setAccount] = React.useState(null);
   const [notification, setNotification] = React.useState(null);
@@ -237,34 +218,6 @@ export default function MiniDrawer(props) {
     window.location.reload();
   };
 
-  const GetDateAndTime = () => {
-    setInterval(() => {
-      const date = new Date();
-      let time = date.toLocaleString("en-US", {
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-        hour12: true,
-      });
-      setClockState(time);
-      let hrs = date.getHours();
-      if (hrs < 12) {
-        setDayState("good_morning");
-      } else if (hrs < 17) {
-        setDayState("good_afternoon");
-      } else {
-        setDayState("good_evening");
-      }
-      // } else if (hrs >= 12 && hrs <= 15) {
-      //   setDayState("good_afternoon");
-      // } else if (hrs > 15 && hrs <= 20) {
-      //   setDayState("good_evening");
-      // } else if (hrs > 20 && hrs <= 24) {
-      //   setDayState("good_night");
-      // }
-    }, 1000);
-  };
-
   //task list api call
 
   const GetTaskList = () => {
@@ -307,7 +260,7 @@ export default function MiniDrawer(props) {
   };
 
   useEffect(() => {
-    GetDateAndTime();
+    // GetDateAndTime();
   }, []);
 
   useEffect(() => {
@@ -336,17 +289,7 @@ export default function MiniDrawer(props) {
         <Toolbar>
           <Box sx={{ width: "60%", display: { xs: "none", md: "flex" } }}>
             <Box sx={{ minWidth: "205px", marginRight: "1.5rem" }}>
-              <Typography color="primary" className={classes.dayText}>
-                {dayState === "Good Night"
-                  ? // <CircleIcon fontSize="small" />
-                    ""
-                  : // <WbSunnyIcon fontSize="small" sx={{ color: "orange" }} />
-                    ""}
-                {t(dayState)}
-              </Typography>
-              <Typography color="primary" className={classes.timeText}>
-                {`${new Date()?.toDateString()} ${clockState}`}
-              </Typography>
+              <GetDateAndTime />
             </Box>
             <Button
               id="demo-customized-button"
