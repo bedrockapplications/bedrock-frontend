@@ -46,16 +46,23 @@ const useStyle = makeStyles(() => ({
 }));
 
 const validationSchema = Yup.object().shape({
-  taskName: Yup.string().required("Task Name is a required").nullable(),
-  startDate: Yup.string().required("Start Date is a required").nullable(),
-  endDate: Yup.string().required("End Date is a required").nullable(),
-  startTime: Yup.string().required("Start Time is a required").nullable(),
-  endTime: Yup.string().required("End Time is a required").nullable(),
+  taskName: Yup.string().required("Task Name is a required").trim().nullable(),
+  startDate: Yup.string()
+    .required("Start Date is a required")
+    .trim()
+    .nullable(),
+  endDate: Yup.string().required("End Date is a required").trim().nullable(),
+  startTime: Yup.string()
+    .required("Start Time is a required")
+    .trim()
+    .nullable(),
+  endTime: Yup.string().required("End Time is a required").trim().nullable(),
   partiesInvolved: Yup.string()
     .required("Parties Involved is a required")
+    .trim()
     .nullable(),
-  notes: Yup.string().required("Notes is a required").nullable(),
-  fileName: Yup.string().required().nullable(),
+  notes: Yup.string().required("Notes is a required").trim().nullable(),
+  fileName: Yup.string().required().trim().nullable(),
 });
 
 const FormCreateNewTask = (props) => {
@@ -130,7 +137,8 @@ const FormCreateNewTask = (props) => {
                       }
                     })
                     .catch((error) => {
-                      console.log("error", error);
+                      let errorObj = error?.response?.data;
+                      ShowSnackbar("error", errorObj?.message);
                       setSubmitting(false);
                     });
                 }}
@@ -151,8 +159,6 @@ const FormCreateNewTask = (props) => {
                             name="taskName"
                             id="taskName"
                             label={t("task_name")}
-                            required={true}
-                            error={errors?.taskName && touched?.taskName}
                           />
                           <ErrorMessage
                             name="taskName"
@@ -169,8 +175,6 @@ const FormCreateNewTask = (props) => {
                             label={t("start_date")}
                             disablePast
                             value={values?.startDate}
-                            required={true}
-                            error={errors?.startDate && touched?.startDate}
                           />
                           <ErrorMessage
                             name="startDate"
@@ -189,8 +193,6 @@ const FormCreateNewTask = (props) => {
                             disabled={values?.startDate === null}
                             minDate={values?.startDate}
                             value={values?.endDate}
-                            required={true}
-                            error={errors?.endDate && touched?.endDate}
                           />
                           <ErrorMessage
                             name="endDate"
@@ -207,8 +209,6 @@ const FormCreateNewTask = (props) => {
                             label={t("start_time")}
                             disablePast
                             value={values?.startTime}
-                            required={true}
-                            error={errors?.startTime && touched?.startTime}
                           />
                           <ErrorMessage
                             name="startTime"
@@ -225,8 +225,6 @@ const FormCreateNewTask = (props) => {
                             label={t("end_time")}
                             disablePast
                             value={values?.endTime}
-                            required={true}
-                            error={errors?.endTime && touched?.endTime}
                           />
                           <ErrorMessage
                             name="endTime"
@@ -261,7 +259,7 @@ const FormCreateNewTask = (props) => {
                             size="small"
                             label={t("attachments")}
                             value={values.fileName}
-                            required
+                            // required
                             inputProps={{ readOnly: true }}
                             InputProps={{
                               endAdornment: (
@@ -289,11 +287,6 @@ const FormCreateNewTask = (props) => {
                             name="partiesInvolved"
                             id="partiesInvolved"
                             label={t("parties_involved")}
-                            required={true}
-                            error={
-                              errors?.partiesInvolved &&
-                              touched?.partiesInvolved
-                            }
                           />
                           <ErrorMessage
                             name="partiesInvolved"
@@ -308,7 +301,6 @@ const FormCreateNewTask = (props) => {
                             name="notes"
                             id="notes"
                             label={t("notes")}
-                            error={errors?.notes && touched?.notes}
                           />
                           <ErrorMessage
                             name="notes"

@@ -17,7 +17,7 @@ export const ShowSnackbar = (type, message) => {
       break;
     }
     case "error": {
-      toast.success(message, {
+      toast.error(message, {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,

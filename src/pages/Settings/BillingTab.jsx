@@ -7,6 +7,8 @@ import { makeStyles } from "@mui/styles";
 import { Grid, Paper, Typography, Box, Button, Divider } from "@mui/material";
 import MuiTextField from "../../components/Formik/MuiTextField";
 import { updateUserDetails } from "../../services/request";
+import MuiEmailField from "../../components/Formik/MuiEmailField";
+import { ShowSnackbar } from "../../components/Snackbar";
 
 const useStyle = makeStyles(() => ({
   companyText: {
@@ -61,6 +63,7 @@ const BillingTab = () => {
       .then((res) => {
         if (res.status === 200) {
           console.log("res", res);
+          ShowSnackbar("success", "Successfully Updated");
         }
       })
       .catch((error) => {
@@ -185,7 +188,7 @@ const BillingTab = () => {
                           </Typography>
                         </Grid>
                         <Grid item xs={3}>
-                          <MuiTextField
+                          <MuiEmailField
                             name="billEmail"
                             id="billEmail"
                             label="E-mail Address"
@@ -196,6 +199,7 @@ const BillingTab = () => {
                             name="contactNum"
                             id="contactNum"
                             label="Phone Number"
+                            type="number"
                           />
                         </Grid>
                         <Grid item xs={3}>

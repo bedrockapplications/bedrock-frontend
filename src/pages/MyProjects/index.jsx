@@ -18,6 +18,8 @@ import { useTranslation } from "react-i18next";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { GlobalState } from "../../Context/Context";
 import PremiumDailog from "../../components/premiumDailog";
+import { ShowSnackbar } from "../../components/Snackbar";
+
 // import ProjectDataTable from "./ProjectDataTable";
 // import CardMedia from "@mui/material/CardMedia";
 // import { CardActionArea } from "@mui/material";
@@ -100,6 +102,7 @@ const MyProjects = () => {
           getProjects();
           resetForm();
           setSubmitting(false);
+          ShowSnackbar("success", "Project Created Successfully");
         }
       })
       .catch((error) => {
@@ -290,10 +293,6 @@ const MyProjects = () => {
                               name="projectName"
                               id="projectName"
                               label={t("myProject.projectName")}
-                              required={true}
-                              error={
-                                errors?.projectName && touched?.projectName
-                              }
                             />
                             <ErrorMessage
                               name="projectName"
@@ -311,8 +310,6 @@ const MyProjects = () => {
                               name="address"
                               id="address"
                               label={t("myProject.address")}
-                              required={true}
-                              error={errors?.address && touched?.address}
                             />
                             <ErrorMessage
                               name="address"
@@ -327,8 +324,6 @@ const MyProjects = () => {
                               name="Zipcode"
                               id="Zipcode"
                               label={t("myProject.zipCode")}
-                              required={true}
-                              error={errors?.Zipcode && touched?.Zipcode}
                             />
                             <ErrorMessage
                               name="Zipcode"
@@ -343,8 +338,6 @@ const MyProjects = () => {
                               name="city"
                               id="city"
                               label={t("myProject.city")}
-                              required={true}
-                              error={errors?.city && touched?.city}
                             />
                             <ErrorMessage
                               name="city"
@@ -359,8 +352,6 @@ const MyProjects = () => {
                               name="state"
                               id="state"
                               label={t("myProject.state")}
-                              required={true}
-                              error={errors?.state && touched?.state}
                             />
                             <ErrorMessage
                               name="state"
@@ -375,8 +366,6 @@ const MyProjects = () => {
                               name="country"
                               id="country"
                               label={t("myProject.country")}
-                              required={true}
-                              error={errors?.country && touched?.country}
                             />
                             <ErrorMessage
                               name="country"

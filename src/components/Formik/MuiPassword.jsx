@@ -3,8 +3,9 @@ import { TextField } from "@mui/material";
 import { Field } from "formik";
 import PropTypes from "prop-types";
 
-const RenderTextArea = (props) => {
-  const { name, id, label, field, disabled, error, rows, required } = props;
+const RenderPassword = (props) => {
+  const { name, id, label, field, disabled, error, required, handleBlur } =
+    props;
   return (
     <TextField
       {...field}
@@ -17,18 +18,18 @@ const RenderTextArea = (props) => {
       size="small"
       fullWidth
       autoComplete="off"
-      multiline
-      rows={rows}
       required={required}
+      type="password"
+      onBlur={handleBlur}
     />
   );
 };
 
-const MuiTextArea = (props) => {
+const MuiPasswordField = (props) => {
   const { name, id, label, ...other } = props;
   return (
     <Field
-      component={RenderTextArea}
+      component={RenderPassword}
       name={name}
       id={id}
       label={label}
@@ -37,23 +38,23 @@ const MuiTextArea = (props) => {
   );
 };
 
-MuiTextArea.propTypes = {
+MuiPasswordField.propTypes = {
   name: PropTypes.string,
   id: PropTypes.string,
   label: PropTypes.string,
   disabled: PropTypes.bool,
   error: PropTypes.bool,
-  rows: PropTypes.number,
   required: PropTypes.bool,
+  handleBlur: PropTypes.func,
 };
 
-MuiTextArea.defaultProps = {
+MuiPasswordField.defaultProps = {
   name: "name",
   id: "name",
   label: "Name",
   disabled: false,
   error: false,
-  rows: 3,
+  required: false,
 };
 
-export default MuiTextArea;
+export default MuiPasswordField;

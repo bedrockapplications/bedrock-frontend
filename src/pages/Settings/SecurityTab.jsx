@@ -12,6 +12,8 @@ import {
   getCheckExestingPassword,
   updateUserPassword,
 } from "../../services/request";
+import MuiPasswordField from "../../components/Formik/MuiPassword";
+import { ShowSnackbar } from "../../components/Snackbar";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -68,17 +70,14 @@ const SecurityTab = () => {
       getCheckExestingPassword(values?.existingpassword, userDetails._id)
         .then((res) => {
           if (res.status === 200) {
-            setOpen(true);
-            setColor("success");
             setCheckPassword(false);
-            setMessage("Success Password Matched");
+            ShowSnackbar("success", res.data);
           }
         })
         .catch((error) => {
-          setOpen(true);
-          setColor("error");
+          let errorObj = error?.response?.data;
           setCheckPassword(true);
-          setMessage("The password you entered is incorrect");
+          ShowSnackbar("error", errorObj?.message);
         });
     }
   };
@@ -92,21 +91,13 @@ const SecurityTab = () => {
     updateUserPassword(payload)
       .then((res) => {
         if (res.status === 200) {
-          setOpen(true);
-          setColor("success");
-          setMessage(res.data.success);
+          ShowSnackbar("success", res.data.success);
           resetForm();
         }
       })
       .catch((error) => {
-        setColor("error");
-        setOpen(true);
-        setMessage("Something Went Worng");
+        ShowSnackbar("error", "Something Went Worng");
       });
-  };
-
-  const handleClose = () => {
-    setOpen(false);
   };
 
   return (
@@ -144,11 +135,10 @@ const SecurityTab = () => {
                           <Grid container spacing={3}>
                             <Grid item xs={4}>
                               <Box className={classes.fieldWrappper}>
-                                <MuiTextField
+                                <MuiPasswordField
                                   name="existingpassword"
                                   id="existingpassword"
                                   label="Password"
-                                  type="password"
                                   handleBlur={() => handleCheckPassword(values)}
                                 />
                                 <ErrorMessage
@@ -169,7 +159,7 @@ const SecurityTab = () => {
                           <Grid container spacing={3}>
                             <Grid item xs={4}>
                               <Box className={classes.fieldWrappper}>
-                                <MuiTextField
+                                <MuiPasswordField
                                   name="newpassword"
                                   id="newpassword"
                                   label="Password"
@@ -185,7 +175,7 @@ const SecurityTab = () => {
                             </Grid>
                             <Grid item xs={4}>
                               <Box className={classes.fieldWrappper}>
-                                <MuiTextField
+                                <MuiPasswordField
                                   name="confirmpassword"
                                   id="confirmpassword"
                                   label="Confirm Password"
@@ -219,11 +209,11 @@ const SecurityTab = () => {
           </Form>
         )}
       </Formik>
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      {/* <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={color} sx={{ width: "100%" }}>
           {message}
         </Alert>
-      </Snackbar>
+      </Snackbar> */}
     </>
   );
 };

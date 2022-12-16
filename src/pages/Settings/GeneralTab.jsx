@@ -9,6 +9,8 @@ import MuiTextField from "../../components/Formik/MuiTextField";
 import { useTranslation } from "react-i18next";
 import { GlobalState } from "../../Context/Context";
 import { updateUserDetails } from "../../services/request";
+import MuiEmailField from "../../components/Formik/MuiEmailField";
+import { ShowSnackbar } from "../../components/Snackbar";
 
 const useStyle = makeStyles(() => ({
   companyText: {
@@ -71,6 +73,7 @@ const GeneralTab = () => {
       .then((res) => {
         if (res.status === 200) {
           console.log("res", res);
+          ShowSnackbar("success", "Successfully Updated");
         }
       })
       .catch((error) => {
@@ -134,11 +137,10 @@ const GeneralTab = () => {
                     </Typography>
                     <Grid container spacing={3.5}>
                       <Grid item xs={12}>
-                        <MuiTextField
+                        <MuiEmailField
                           name="email"
                           id="email"
                           label="email"
-                          required
                           disabled="true"
                         />
                       </Grid>
@@ -147,7 +149,7 @@ const GeneralTab = () => {
                           name="phoneNo"
                           id="phoneNo"
                           label="Phone Number"
-                          required
+                          type="number"
                         />
                       </Grid>
                     </Grid>
@@ -227,6 +229,7 @@ const GeneralTab = () => {
                             name="contactNum"
                             id="contactNum"
                             label="Phone Number"
+                            type="number"
                           />
                         </Grid>
                         <Grid item xs={3}>
