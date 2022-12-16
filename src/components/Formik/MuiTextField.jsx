@@ -12,7 +12,6 @@ const RenderTextField = (props) => {
     disabled,
     error,
     required,
-    handleBlur,
     type,
   } = props;
   return (
@@ -28,7 +27,6 @@ const RenderTextField = (props) => {
       fullWidth
       autoComplete="off"
       required={required}
-      onBlur={handleBlur}
       type={type}
     />
   );
@@ -54,7 +52,6 @@ MuiTextField.propTypes = {
   disabled: PropTypes.bool,
   error: PropTypes.bool,
   required: PropTypes.bool,
-  handleBlure: PropTypes.func,
   type: PropTypes.string,
 };
 
