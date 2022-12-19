@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext, useCallback } from "react";
-import InputEmoji from "react-input-emoji";
 
 import {
   getMeetingsList,
@@ -7,11 +6,8 @@ import {
   createContactApi,
   getContactsList,
 } from "../../services/request";
-import { allMessages } from "./messages";
 
 import employee from "../../Images/employee1.png";
-import send from "../../Images/send.svg";
-import attach from "../../Images/attach.svg";
 // import cloud from "../../Images/CLoud.png";
 import crane from "../../Images/crane.png";
 import { makeStyles } from "@mui/styles";
@@ -35,7 +31,6 @@ import {
   TextField,
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
-import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import MuiDialog from "../../components/MuiDialog";
 import { useTranslation } from "react-i18next";
 import noDataImg from "../../Images/NoData.png";
@@ -46,11 +41,10 @@ import { Formik, Form, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 import { GlobalState } from "../../Context/Context";
-import Avatar from "@mui/material/Avatar";
-import Profile from "../../Images/avatar.png";
 import PremiumDailog from "../../components/premiumDailog";
 import FormCreateNewTask from "./FormCreateNewTask";
 import CreateUserForm from "./CreateUserForm";
+import ChatBox from "../../components/Chat/chat";
 
 //Please Dont remove this imports
 // import MuiDatePicker from "../../components/Formik/MuiDatePicker";
@@ -288,9 +282,9 @@ const Dashboard = () => {
   const [openForm, setOpenForm] = useState(false);
   const [msgInput, setMsgInput] = useState("");
 
-  useEffect(() => {
-    console.log(msgInput);
-  }, [msgInput]);
+  // useEffect(() => {
+  //   console.log(msgInput);
+  // }, [msgInput]);
 
   const handleCloseForm = useCallback(() => {
     setOpenForm(false);
@@ -501,72 +495,7 @@ const Dashboard = () => {
                   </Box>
                 </Box>
                 {/* :
-                <Box className={classes.flow} sx={{background:"#E5E5EA"}}>
-                  <Stack
-                  direction="row"
-                  // justifyContent="space-between"
-                  alignItems="center"
-                >
-                    <IconButton
-                      size="small"
-                      onClick={(event) => setSelectedChat({})}
-                    >
-                      <ArrowBackIosIcon />
-                    </IconButton>
-                    <Avatar alt="" src={Profile} className={classes.avatar} />
-                    <Typography className={classes.chatTitle}>
-                      {Object.keys(selectedChat).length > 0 ? `${selectedChat.name} | ${selectedChat.role}` : ""}
-                    </Typography>
-                  </Stack>
-                  <Box sx={{ height: "55vh", overflowY: "auto", margin: "1vh 2rem", background: "#F2F2F7", p:"0.75rem", borderRadius:"5px", display:"flex", flexDirection:"column", justifyContent:"space-around" }}>
-                    <Box className={classes.messageBox}>
-                      {allMessages.filter(element => {
-                          return(
-                              element.sender === selectedChat.name || element.reciever === selectedChat.name
-                          )
-                      }).map((each, i) => {
-                        return(
-                          <Box sx={{textAlign: each.sender === selectedChat.name ? "left" : "Right", display:"flex", flexDirection:"column", alignItems: each.sender === selectedChat.name ? "flex-start" : "flex-end"}}>
-                            <Box sx={{background: each.sender === selectedChat.name ? "#3A3A3C" : "white", color: each.sender === selectedChat.name ? "white" : "#3A3A3C", padding:"10px 15px", borderRadius:"5px", margin:"10px", width:"fit-content"}}>{each.message}</Box>
-                            <Box sx={{margin:"0px 10px", color:"#3A3A3C"}}>{each.time}</Box>
-                          </Box>
-                        )
-                      })
-                    }
-                    </Box>
-                    <Box className={classes.messageInputBox}>
-                      <Grid container spacing={1} sx={{display:"flex", justifyContent:"space-between", alignItems:"center", height:"100%", width:"100%"}}>
-                        <Grid item xs={10}>
-                          
-                          <InputEmoji
-                            value={msgInput}
-                            onChange={setMsgInput}
-                            // cleanOnEnter
-                            // onEnter={handleOnEnter}
-                            placeholder="Send Message"
-                            className={classes.msgInput}
-                          />
-                        </Grid>
-                        <Grid item xs={1}>
-                          
-                           <label for="file-input">
-                            <img src={attach} alt=""
-                            className={classes.msgicon}/>
-                          </label>
-
-                          <input className={classes.upload} id="file-input" type="file" />
-                        </Grid>
-                        <Grid item xs={1}>
-                          <img
-                            src={send}
-                            alt=""
-                            className={classes.msgicon}
-                          />
-                        </Grid>
-                      </Grid>
-                    </Box>
-                  </Box>
-                </Box>
+                <ChatBox />
                 } */}
               </Paper>
             </Grid>
