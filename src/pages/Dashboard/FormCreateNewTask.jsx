@@ -1,9 +1,10 @@
-import React, { useState, useRef, memo } from "react";
+import React, { useState, useRef, memo, useContext } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 import { createMeetingApi } from "../../services/request";
 import { ShowSnackbar } from "../../components/Snackbar";
+import { GlobalState } from "../../Context/Context";
 
 import {
   Grid,
@@ -72,6 +73,8 @@ const FormCreateNewTask = (props) => {
   const inputRef = useRef(null);
   const userId = localStorage.getItem("userId");
 
+  const { setIsLoading } = useContext(GlobalState);
+
   const handleClick = () => {
     inputRef?.current?.click();
   };
@@ -104,6 +107,7 @@ const FormCreateNewTask = (props) => {
                 enableReinitialize
                 validationSchema={validationSchema}
                 onSubmit={(values, { setSubmitting, resetForm }) => {
+                  setIsLoading(true);
                   let fileUploaded = values.attachment;
                   let formData = new FormData();
                   formData.append("attachment", fileUploaded);

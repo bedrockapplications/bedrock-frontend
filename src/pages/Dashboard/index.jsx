@@ -75,7 +75,7 @@ const useStyle = makeStyles(() => ({
     position: "absolute",
     top: "-15px",
     left: "20px",
-    height:"120px",
+    height: "120px",
     width: "inherit",
   },
   craneImg: {
@@ -280,6 +280,7 @@ const Dashboard = () => {
     setShow,
     taskDetails,
     setTaskDetails,
+    setIsLoading,
   } = useContext(GlobalState);
   const [detailsList, setDetailsList] = useState([]);
   const [openCancle, setOpenCancle] = useState(false);
@@ -306,10 +307,12 @@ const Dashboard = () => {
         .then((res) => {
           if (res.status === 200) {
             setDetailsList([...res.data]);
+            setIsLoading(false);
           }
         })
         .catch((error) => {
           console.log("error", error);
+          setIsLoading(false);
         });
     }
   }, []);
@@ -324,17 +327,20 @@ const Dashboard = () => {
             } else {
               setContactDetails([]);
             }
+            setIsLoading(false);
             setOpenUserForm(false);
           }
         })
         .catch((error) => {
           console.log("error", error);
           setOpenUserForm(false);
+          setIsLoading(false);
         });
     }
   }, []);
 
   useEffect(() => {
+    setIsLoading(true);
     getAllTasksList();
     getAllContactsList();
   }, []);
