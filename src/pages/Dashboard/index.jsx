@@ -302,11 +302,13 @@ const Dashboard = () => {
           if (res.status === 200) {
             setDetailsList([...res.data]);
             setIsLoading(false);
+            console.log("tasklist")
           }
         })
         .catch((error) => {
           console.log("error", error);
           setIsLoading(false);
+          console.log("tasklist")
         });
     }
   }, []);
@@ -321,21 +323,22 @@ const Dashboard = () => {
             } else {
               setContactDetails([]);
             }
-            setIsLoading(false);
             setOpenUserForm(false);
+            getAllTasksList();
+            console.log("contactlist")
           }
         })
         .catch((error) => {
           console.log("error", error);
           setOpenUserForm(false);
-          setIsLoading(false);
+          console.log("contactlist")
+          getAllTasksList();
         });
     }
   }, []);
 
   useEffect(() => {
     setIsLoading(true);
-    getAllTasksList();
     getAllContactsList();
   }, []);
 
