@@ -83,7 +83,6 @@ const SecurityTab = () => {
   };
 
   const handleSaveEditFiles = (values, setSubmitting, resetForm) => {
-    console.log("values", values);
     let payload = {
       email: userDetails.email,
       password: values.newpassword,

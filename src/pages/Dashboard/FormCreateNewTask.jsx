@@ -144,6 +144,7 @@ const FormCreateNewTask = (props) => {
                       let errorObj = error?.response?.data;
                       ShowSnackbar("error", errorObj?.message);
                       setSubmitting(false);
+                      setIsLoading(false);
                     });
                 }}
               >

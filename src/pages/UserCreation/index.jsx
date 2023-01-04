@@ -192,7 +192,6 @@ const UserCreation = () => {
                   enableReinitialize
                   validationSchema={userValidationSchema}
                   onSubmit={(values, { setSubmitting, resetForm }) => {
-                    console.log("values", values);
                     handleCreateNewUser(values, setSubmitting, resetForm);
                   }}
                 >

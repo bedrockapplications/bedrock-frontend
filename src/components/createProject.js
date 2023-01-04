@@ -26,7 +26,6 @@ const CreateProject = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
-    console.log("fshjs",formValues.date)
   };
 
   const history = useHistory();
@@ -39,7 +38,6 @@ const CreateProject = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setFormErrors(validate(formValues));
-    console.log("values", formValues);
     if (
       formValues.project &&
       formValues.phoneNumber &&

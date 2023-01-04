@@ -81,7 +81,7 @@ const MyProjects = () => {
   const uId = localStorage.getItem("userId");
   const [projectsList, setProjectsList] = useState([]);
   const [selectedRowData, setSelectedRowData] = useState({});
-  const { popen, setPopen } = useContext(GlobalState);
+  const { popen, setPopen, setIsLoading } = useContext(GlobalState);
 
   const handleCreateNewProject = (values, setSubmitting, resetForm) => {
     let payload = {
@@ -95,20 +95,21 @@ const MyProjects = () => {
       userId: uId,
     };
     setSubmitting(true);
+    setIsLoading(true);
     createNewProjectApi(payload)
       .then((res) => {
         if (res.status === 200) {
-          console.log("res", res.data);
           getProjects();
           resetForm();
           setSubmitting(false);
           ShowSnackbar("success", "Project Created Successfully");
+          setIsLoading(false);
         }
       })
       .catch((error) => {
         const errorObj = error;
         setSubmitting(false);
-        console.log("errorObj", errorObj);
+        setIsLoading(false);
       });
   };
 
@@ -182,6 +183,7 @@ const MyProjects = () => {
   };
 
   const getProjects = () => {
+    setIsLoading(true);
     getAllProjectList(uId)
       .then((res) => {
         if (res.status === 200) {
@@ -190,11 +192,12 @@ const MyProjects = () => {
           } else {
             setProjectsList([]);
           }
+          setIsLoading(false);
         }
       })
       .catch((error) => {
         let errorObj = error;
-        console.log(errorObj);
+        setIsLoading(false);
       });
   };
 

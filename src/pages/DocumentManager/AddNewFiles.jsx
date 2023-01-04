@@ -14,6 +14,7 @@ import MuiSelectField from "../../components/Formik/MuiSelectField";
 import FileUpload from "../../components/Drag&DropUpload";
 import { uploadDocumentApi } from "../../services/request";
 import { GlobalState } from "../../Context/Context";
+import { ShowSnackbar } from "../../components/Snackbar";
 
 const validationSchema = Yup.object().shape({
   projectId: Yup.string().required().nullable(),
@@ -30,11 +31,12 @@ const AddNewFiles = (props) => {
     categoryType,
     GetSearchOptions,
   } = props;
-  const { page, rowsPerPage } = useContext(GlobalState);
+  const { page, rowsPerPage, setIsLoading } = useContext(GlobalState);
 
   const userId = localStorage.getItem("userId");
 
   const handleSave = (data, setSubmitting, resetForm) => {
+    setIsLoading(true);
     setSubmitting(true);
     let formData = new FormData();
     formData.append("projectId", data.projectId);
@@ -51,11 +53,14 @@ const AddNewFiles = (props) => {
           setSubmitting(false);
           resetForm();
           handleClose();
+          setIsLoading(false);
+          ShowSnackbar("success", res?.data);
         }
       })
       .catch((error) => {
         console.log("error", error);
         setSubmitting(false);
+        setIsLoading(false);
       });
   };
 

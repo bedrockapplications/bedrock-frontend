@@ -112,6 +112,7 @@ const DocumentManager = () => {
     setSelectedProjected,
     search,
     setSearch,
+    setIsLoading,
   } = useContext(GlobalState);
 
   const [tabValue, setTabValue] = useState(0);
@@ -176,6 +177,7 @@ const DocumentManager = () => {
   };
 
   const GetDocumentsLists = (pageNumber, limit, projectId, searchValue) => {
+    setIsLoading(true);
     getAllDocumentListApi(
       pageNumber || 0,
       limit || 10,
@@ -192,10 +194,12 @@ const DocumentManager = () => {
           setTotalCount(data.DesignDocumentsCount);
           setPhotosCount(data.PhotosCount);
           setSubmittalsCount(data.SubmittalsCount);
+          setIsLoading(false);
         }
       })
       .catch((error) => {
         console.log("error", error);
+        setIsLoading(false);
       });
   };
 
