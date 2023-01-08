@@ -77,7 +77,6 @@ const Billing = () => {
         },
       },
     };
-    console.log("final data", reqbody);
     fetch(`${process.env.REACT_APP_API_URL}/user/save/`, {
       method: "POST",
       headers: new Headers({

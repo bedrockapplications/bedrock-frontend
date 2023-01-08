@@ -70,7 +70,7 @@ const CreateUserForm = (props) => {
     createContactApi(payload)
       .then((res) => {
         if (res.status === 200) {
-          ShowSnackbar("success", res?.data?.message);
+          ShowSnackbar("success", "User Created Successfully");
           if (userRole === "Owner") {
             getAllContactsList();
           }
