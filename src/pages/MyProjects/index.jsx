@@ -193,7 +193,7 @@ const MyProjects = () => {
                 opacity: 0.7,
               }}
             >
-              No Record created yet!
+              No Records Found!
             </Typography>
           </Box>
         ),

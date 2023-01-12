@@ -32,7 +32,7 @@ const EmptyTableBody = () => {
         <Box className={classes.boxContainer}>
           <img src={openBox} alt="" style={{ opacity: "0.6" }} />
           <Typography className={classes.noRecordText}>
-            No Record created yet!
+            No Records Found!
           </Typography>
         </Box>
       </TableBody>
