@@ -422,7 +422,7 @@ const Dashboard = () => {
         <Grid item xs={12}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={12} md={8} lg={8}>
-              <Paper sx={{ p: "0.75rem", backgroundColor: "#f3f2f7" }}>
+              <Paper sx={{ p: "0.75rem", backgroundColor: "#f3f2f7", position:"relative", overflowX:"hidden" }}>
                 {/* {Object.keys(selectedChat).length === 0 ? */}
                 <Box className={classes.flowright}>
                   <Stack
