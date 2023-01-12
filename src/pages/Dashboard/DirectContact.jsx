@@ -16,6 +16,7 @@ import logo from "../../Images/Bedrock Rock .png";
 import { useEffect } from "react";
 import { getContactsList } from "../../services/request";
 import { Box } from "@mui/system";
+import phonebook from "../../Images/phonebook.svg";
 
 const useStyle = makeStyles(() => ({
   titleText: {
@@ -157,29 +158,25 @@ const DirectContact = (props) => {
                   spacing={1}
                   sx={{
                     display: "flex",
-                    flexDirection: "column",
+                    // flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
                     textAlign: "center",
+                    height: "inherit",
                   }}
                 >
-                  <Grid item xs={8} sx={{ mt: 5 }}>
-                    <Avatar
-                      alt=""
-                      src={logo}
+                  <Grid item xs={8}>
+                    <img src={phonebook} alt="" width={"70px"} />
+                    <Typography
                       sx={{
-                        height: "200px",
-                        width: "200px",
-                        borderRadius: "0px",
+                        mt: 1,
+                        fontSize: "20px",
+                        fontWeight: "700",
+                        opacity: 0.6,
                       }}
-                    />
-                  </Grid>
-                  <Grid
-                    item
-                    xs={8}
-                    sx={{ mt: 1, fontSize: "20px", fontWeight: "700" }}
-                  >
-                    Welcome to BedRock!
+                    >
+                      No Contacts Found!
+                    </Typography>
                   </Grid>
                 </Grid>
               )}

@@ -45,6 +45,7 @@ import PremiumDailog from "../../components/premiumDailog";
 import FormCreateNewTask from "./FormCreateNewTask";
 import CreateUserForm from "./CreateUserForm";
 import ChatBox from "../../components/Chat/chat";
+import noTasks from "../../Images/noTasks.svg";
 
 //Please Dont remove this imports
 // import MuiDatePicker from "../../components/Formik/MuiDatePicker";
@@ -495,7 +496,24 @@ const Dashboard = () => {
                           alignItems: "center",
                         }}
                       >
-                        <img src={noDataImg} alt="" />
+                        <img
+                          src={noTasks}
+                          alt=""
+                          style={{ width: "75px", opacity: "0.6" }}
+                        />
+
+                        <Typography
+                          sx={{
+                            fontSize: "20px",
+                            marginLeft: "1.5rem",
+                            color: "#3A3A3C",
+                            fontWeight: "700",
+                            lineHeight: "30px",
+                            opacity: 0.7,
+                          }}
+                        >
+                          No Tasks are Planned yet !
+                        </Typography>
                       </Box>
                     )}
                   </Box>

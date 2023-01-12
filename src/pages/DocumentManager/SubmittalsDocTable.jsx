@@ -22,6 +22,7 @@ import SortingTableHeader from "./SortingTableHeaders";
 import { getComparator, stableSort } from "./SortingTableHeaders";
 import SubmittalsDialog from "./SubmittlasModel";
 import PremiumDailog from "../../components/premiumDailog";
+import EmptyTableBody from "../../components/EmptyTableBody";
 
 const useStyle = makeStyles(() => ({
   headerText: {
@@ -161,7 +162,13 @@ const SubmittalsDocTable = (props) => {
   return (
     <>
       <Paper sx={{ width: "100%", border: "3px solid #3A3A3C" }}>
-        <TableContainer sx={{ height: 320, maxHeight: 320 }}>
+        <TableContainer
+          sx={{
+            height: data?.length > 0 ? 320 : 370,
+            maxHeight: data?.length > 0 ? 320 : 370,
+            position: "relative",
+          }}
+        >
           <Table stickyHeader aria-label="simple table">
             <SortingTableHeader
               headCells={headCells}
@@ -170,60 +177,66 @@ const SubmittalsDocTable = (props) => {
               onRequestSort={handleRequestSort}
               rowCount={data.length}
             />
-            <TableBody>
-              {stableSort(data, getComparator(order, orderBy))?.map(
-                (item, i) => (
-                  <TableRow key={item._id}>
-                    <TableCell align="right">
-                      <a href={item?.filePath} download={item?.fileName}>
-                        {item?.fileName}
-                      </a>
-                    </TableCell>
-                    <TableCell align="right">{item?.contentType}</TableCell>
-                    <TableCell align="right">
-                      {item?.projectId?.projectName}
-                    </TableCell>
-                    <TableCell align="right">
-                      {moment(item?.updatedAt).format("DD-MM-YYYY")}
-                    </TableCell>
-                    <TableCell align="right">
-                      <IconButton
-                        size="small"
-                        color="primary"
-                        onClick={() => handleEditOpen(item)}
-                      >
-                        <EditIcon fontSize="small" />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        color="primary"
-                        onClick={() => handleOpenSubmittals(item)}
-                      >
-                        <EmailIcon fontSize="small" />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        color="primary"
-                        onClick={() => handleOpenDelete(item)}
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                )
-              )}
-            </TableBody>
+            {data.length > 0 ? (
+              <TableBody>
+                {stableSort(data, getComparator(order, orderBy))?.map(
+                  (item, i) => (
+                    <TableRow key={item._id}>
+                      <TableCell align="right">
+                        <a href={item?.filePath} download={item?.fileName}>
+                          {item?.fileName}
+                        </a>
+                      </TableCell>
+                      <TableCell align="right">{item?.contentType}</TableCell>
+                      <TableCell align="right">
+                        {item?.projectId?.projectName}
+                      </TableCell>
+                      <TableCell align="right">
+                        {moment(item?.updatedAt).format("DD-MM-YYYY")}
+                      </TableCell>
+                      <TableCell align="right">
+                        <IconButton
+                          size="small"
+                          color="primary"
+                          onClick={() => handleEditOpen(item)}
+                        >
+                          <EditIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          color="primary"
+                          onClick={() => handleOpenSubmittals(item)}
+                        >
+                          <EmailIcon fontSize="small" />
+                        </IconButton>
+                        <IconButton
+                          size="small"
+                          color="primary"
+                          onClick={() => handleOpenDelete(item)}
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  )
+                )}
+              </TableBody>
+            ) : (
+              <EmptyTableBody />
+            )}
           </Table>
         </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 50, 100]}
-          component="div"
-          count={totalCount}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        {data?.length > 0 && (
+          <TablePagination
+            rowsPerPageOptions={[10, 25, 50, 100]}
+            component="div"
+            count={totalCount}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        )}
       </Paper>
       <DeleteDocument
         open={deleteOpen}

@@ -19,6 +19,7 @@ import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 import { GlobalState } from "../../Context/Context";
 import PremiumDailog from "../../components/premiumDailog";
 import { ShowSnackbar } from "../../components/Snackbar";
+import openBox from "../../Images/openbox.svg";
 
 // import ProjectDataTable from "./ProjectDataTable";
 // import CardMedia from "@mui/material/CardMedia";
@@ -170,6 +171,34 @@ const MyProjects = () => {
       // console.log("selectedItem", selectedItem);
       setSelectedRowData(selectedItem);
     },
+    textLabels: {
+      body: {
+        noMatch: (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "330px",
+            }}
+          >
+            <img src={openBox} alt="" style={{ opacity: "0.6" }} />
+            <Typography
+              sx={{
+                fontSize: "20px",
+                marginLeft: "1.5rem",
+                color: "#3A3A3C",
+                fontWeight: "700",
+                lineHeight: "30px",
+                opacity: 0.7,
+              }}
+            >
+              No Record created yet!
+            </Typography>
+          </Box>
+        ),
+      },
+    },
   };
 
   const arrayBufferToBase64 = (buffer) => {
@@ -188,7 +217,7 @@ const MyProjects = () => {
       .then((res) => {
         if (res.status === 200) {
           if (res?.data?.length > 0) {
-            setProjectsList([...res?.data]);
+            setProjectsList([...res.data]);
           } else {
             setProjectsList([]);
           }
