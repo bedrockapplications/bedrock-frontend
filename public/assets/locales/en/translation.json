@@ -51,7 +51,15 @@
     "type": "Type",
     "projectName": "Project Name",
     "uploadDate": "Upload Date",
-    "actions": "Actions"
+    "actions": "Actions",
+    
+    "createdBy": "Created By",
+    "project": "Project",
+    "schedule": "Schedule",
+    "reportingTo": "Reporting To",
+    "location": "Location",
+    "workActivity": "Work Activity",
+    "notes/comments": "Notes/Comments"
   },
   "settings": {
     "account_overview": "Account Overview",
