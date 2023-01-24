@@ -28,6 +28,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import projectImg from "../../Images/projectImg.png";
 import ownerImg from "../../Images/owner.svg";
 import contarctorImg from "../../Images/contractor.svg";
+import CreateDailyLog from "./CreateDailyLog";
 
 const useStyle = makeStyles(() => ({
   PageHeader: {
@@ -267,153 +268,153 @@ const DailyLogs = () => {
   const classes = useStyle();
 
   const [viewToggle, setViewToggle] = useState(false);
+  const [openDailyLog, setOpenDailyLog] = useState(false);
 
   const handleSearch = (value) => {
     console.log("value", value);
   };
 
+  const handleOpenDailyLog = () => {
+    setOpenDailyLog(true);
+  };
+
+  const handleCloseDailyLog = () => {
+    setOpenDailyLog(false);
+  };
+
   return (
-    <Box sx={{ height: "calc(100% - 65px)" }}>
-      <Grid container spacing={0}>
-        <Grid item xs={12}>
-          <Paper elevation={0} className={classes.PageHeader}>
-            <Grid container spacing={3}>
-              <Grid item xs={12}>
-                <Typography className={classes.titleText}>Daily Log</Typography>
-              </Grid>
-              <Grid item xs={12} sm={6} md={1.5} lg={1.5}>
-                <Button
-                  startIcon={<AddIcon />}
-                  fullWidth
-                  className={classes.createBtn}
-                >
-                  Create Log
-                </Button>
-              </Grid>
-              <Grid item xs={12} sm={6} md={2.5} lg={2.2}>
-                <Button
-                  fullWidth
-                  endIcon={<ArrowDropDownIcon />}
-                  className={classes.createBtn}
-                >
-                  Download Multiple{" "}
-                </Button>
-              </Grid>
-              <Grid item xs={12} sm={6} md={2} lg={1.8}>
-                <Button
-                  fullWidth
-                  endIcon={<ArrowDropDownIcon />}
-                  className={classes.createBtn}
-                >
-                  Delete Multiple{" "}
-                </Button>
-              </Grid>
-              <Grid item xs={12} sm={6} md={3} lg={3}>
-                <TextField
-                  id="search"
-                  name="search"
-                  placeholder={"Search"}
-                  variant="outlined"
-                  size="small"
-                  sx={{ backgroundColor: "#fff", borderRadius: "10px" }}
-                  fullWidth
-                  onChange={(e) => handleSearch(e.target.value)}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <SearchIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                md={3}
-                lg={3}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "center",
-                }}
-              >
-                <Stack direction="row" spacing={2} alignItems="center">
-                  <Typography className={classes.switchText}>
-                    Card View
+    <>
+      <Box sx={{ height: "calc(100% - 65px)" }}>
+        <Grid container spacing={0}>
+          <Grid item xs={12}>
+            <Paper elevation={0} className={classes.PageHeader}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <Typography className={classes.titleText}>
+                    Daily Log
                   </Typography>
-                  <AntSwitch
-                    checked={viewToggle}
-                    onChange={() => setViewToggle(!viewToggle)}
-                    inputProps={{ "aria-label": "ant design" }}
-                  />
-                  <Typography className={classes.switchText}>
-                    Tabular View
-                  </Typography>
-                </Stack>
-              </Grid>
-            </Grid>
-          </Paper>
-        </Grid>
-      </Grid>
-      <Box sx={{ width: "100%", marginTop: "1rem" }}>
-        {viewToggle ? (
-          <TabularView data={data} />
-        ) : (
-          <Paper
-            sx={{
-              minHeight: "400px",
-              border: "3px solid #3A3A3C",
-              padding: "5px",
-            }}
-          >
-            <Grid container spacing={2}>
-              {[1, 2, 3]?.map((item, i) => (
-                <Grid item xs={4}>
-                  <Paper
-                    sx={{
-                      background: "rgba(214, 214, 219, 0.48)",
-                      padding: "1rem",
-                    }}
+                </Grid>
+                <Grid item xs={12} sm={6} md={1.5} lg={1.5}>
+                  <Button
+                    startIcon={<AddIcon />}
+                    fullWidth
+                    className={classes.createBtn}
+                    onClick={handleOpenDailyLog}
                   >
-                    <Stack
-                      direction="row"
-                      divider={<Divider orientation="vertical" flexItem />}
-                      spacing={1}
+                    Create Log
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={2.5} lg={2.2}>
+                  <Button
+                    fullWidth
+                    endIcon={<ArrowDropDownIcon />}
+                    className={classes.createBtn}
+                  >
+                    Download Multiple{" "}
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={2} lg={1.8}>
+                  <Button
+                    fullWidth
+                    endIcon={<ArrowDropDownIcon />}
+                    className={classes.createBtn}
+                  >
+                    Delete Multiple{" "}
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3} lg={3}>
+                  <TextField
+                    id="search"
+                    name="search"
+                    placeholder={"Search"}
+                    variant="outlined"
+                    size="small"
+                    sx={{ backgroundColor: "#fff", borderRadius: "10px" }}
+                    fullWidth
+                    onChange={(e) => handleSearch(e.target.value)}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <SearchIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  md={3}
+                  lg={3}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Stack direction="row" spacing={2} alignItems="center">
+                    <Typography className={classes.switchText}>
+                      Card View
+                    </Typography>
+                    <AntSwitch
+                      checked={viewToggle}
+                      onChange={() => setViewToggle(!viewToggle)}
+                      inputProps={{ "aria-label": "ant design" }}
+                    />
+                    <Typography className={classes.switchText}>
+                      Tabular View
+                    </Typography>
+                  </Stack>
+                </Grid>
+              </Grid>
+            </Paper>
+          </Grid>
+        </Grid>
+        <Box sx={{ width: "100%", marginTop: "1rem" }}>
+          {viewToggle ? (
+            <TabularView data={data} />
+          ) : (
+            <Paper
+              sx={{
+                minHeight: "400px",
+                border: "3px solid #3A3A3C",
+                padding: "5px",
+              }}
+            >
+              <Grid container spacing={2}>
+                {[1, 2, 3]?.map((item, i) => (
+                  <Grid item xs={4}>
+                    <Paper
+                      sx={{
+                        background: "rgba(214, 214, 219, 0.48)",
+                        padding: "1rem",
+                      }}
                     >
-                      <Box>
-                        <Typography className={classes.dateText}>
-                          01/06/2020
-                        </Typography>
+                      <Stack
+                        direction="row"
+                        divider={<Divider orientation="vertical" flexItem />}
+                        spacing={1}
+                      >
                         <Box>
-                          <IconButton size="small" color="primary">
-                            <EditIcon fontSize="16px" />
-                          </IconButton>
-                          <IconButton size="small" color="primary">
-                            <DownloadForOfflineOutlinedIcon fontSize="16px" />
-                          </IconButton>
-                          <IconButton size="small" color="primary">
-                            <ShareIcon fontSize="16px" color="#000" />
-                          </IconButton>
-                          <IconButton size="small" color="primary">
-                            <DeleteIcon fontSize="16px" color="#000" />
-                          </IconButton>
+                          <Typography className={classes.dateText}>
+                            01/06/2020
+                          </Typography>
+                          <Box>
+                            <IconButton size="small" color="primary">
+                              <EditIcon fontSize="16px" />
+                            </IconButton>
+                            <IconButton size="small" color="primary">
+                              <DownloadForOfflineOutlinedIcon fontSize="16px" />
+                            </IconButton>
+                            <IconButton size="small" color="primary">
+                              <ShareIcon fontSize="16px" color="#000" />
+                            </IconButton>
+                            <IconButton size="small" color="primary">
+                              <DeleteIcon fontSize="16px" color="#000" />
+                            </IconButton>
+                          </Box>
                         </Box>
-                      </Box>
-                      <Box>
-                        <Typography
-                          sx={{
-                            fontSize: "12px",
-                            fontWeight: "600",
-                            color: "#000",
-                          }}
-                        >
-                          Project :{" "}
-                          <a href="" style={{ fontSize: "10px" }}>
-                            MVP CONSTRUCTIONS
-                          </a>
-                        </Typography>
-                        <Stack direction="row">
+                        <Box>
                           <Typography
                             sx={{
                               fontSize: "12px",
@@ -421,99 +422,119 @@ const DailyLogs = () => {
                               color: "#000",
                             }}
                           >
-                            Status :{" "}
+                            Project :{" "}
+                            <a href="" style={{ fontSize: "10px" }}>
+                              MVP CONSTRUCTIONS
+                            </a>
                           </Typography>
                           <Stack direction="row">
                             <Typography
-                              sx={{ fontSize: "10px", marginRight: "30px" }}
+                              sx={{
+                                fontSize: "12px",
+                                fontWeight: "600",
+                                color: "#000",
+                              }}
                             >
-                              Progress
+                              Status :{" "}
                             </Typography>
-                            <Typography sx={{ fontSize: "10px" }}>
-                              80%
-                            </Typography>
+                            <Stack direction="row">
+                              <Typography
+                                sx={{ fontSize: "10px", marginRight: "30px" }}
+                              >
+                                Progress
+                              </Typography>
+                              <Typography sx={{ fontSize: "10px" }}>
+                                80%
+                              </Typography>
+                            </Stack>
                           </Stack>
+                          <LinearProgress variant="determinate" value={80} />
+                        </Box>
+                        <Box>
+                          <img src={projectImg} alt="" width={"70px"} />
+                        </Box>
+                      </Stack>
+                      <Stack direction="row" className={classes.stackcontainer}>
+                        <Typography className={classes.titles}>
+                          Location :
+                        </Typography>
+                        <Typography className={classes.valueText}>
+                          Alaska{" "}
+                          <span
+                            style={{
+                              background: "#2ED47A",
+                              color: "#fff",
+                              padding: "3px 5px",
+                              fontSize: "12px",
+                              borderRadius: "5px",
+                            }}
+                          >
+                            Sunny
+                          </span>{" "}
+                          85 ° F
+                        </Typography>
+                      </Stack>
+                      <Stack
+                        direction="row"
+                        alignItems={"center"}
+                        className={classes.stackcontainer}
+                      >
+                        <Typography className={classes.titles}>
+                          Created By :{" "}
+                        </Typography>
+                        <Stack direction="row" alignItems={"center"}>
+                          <img src={ownerImg} alt="" width={"55px"} />
+                          <Typography className={classes.valueText}>
+                            Aravind G. - Owner
+                          </Typography>
                         </Stack>
-                        <LinearProgress variant="determinate" value={80} />
-                      </Box>
-                      <Box>
-                        <img src={projectImg} alt="" width={"70px"} />
-                      </Box>
-                    </Stack>
-                    <Stack direction="row" className={classes.stackcontainer}>
-                      <Typography className={classes.titles}>
-                        Location :
-                      </Typography>
-                      <Typography className={classes.valueText}>
-                        Alaska{" "}
-                        <span
-                          style={{
-                            background: "#2ED47A",
-                            color: "#fff",
-                            padding: "3px 5px",
-                            fontSize: "12px",
-                            borderRadius: "5px",
-                          }}
-                        >
-                          Sunny
-                        </span>{" "}
-                        85 ° F
-                      </Typography>
-                    </Stack>
-                    <Stack
-                      direction="row"
-                      alignItems={"center"}
-                      className={classes.stackcontainer}
-                    >
-                      <Typography className={classes.titles}>
-                        Created By :{" "}
-                      </Typography>
-                      <Stack direction="row" alignItems={"center"}>
-                        <img src={ownerImg} alt="" width={"55px"} />
+                      </Stack>
+                      <Stack
+                        direction="row"
+                        alignItems={"center"}
+                        className={classes.stackcontainer}
+                      >
+                        <Typography className={classes.titles}>
+                          Reporting To :{" "}
+                        </Typography>
+                        <Stack direction="row" alignItems={"center"}>
+                          <img src={contarctorImg} alt="" width={"55px"} />
+                          <Typography className={classes.valueText}>
+                            Sarah M. - Contarctor
+                          </Typography>
+                        </Stack>
+                      </Stack>
+                      <Stack direction="row" className={classes.stackcontainer}>
+                        <Typography className={classes.titles}>
+                          Work Activity :{" "}
+                        </Typography>
                         <Typography className={classes.valueText}>
-                          Aravind G. - Owner
+                          Excavator
                         </Typography>
                       </Stack>
-                    </Stack>
-                    <Stack
-                      direction="row"
-                      alignItems={"center"}
-                      className={classes.stackcontainer}
-                    >
-                      <Typography className={classes.titles}>
-                        Reporting To :{" "}
-                      </Typography>
-                      <Stack direction="row" alignItems={"center"}>
-                        <img src={contarctorImg} alt="" width={"55px"} />
+                      <Stack direction="row" className={classes.stackcontainer}>
+                        <Typography className={classes.titles}>
+                          Notes :{" "}
+                        </Typography>
                         <Typography className={classes.valueText}>
-                          Sarah M. - Contarctor
+                          Material Need to be delivered
                         </Typography>
                       </Stack>
-                    </Stack>
-                    <Stack direction="row" className={classes.stackcontainer}>
-                      <Typography className={classes.titles}>
-                        Work Activity :{" "}
-                      </Typography>
-                      <Typography className={classes.valueText}>
-                        Excavator
-                      </Typography>
-                    </Stack>
-                    <Stack direction="row" className={classes.stackcontainer}>
-                      <Typography className={classes.titles}>
-                        Notes :{" "}
-                      </Typography>
-                      <Typography className={classes.valueText}>
-                        Material Need to be delivered
-                      </Typography>
-                    </Stack>
-                  </Paper>
-                </Grid>
-              ))}
-            </Grid>
-          </Paper>
-        )}
+                    </Paper>
+                  </Grid>
+                ))}
+              </Grid>
+            </Paper>
+          )}
+        </Box>
       </Box>
-    </Box>
+      <CreateDailyLog
+        title="Create Log"
+        id="createLog"
+        open={openDailyLog}
+        handleClose={handleCloseDailyLog}
+      />
+    </>
   );
 };
 
