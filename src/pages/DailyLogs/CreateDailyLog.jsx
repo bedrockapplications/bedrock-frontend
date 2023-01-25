@@ -20,6 +20,9 @@ import {
   Button,
   DialogActions,
   Box,
+  FormGroup,
+  FormControlLabel,
+  Checkbox,
 } from "@mui/material";
 
 import Table from "@mui/material/Table";
@@ -43,11 +46,42 @@ const useStyle = makeStyles(() => ({
     letterSpacing: "0.02rem",
     lineHeight: "24px",
   },
+  timeOfDay: {
+    fontWeight: "800",
+    fontSize: "14px",
+    textAlign: "center",
+    color: "rgba(58, 58, 60, 0.5)",
+  },
+  temperature: {
+    fontWeight: "900",
+    fontSize: "14px",
+    textAlign: "center",
+    color: "#3A3A3C",
+  },
 }));
 
 const CreateDailyLog = (props) => {
   const { open, handleClose, id, title } = props;
   const classes = useStyle();
+
+  const weatherData = [
+    {
+      timeOfDay: "Morning",
+      temperature: "20° Fahrenheit",
+    },
+    {
+      timeOfDay: "AfterNoon",
+      temperature: "25° Fahrenheit",
+    },
+    {
+      timeOfDay: "Evening",
+      temperature: "18° Fahrenheit",
+    },
+    {
+      timeOfDay: "Night",
+      temperature: "10° Fahrenheit",
+    },
+  ];
 
   const [expanded, setExpanded] = useState(false);
 
@@ -99,15 +133,19 @@ const CreateDailyLog = (props) => {
                   onChange={handleChange("dateTime")}
                 >
                   <AccordionSummary
-                    expandIcon={<AddIcon />}
+                    expandIcon={<AddIcon sx={{ color: expanded === "dateTime" ? "#FFFFFF" : ""}}/>}
                     aria-controls="dateTime"
                     id="dateTime"
+                    sx={{
+                      backgroundColor: expanded === "dateTime" ? "#3A3A3C" : "",
+                      color: expanded === "dateTime" ? "#FFFFFF" : "",
+                    }}
                   >
                     <Typography className={classes.accordionTitle}>
                       Date & Time
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails sx={{paddingTop: "20px"}}>
                     <Grid container spacing={2}>
                       <Grid item xs={3}>
                         <MuiDatePicker
@@ -140,15 +178,19 @@ const CreateDailyLog = (props) => {
                   onChange={handleChange("selectProject")}
                 >
                   <AccordionSummary
-                    expandIcon={<AddIcon />}
+                    expandIcon={<AddIcon sx={{ color: expanded === "selectProject" ? "#FFFFFF" : ""}} />}
                     aria-controls="selectProject"
                     id="selectProject"
+                    sx={{
+                      backgroundColor: expanded === "selectProject" ? "#3A3A3C" : "",
+                      color: expanded === "selectProject" ? "#FFFFFF" : "",
+                    }}
                   >
                     <Typography className={classes.accordionTitle}>
                       Select Project
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails sx={{paddingTop: "20px"}}>
                     <Grid container spacing={2}>
                       <Grid item xs={4}>
                         <MuiSelectField
@@ -213,17 +255,25 @@ const CreateDailyLog = (props) => {
                   onChange={handleChange("Weather")}
                 >
                   <AccordionSummary
-                    expandIcon={<AddIcon />}
+                    expandIcon={
+                      <AddIcon
+                        sx={{ color: expanded === "Weather" ? "#FFFFFF" : ""}}
+                      />
+                    }
                     aria-controls="Weather-content"
                     id="Weather-header"
+                    sx={{
+                      backgroundColor: expanded === "Weather" ? "#3A3A3C" : "",
+                      color: expanded === "Weather" ? "#FFFFFF" : "",
+                    }}
                   >
                     <Typography className={classes.accordionTitle}>
                       Add Observed Weather Conditions
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
-                    <Grid container spacing={2}>
-                      {[1, 2, 3, 4].map((item, i) => (
+                  <AccordionDetails sx={{paddingTop: "20px"}}>
+                    <Grid container spacing={3}>
+                      {weatherData.map((item, i) => (
                         <Grid item xs={3} key={item + i}>
                           <Box
                             sx={{
@@ -231,15 +281,52 @@ const CreateDailyLog = (props) => {
                               textAlign: "center",
                               boxShadow:
                                 "inset 0px 1px 4px rgba(0, 0, 0, 0.25)",
+                              filter:
+                                "drop-shadow(0px 1px 4px rgba(0, 0, 0, 0.25))",
+                              borderRadius: "5px",
                             }}
                           >
                             <img src={weatherApp} alt="" />
-                            <Typography>Morning</Typography>
-                            <Typography>20° Celsius</Typography>
+                            <Typography className={classes.timeOfDay}>
+                              {item.timeOfDay}
+                            </Typography>
+                            <Typography className={classes.temperature}>
+                              {item.temperature}
+                            </Typography>
                           </Box>
                         </Grid>
                       ))}
-
+                      <Grid item xs={4}>
+                        <FormGroup>
+                          <FormControlLabel
+                            control={<Checkbox />}
+                            label="Add Weather Data"
+                          />
+                        </FormGroup>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <MuiSelectField
+                          name="weatherStatus"
+                          id="weatherStatus"
+                          label="Weather Status"
+                          options={["Fine", "Rain", "Cloud", "Wind", "Snow"]}
+                        />
+                      </Grid>
+                      <Grid item xs={4}>
+                        <MuiSelectField
+                          name="groundConditions"
+                          id="groundConditions"
+                          label="Ground Conditions"
+                          options={["Dry", "Damp", "Wet", "Dusty", "Frozen"]}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <MuiTextArea
+                          name="weathernotes"
+                          id="weathernotes"
+                          label={"comments"}
+                        />
+                      </Grid>
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
                         <Button variant="contained" type="submit" size="small">
                           Next
@@ -253,15 +340,19 @@ const CreateDailyLog = (props) => {
                   onChange={handleChange("Schedule")}
                 >
                   <AccordionSummary
-                    expandIcon={<AddIcon />}
+                    expandIcon={<AddIcon sx={{ color: expanded === "Schedule" ? "#FFFFFF" : ""}} />}
                     aria-controls="Schedule-content"
                     id="Schedule-header"
+                    sx={{
+                      backgroundColor: expanded === "Schedule" ? "#3A3A3C" : "",
+                      color: expanded === "Schedule" ? "#FFFFFF" : "",
+                    }}
                   >
                     <Typography className={classes.accordionTitle}>
                       Add Schedule / Plan Change Details
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails sx={{paddingTop: "20px"}}>
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <FieldArray name="schedule">
@@ -366,15 +457,19 @@ const CreateDailyLog = (props) => {
                   onChange={handleChange("ManPower")}
                 >
                   <AccordionSummary
-                    expandIcon={<AddIcon />}
+                    expandIcon={<AddIcon sx={{ color: expanded === "ManPower" ? "#FFFFFF" : ""}} />}
                     aria-controls="ManPower-content"
                     id="ManPower-header"
+                    sx={{
+                      backgroundColor: expanded === "ManPower" ? "#3A3A3C" : "",
+                      color: expanded === "ManPower" ? "#FFFFFF" : "",
+                    }}
                   >
                     <Typography className={classes.accordionTitle}>
                       Add ManPower Details
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails sx={{paddingTop: "20px"}}>
                     <Grid container spacing={2}>
                       <Grid item xs={3}>
                         <MuiDatePicker
@@ -407,15 +502,19 @@ const CreateDailyLog = (props) => {
                   onChange={handleChange("Inspection")}
                 >
                   <AccordionSummary
-                    expandIcon={<AddIcon />}
+                    expandIcon={<AddIcon sx={{ color: expanded === "Inspection" ? "#FFFFFF" : ""}}/>}
                     aria-controls="Inspection-content"
                     id="Inspection-header"
+                    sx={{
+                      backgroundColor: expanded === "Inspection" ? "#3A3A3C" : "",
+                      color: expanded === "Inspection" ? "#FFFFFF" : "",
+                    }}
                   >
                     <Typography className={classes.accordionTitle}>
                       Add Visitor / Inspection Details
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails sx={{paddingTop: "20px"}}>
                     <Grid container spacing={2}>
                       <Grid item xs={3}>
                         <MuiDatePicker
@@ -448,15 +547,19 @@ const CreateDailyLog = (props) => {
                   onChange={handleChange("Inventory")}
                 >
                   <AccordionSummary
-                    expandIcon={<AddIcon />}
+                    expandIcon={<AddIcon sx={{ color: expanded === "Inventory" ? "#FFFFFF" : ""}}/>}
                     aria-controls="Inventory-content"
                     id="Inventory-header"
+                    sx={{
+                      backgroundColor: expanded === "Inventory" ? "#3A3A3C" : "",
+                      color: expanded === "Inventory" ? "#FFFFFF" : "",
+                    }}
                   >
                     <Typography className={classes.accordionTitle}>
                       Add Inventory Data
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails sx={{paddingTop: "20px"}}>
                     <Grid container spacing={2}>
                       <Grid item xs={3}>
                         <MuiDatePicker
@@ -489,15 +592,19 @@ const CreateDailyLog = (props) => {
                   onChange={handleChange("On-Site")}
                 >
                   <AccordionSummary
-                    expandIcon={<AddIcon />}
+                    expandIcon={<AddIcon sx={{ color: expanded === "On-Site" ? "#FFFFFF" : ""}}/>}
                     aria-controls="On-Site-content"
                     id="On-Site-header"
+                    sx={{
+                      backgroundColor: expanded === "On-Site" ? "#3A3A3C" : "",
+                      color: expanded === "On-Site" ? "#FFFFFF" : "",
+                    }}
                   >
                     <Typography className={classes.accordionTitle}>
                       Add On-Site Issues
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails sx={{paddingTop: "20px"}}>
                     <Grid container spacing={2}>
                       <Grid item xs={3}>
                         <MuiDatePicker
@@ -530,15 +637,19 @@ const CreateDailyLog = (props) => {
                   onChange={handleChange("Photos")}
                 >
                   <AccordionSummary
-                    expandIcon={<AddIcon />}
+                    expandIcon={<AddIcon sx={{ color: expanded === "Photos" ? "#FFFFFF" : ""}}/>}
                     aria-controls="Photos-content"
                     id="Photos-header"
+                    sx={{
+                      backgroundColor: expanded === "Photos" ? "#3A3A3C" : "",
+                      color: expanded === "Photos" ? "#FFFFFF" : "",
+                    }}
                   >
                     <Typography className={classes.accordionTitle}>
                       Add Photos / Documents / Videos
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails sx={{paddingTop: "20px"}}>
                     <Grid container spacing={2}>
                       <Grid item xs={3}>
                         <MuiDatePicker
@@ -571,15 +682,19 @@ const CreateDailyLog = (props) => {
                   onChange={handleChange("Notes")}
                 >
                   <AccordionSummary
-                    expandIcon={<AddIcon />}
+                    expandIcon={<AddIcon sx={{ color: expanded === "Notes" ? "#FFFFFF" : ""}}/>}
                     aria-controls="Notes-content"
                     id="Notes-header"
+                    sx={{
+                      backgroundColor: expanded === "Notes" ? "#3A3A3C" : "",
+                      color: expanded === "Notes" ? "#FFFFFF" : "",
+                    }}
                   >
                     <Typography className={classes.accordionTitle}>
                       Notes / Comments
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails  sx={{paddingTop: "20px"}}>
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <MuiTextArea name="notes" id="notes" label={"Notes"} />
@@ -597,15 +712,19 @@ const CreateDailyLog = (props) => {
                   onChange={handleChange("Signature")}
                 >
                   <AccordionSummary
-                    expandIcon={<AddIcon />}
+                    expandIcon={<AddIcon sx={{ color: expanded === "Signature" ? "#FFFFFF" : ""}}/>}
                     aria-controls="Signature-content"
                     id="Signature-header"
+                    sx={{
+                      backgroundColor: expanded === "Signature" ? "#3A3A3C" : "",
+                      color: expanded === "Signature" ? "#FFFFFF" : "",
+                    }}
                   >
                     <Typography className={classes.accordionTitle}>
                       Add Signature{" "}
                     </Typography>
                   </AccordionSummary>
-                  <AccordionDetails>
+                  <AccordionDetails sx={{paddingTop: "20px"}}>
                     <Grid container spacing={2}>
                       <Grid item xs={3}>
                         <MuiDatePicker
