@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Formik, Form, ErrorMessage } from "formik";
+import { makeStyles } from "@mui/styles";
 
 import MuiDatePicker from "../../components/Formik/MuiDatePicker";
 import MuiTimePicker from "../../components/Formik/MuiTimePicker";
@@ -25,8 +26,20 @@ import AddIcon from "@mui/icons-material/Add";
 
 import weatherApp from "../../Images/weatherApp.svg";
 
+const useStyle = makeStyles(() => ({
+  accordionTitle: {
+    width: "50%",
+    flexShrink: 0,
+    fontSize: "1rem",
+    fontWeight: "600",
+    letterSpacing: "0.02rem",
+    lineHeight: "24px",
+  },
+}));
+
 const CreateDailyLog = (props) => {
   const { open, handleClose, id, title } = props;
+  const classes = useStyle();
 
   const [expanded, setExpanded] = useState(false);
 
@@ -64,8 +77,8 @@ const CreateDailyLog = (props) => {
               console.log("values", values);
             }}
           >
-            {({ values, isValid, isSubmitting }) => (
-              <Form>
+            {({ values, isValid, isSubmitting, handleSubmit }) => (
+              <Form onSubmit={handleSubmit}>
                 <Accordion
                   expanded={expanded === "dateTime"}
                   onChange={handleChange("dateTime")}
@@ -75,7 +88,7 @@ const CreateDailyLog = (props) => {
                     aria-controls="dateTime"
                     id="dateTime"
                   >
-                    <Typography sx={{ width: "50%", flexShrink: 0 }}>
+                    <Typography className={classes.accordionTitle}>
                       Date & Time
                     </Typography>
                   </AccordionSummary>
@@ -116,7 +129,7 @@ const CreateDailyLog = (props) => {
                     aria-controls="selectProject"
                     id="selectProject"
                   >
-                    <Typography sx={{ width: "50%", flexShrink: 0 }}>
+                    <Typography className={classes.accordionTitle}>
                       Select Project
                     </Typography>
                   </AccordionSummary>
@@ -189,7 +202,7 @@ const CreateDailyLog = (props) => {
                     aria-controls="Weather-content"
                     id="Weather-header"
                   >
-                    <Typography sx={{ width: "50%", flexShrink: 0 }}>
+                    <Typography className={classes.accordionTitle}>
                       Add Observed Weather Conditions
                     </Typography>
                   </AccordionSummary>
@@ -229,7 +242,7 @@ const CreateDailyLog = (props) => {
                     aria-controls="Schedule-content"
                     id="Schedule-header"
                   >
-                    <Typography sx={{ width: "50%", flexShrink: 0 }}>
+                    <Typography className={classes.accordionTitle}>
                       Add Schedule / Plan Change Details
                     </Typography>
                   </AccordionSummary>
@@ -270,7 +283,7 @@ const CreateDailyLog = (props) => {
                     aria-controls="ManPower-content"
                     id="ManPower-header"
                   >
-                    <Typography sx={{ width: "50%", flexShrink: 0 }}>
+                    <Typography className={classes.accordionTitle}>
                       Add ManPower Details
                     </Typography>
                   </AccordionSummary>
@@ -311,7 +324,7 @@ const CreateDailyLog = (props) => {
                     aria-controls="Inspection-content"
                     id="Inspection-header"
                   >
-                    <Typography sx={{ width: "50%", flexShrink: 0 }}>
+                    <Typography className={classes.accordionTitle}>
                       Add Visitor / Inspection Details
                     </Typography>
                   </AccordionSummary>
@@ -352,7 +365,7 @@ const CreateDailyLog = (props) => {
                     aria-controls="Inventory-content"
                     id="Inventory-header"
                   >
-                    <Typography sx={{ width: "50%", flexShrink: 0 }}>
+                    <Typography className={classes.accordionTitle}>
                       Add Inventory Data
                     </Typography>
                   </AccordionSummary>
@@ -393,7 +406,7 @@ const CreateDailyLog = (props) => {
                     aria-controls="On-Site-content"
                     id="On-Site-header"
                   >
-                    <Typography sx={{ width: "50%", flexShrink: 0 }}>
+                    <Typography className={classes.accordionTitle}>
                       Add On-Site Issues
                     </Typography>
                   </AccordionSummary>
@@ -434,7 +447,7 @@ const CreateDailyLog = (props) => {
                     aria-controls="Photos-content"
                     id="Photos-header"
                   >
-                    <Typography sx={{ width: "50%", flexShrink: 0 }}>
+                    <Typography className={classes.accordionTitle}>
                       Add Photos / Documents / Videos
                     </Typography>
                   </AccordionSummary>
@@ -475,7 +488,7 @@ const CreateDailyLog = (props) => {
                     aria-controls="Notes-content"
                     id="Notes-header"
                   >
-                    <Typography sx={{ width: "50%", flexShrink: 0 }}>
+                    <Typography className={classes.accordionTitle}>
                       Notes / Comments
                     </Typography>
                   </AccordionSummary>
@@ -501,7 +514,7 @@ const CreateDailyLog = (props) => {
                     aria-controls="Signature-content"
                     id="Signature-header"
                   >
-                    <Typography sx={{ width: "50%", flexShrink: 0 }}>
+                    <Typography className={classes.accordionTitle}>
                       Add Signature{" "}
                     </Typography>
                   </AccordionSummary>
@@ -539,7 +552,7 @@ const CreateDailyLog = (props) => {
         </DialogContent>
         <DialogActions>
           <Button variant="contained" type="submit" size="small">
-            Save changes
+            Submit
           </Button>
         </DialogActions>
       </MuiDialog>
