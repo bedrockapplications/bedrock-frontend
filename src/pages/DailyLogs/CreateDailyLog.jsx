@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Formik, Form, ErrorMessage } from "formik";
+import React, { Fragment, useState } from "react";
+import { Formik, Form, ErrorMessage, FieldArray } from "formik";
 import { makeStyles } from "@mui/styles";
 
 import MuiDatePicker from "../../components/Formik/MuiDatePicker";
@@ -21,6 +21,14 @@ import {
   DialogActions,
   Box,
 } from "@mui/material";
+
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 import AddIcon from "@mui/icons-material/Add";
 
@@ -71,6 +79,13 @@ const CreateDailyLog = (props) => {
               state: "",
               city: "",
               zipcode: "",
+              schedule: [
+                {
+                  activity: "",
+                  choose: "",
+                  comments: "",
+                },
+              ],
             }}
             validationSchema={null}
             onSubmit={(values, { setSubmitting, resetForm }) => {
@@ -248,26 +263,98 @@ const CreateDailyLog = (props) => {
                   </AccordionSummary>
                   <AccordionDetails>
                     <Grid container spacing={2}>
-                      <Grid item xs={3}>
-                        <MuiDatePicker
-                          name="date"
-                          id="date"
-                          label={"Date"}
-                          disablePast
-                          value={values?.Date}
-                        />
+                      <Grid item xs={12}>
+                        <FieldArray name="schedule">
+                          {({ insert, remove, push }) => (
+                            <>
+                              <Grid item xs={12}>
+                                <Button
+                                  variant="contained"
+                                  size="small"
+                                  onClick={() =>
+                                    push({
+                                      activity: "",
+                                      choose: "",
+                                      comments: "",
+                                    })
+                                  }
+                                >
+                                  Add Line Item
+                                </Button>
+                              </Grid>
+                              <Grid item xs={12}>
+                                <TableContainer component={Paper}>
+                                  <Table
+                                    sx={{ minWidth: 650 }}
+                                    aria-label="simple table"
+                                  >
+                                    <TableHead>
+                                      <TableRow>
+                                        <TableCell>Action</TableCell>
+                                        <TableCell align="right">
+                                          Activity
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          Contractor
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          Comments
+                                        </TableCell>
+                                      </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                      {values.schedule.map((item, index) => (
+                                        <TableRow
+                                          key={index}
+                                          sx={{
+                                            "&:last-child td, &:last-child th":
+                                              { border: 0 },
+                                          }}
+                                        >
+                                          <TableCell align="right">
+                                            <Button
+                                              variant="contained"
+                                              size="small"
+                                              onClick={() => remove(index)}
+                                            >
+                                              Delete{" "}
+                                            </Button>
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiTextField
+                                              name={`schedule.${index}.activity`}
+                                              id={`schedule.${index}.activity`}
+                                              label="Activity"
+                                            />
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiSelectField
+                                              name={`schedule.${index}.choose`}
+                                              id={`schedule.${index}.choose`}
+                                              label="Choose"
+                                              options={[]}
+                                            />
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiTextField
+                                              name={`schedule.${index}.comments`}
+                                              id={`schedule.${index}.comments`}
+                                              label="Comments"
+                                            />
+                                          </TableCell>
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                </TableContainer>
+                              </Grid>
+                            </>
+                          )}
+                        </FieldArray>
                       </Grid>
-                      <Grid item xs={3}>
-                        <MuiTimePicker
-                          name="time"
-                          id="time"
-                          label={"Time"}
-                          disablePast
-                          value={values?.time}
-                        />
-                      </Grid>
+
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
+                        <Button variant="contained" size="small">
                           Next
                         </Button>
                       </Grid>
