@@ -1,6 +1,7 @@
-import React, { memo, Fragment, useState } from "react";
+import React, { memo, Fragment, useState, useContext } from "react";
 import { Formik, Form, ErrorMessage, FieldArray } from "formik";
 import { makeStyles } from "@mui/styles";
+import { GlobalState } from "../../Context/Context";
 
 import MuiDatePicker from "../../components/Formik/MuiDatePicker";
 import MuiTimePicker from "../../components/Formik/MuiTimePicker";
@@ -63,6 +64,7 @@ const useStyle = makeStyles(() => ({
 
 const CreateDailyLog = (props) => {
   const { open, handleClose, id, title } = props;
+  const { expanded, setExpanded } = useContext(GlobalState);
   const classes = useStyle();
 
   const weatherData = [
@@ -84,12 +86,12 @@ const CreateDailyLog = (props) => {
     },
   ];
 
-  const [expanded, setExpanded] = useState(false);
+  // const [expanded, setExpanded] = useState(false);
 
-  const handleChange = (panel) => (event, isExpanded) => {
-    console.log("panel", panel, isExpanded, event);
-    setExpanded(isExpanded ? panel : false);
-  };
+  // const handleChange = (panel) => (event, isExpanded) => {
+  //   console.log("panel", panel, isExpanded, event);
+  //   setExpanded(isExpanded ? panel : false);
+  // };
 
   return (
     <>
@@ -130,6 +132,7 @@ const CreateDailyLog = (props) => {
             {({ values, isValid, isSubmitting, handleSubmit }) => (
               <Form onSubmit={handleSubmit}>
                 <MuiAccordion title="Date & Time" selectedPanel="dateTime">
+                  {expanded === "dateTime"?
                   <Grid container spacing={2}>
                     <Grid item xs={3}>
                       <MuiDatePicker
@@ -155,11 +158,13 @@ const CreateDailyLog = (props) => {
                       </Button>
                     </Grid>
                   </Grid>
+                  :""}
                 </MuiAccordion>
                 <MuiAccordion
                   title="Select Project"
                   selectedPanel="selectProject"
                 >
+                   {expanded === "selectProject"?
                   <Grid container spacing={2}>
                     <Grid item xs={4}>
                       <MuiSelectField
@@ -217,11 +222,13 @@ const CreateDailyLog = (props) => {
                       </Button>
                     </Grid>
                   </Grid>
+                  :""}
                 </MuiAccordion>
                 <MuiAccordion
                   title="Add Observed Weather Conditions"
                   selectedPanel="Weather"
                 >
+                  {expanded === "Weather"?
                   <Grid container spacing={3}>
                     {weatherData.map((item, i) => (
                       <Grid item xs={3} key={item + i}>
@@ -282,11 +289,13 @@ const CreateDailyLog = (props) => {
                       </Button>
                     </Grid>
                   </Grid>
+                  :""}
                 </MuiAccordion>
                 <MuiAccordion
                   title=" Add Schedule / Plan Change Details"
                   selectedPanel="Schedule"
                 >
+                  {expanded === "Schedule"?
                   <Grid container spacing={2}>
                     <Grid item xs={12}>
                       <FieldArray name="schedule">
@@ -385,11 +394,13 @@ const CreateDailyLog = (props) => {
                       </Button>
                     </Grid>
                   </Grid>
+                  :""}
                 </MuiAccordion>
                 <MuiAccordion
                   title="Add ManPower Details"
                   selectedPanel="ManPower"
                 >
+                  {expanded === "ManPower"?
                   <Grid container spacing={2}>
                     <Grid item xs={3}>
                       <MuiDatePicker
@@ -415,11 +426,13 @@ const CreateDailyLog = (props) => {
                       </Button>
                     </Grid>
                   </Grid>
+                  :""}
                 </MuiAccordion>
                 <MuiAccordion
                   title="Add Visitor / Inspection Details"
                   selectedPanel="Inspection"
                 >
+                  {expanded === "Inspection"?
                   <Grid container spacing={2}>
                     <Grid item xs={3}>
                       <MuiDatePicker
@@ -445,11 +458,13 @@ const CreateDailyLog = (props) => {
                       </Button>
                     </Grid>
                   </Grid>
+                  :""}
                 </MuiAccordion>{" "}
                 <MuiAccordion
                   title="Add Inventory Data"
                   selectedPanel="Inventory"
                 >
+                  {expanded === "Inspection"?
                   <Grid container spacing={2}>
                     <Grid item xs={3}>
                       <MuiDatePicker
@@ -475,11 +490,13 @@ const CreateDailyLog = (props) => {
                       </Button>
                     </Grid>
                   </Grid>
+                  :""}
                 </MuiAccordion>{" "}
                 <MuiAccordion
                   title="Add On-Site Issues"
                   selectedPanel="On-Site"
                 >
+                  {expanded === "On-Site"?
                   <Grid container spacing={2}>
                     <Grid item xs={3}>
                       <MuiDatePicker
@@ -505,11 +522,13 @@ const CreateDailyLog = (props) => {
                       </Button>
                     </Grid>
                   </Grid>
+                  :""}
                 </MuiAccordion>{" "}
                 <MuiAccordion
                   title="Add Photos / Documents / Videos"
                   selectedPanel="Photos"
                 >
+                  {expanded === "Photos"?
                   <Grid container spacing={2}>
                     <Grid item xs={3}>
                       <MuiDatePicker
@@ -535,8 +554,10 @@ const CreateDailyLog = (props) => {
                       </Button>
                     </Grid>
                   </Grid>
+                  :""}
                 </MuiAccordion>{" "}
                 <MuiAccordion title="Notes / Comments" selectedPanel="Notes">
+                {expanded === "Notes"?
                   <Grid container spacing={2}>
                     <Grid item xs={3}>
                       <MuiDatePicker
@@ -562,8 +583,10 @@ const CreateDailyLog = (props) => {
                       </Button>
                     </Grid>
                   </Grid>
+                  :""}
                 </MuiAccordion>{" "}
                 <MuiAccordion title="Add Signature" selectedPanel="Signature">
+                {expanded === "Signature"?
                   <Grid container spacing={2}>
                     <Grid item xs={3}>
                       <MuiDatePicker
@@ -589,6 +612,7 @@ const CreateDailyLog = (props) => {
                       </Button>
                     </Grid>
                   </Grid>
+                  :""}
                 </MuiAccordion>
               </Form>
             )}
