@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { makeStyles } from "@mui/styles";
 import {
   Box,
@@ -278,9 +278,9 @@ const DailyLogs = () => {
     setOpenDailyLog(true);
   };
 
-  const handleCloseDailyLog = () => {
+  const handleCloseDailyLog = useCallback(() => {
     setOpenDailyLog(false);
-  };
+  }, []);
 
   return (
     <>
@@ -381,7 +381,7 @@ const DailyLogs = () => {
                 padding: "5px",
               }}
             >
-              <Grid container spacing={2}>
+              {/* <Grid container spacing={2}>
                 {[1, 2, 3]?.map((item, i) => (
                   <Grid item xs={4}>
                     <Paper
@@ -523,7 +523,7 @@ const DailyLogs = () => {
                     </Paper>
                   </Grid>
                 ))}
-              </Grid>
+              </Grid> */}
             </Paper>
           )}
         </Box>

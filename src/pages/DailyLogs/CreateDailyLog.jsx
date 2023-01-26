@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { memo, Fragment, useState } from "react";
 import { Formik, Form, ErrorMessage, FieldArray } from "formik";
 import { makeStyles } from "@mui/styles";
 
@@ -36,6 +36,7 @@ import Paper from "@mui/material/Paper";
 import AddIcon from "@mui/icons-material/Add";
 
 import weatherApp from "../../Images/weatherApp.svg";
+import MuiAccordion from "../../components/MuiAccordion";
 
 const useStyle = makeStyles(() => ({
   accordionTitle: {
@@ -128,630 +129,467 @@ const CreateDailyLog = (props) => {
           >
             {({ values, isValid, isSubmitting, handleSubmit }) => (
               <Form onSubmit={handleSubmit}>
-                <Accordion
-                  expanded={expanded === "dateTime"}
-                  onChange={handleChange("dateTime")}
-                >
-                  <AccordionSummary
-                    expandIcon={<AddIcon sx={{ color: expanded === "dateTime" ? "#FFFFFF" : ""}}/>}
-                    aria-controls="dateTime"
-                    id="dateTime"
-                    sx={{
-                      backgroundColor: expanded === "dateTime" ? "#3A3A3C" : "",
-                      color: expanded === "dateTime" ? "#FFFFFF" : "",
-                    }}
-                  >
-                    <Typography className={classes.accordionTitle}>
-                      Date & Time
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails sx={{paddingTop: "20px"}}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={3}>
-                        <MuiDatePicker
-                          name="date"
-                          id="date"
-                          label={"Date"}
-                          disablePast
-                          value={values?.Date}
-                        />
-                      </Grid>
-                      <Grid item xs={3}>
-                        <MuiTimePicker
-                          name="time"
-                          id="time"
-                          label={"Time"}
-                          disablePast
-                          value={values?.time}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
-                          Next
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </AccordionDetails>
-                </Accordion>
-                <Accordion
-                  expanded={expanded === "selectProject"}
-                  onChange={handleChange("selectProject")}
-                >
-                  <AccordionSummary
-                    expandIcon={<AddIcon sx={{ color: expanded === "selectProject" ? "#FFFFFF" : ""}} />}
-                    aria-controls="selectProject"
-                    id="selectProject"
-                    sx={{
-                      backgroundColor: expanded === "selectProject" ? "#3A3A3C" : "",
-                      color: expanded === "selectProject" ? "#FFFFFF" : "",
-                    }}
-                  >
-                    <Typography className={classes.accordionTitle}>
-                      Select Project
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails sx={{paddingTop: "20px"}}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={4}>
-                        <MuiSelectField
-                          name="selectProject"
-                          id="selectProject"
-                          label="Select Project"
-                          options={[]}
-                        />
-                      </Grid>
-                      <Grid item xs={4}>
-                        <MuiSelectField
-                          name="reportingPerson"
-                          id="reportingPerson"
-                          label="Reporting Person"
-                          options={[]}
-                        />
-                      </Grid>
-                      <Grid item xs={4}>
-                        <MuiTextField
-                          name="workStatus"
-                          id="workStatus"
-                          label="% of Planned Work Completed Today"
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <MuiTextField
-                          name="address"
-                          id="address"
-                          label="Address"
-                        />
-                      </Grid>
-                      <Grid item xs={3}>
-                        <MuiTextField
-                          name="country"
-                          id="country"
-                          label="Country"
-                        />
-                      </Grid>
-                      <Grid item xs={3}>
-                        <MuiTextField name="state" id="state" label="State" />
-                      </Grid>
-                      <Grid item xs={3}>
-                        <MuiTextField name="city" id="city" label="City" />
-                      </Grid>
-                      <Grid item xs={3}>
-                        <MuiTextField
-                          name="zipcode"
-                          id="zipcode"
-                          label="Zipcode"
-                        />
-                      </Grid>
-                      <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
-                          Next
-                        </Button>
-                      </Grid>
-                    </Grid>
-                  </AccordionDetails>
-                </Accordion>
-                <Accordion
-                  expanded={expanded === "Weather"}
-                  onChange={handleChange("Weather")}
-                >
-                  <AccordionSummary
-                    expandIcon={
-                      <AddIcon
-                        sx={{ color: expanded === "Weather" ? "#FFFFFF" : ""}}
+                <MuiAccordion title="Date & Time" selectedPanel="dateTime">
+                  <Grid container spacing={2}>
+                    <Grid item xs={3}>
+                      <MuiDatePicker
+                        name="date"
+                        id="date"
+                        label={"Date"}
+                        disablePast
+                        value={values?.Date}
                       />
-                    }
-                    aria-controls="Weather-content"
-                    id="Weather-header"
-                    sx={{
-                      backgroundColor: expanded === "Weather" ? "#3A3A3C" : "",
-                      color: expanded === "Weather" ? "#FFFFFF" : "",
-                    }}
-                  >
-                    <Typography className={classes.accordionTitle}>
-                      Add Observed Weather Conditions
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails sx={{paddingTop: "20px"}}>
-                    <Grid container spacing={3}>
-                      {weatherData.map((item, i) => (
-                        <Grid item xs={3} key={item + i}>
-                          <Box
-                            sx={{
-                              padding: "1rem",
-                              textAlign: "center",
-                              boxShadow:
-                                "inset 0px 1px 4px rgba(0, 0, 0, 0.25)",
-                              filter:
-                                "drop-shadow(0px 1px 4px rgba(0, 0, 0, 0.25))",
-                              borderRadius: "5px",
-                            }}
-                          >
-                            <img src={weatherApp} alt="" />
-                            <Typography className={classes.timeOfDay}>
-                              {item.timeOfDay}
-                            </Typography>
-                            <Typography className={classes.temperature}>
-                              {item.temperature}
-                            </Typography>
-                          </Box>
-                        </Grid>
-                      ))}
-                      <Grid item xs={4}>
-                        <FormGroup>
-                          <FormControlLabel
-                            control={<Checkbox />}
-                            label="Add Weather Data"
-                          />
-                        </FormGroup>
-                      </Grid>
-                      <Grid item xs={4}>
-                        <MuiSelectField
-                          name="weatherStatus"
-                          id="weatherStatus"
-                          label="Weather Status"
-                          options={["Fine", "Rain", "Cloud", "Wind", "Snow"]}
-                        />
-                      </Grid>
-                      <Grid item xs={4}>
-                        <MuiSelectField
-                          name="groundConditions"
-                          id="groundConditions"
-                          label="Ground Conditions"
-                          options={["Dry", "Damp", "Wet", "Dusty", "Frozen"]}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <MuiTextArea
-                          name="weathernotes"
-                          id="weathernotes"
-                          label={"comments"}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
-                          Next
-                        </Button>
-                      </Grid>
                     </Grid>
-                  </AccordionDetails>
-                </Accordion>{" "}
-                <Accordion
-                  expanded={expanded === "Schedule"}
-                  onChange={handleChange("Schedule")}
+                    <Grid item xs={3}>
+                      <MuiTimePicker
+                        name="time"
+                        id="time"
+                        label={"Time"}
+                        disablePast
+                        value={values?.time}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sx={{ textAlign: "right" }}>
+                      <Button variant="contained" type="submit" size="small">
+                        Next
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </MuiAccordion>
+                <MuiAccordion
+                  title="Select Project"
+                  selectedPanel="selectProject"
                 >
-                  <AccordionSummary
-                    expandIcon={<AddIcon sx={{ color: expanded === "Schedule" ? "#FFFFFF" : ""}} />}
-                    aria-controls="Schedule-content"
-                    id="Schedule-header"
-                    sx={{
-                      backgroundColor: expanded === "Schedule" ? "#3A3A3C" : "",
-                      color: expanded === "Schedule" ? "#FFFFFF" : "",
-                    }}
-                  >
-                    <Typography className={classes.accordionTitle}>
-                      Add Schedule / Plan Change Details
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails sx={{paddingTop: "20px"}}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12}>
-                        <FieldArray name="schedule">
-                          {({ insert, remove, push }) => (
-                            <>
-                              <Grid item xs={12}>
-                                <Button
-                                  variant="contained"
-                                  size="small"
-                                  onClick={() =>
-                                    push({
-                                      activity: "",
-                                      choose: "",
-                                      comments: "",
-                                    })
-                                  }
+                  <Grid container spacing={2}>
+                    <Grid item xs={4}>
+                      <MuiSelectField
+                        name="selectProject"
+                        id="selectProject"
+                        label="Select Project"
+                        options={[]}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <MuiSelectField
+                        name="reportingPerson"
+                        id="reportingPerson"
+                        label="Reporting Person"
+                        options={[]}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <MuiTextField
+                        name="workStatus"
+                        id="workStatus"
+                        label="% of Planned Work Completed Today"
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <MuiTextField
+                        name="address"
+                        id="address"
+                        label="Address"
+                      />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <MuiTextField
+                        name="country"
+                        id="country"
+                        label="Country"
+                      />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <MuiTextField name="state" id="state" label="State" />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <MuiTextField name="city" id="city" label="City" />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <MuiTextField
+                        name="zipcode"
+                        id="zipcode"
+                        label="Zipcode"
+                      />
+                    </Grid>
+                    <Grid item xs={12} sx={{ textAlign: "right" }}>
+                      <Button variant="contained" type="submit" size="small">
+                        Next
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </MuiAccordion>
+                <MuiAccordion
+                  title="Add Observed Weather Conditions"
+                  selectedPanel="Weather"
+                >
+                  <Grid container spacing={3}>
+                    {weatherData.map((item, i) => (
+                      <Grid item xs={3} key={item + i}>
+                        <Box
+                          sx={{
+                            padding: "1rem",
+                            textAlign: "center",
+                            boxShadow: "inset 0px 1px 4px rgba(0, 0, 0, 0.25)",
+                            filter:
+                              "drop-shadow(0px 1px 4px rgba(0, 0, 0, 0.25))",
+                            borderRadius: "5px",
+                          }}
+                        >
+                          <img src={weatherApp} alt="" />
+                          <Typography className={classes.timeOfDay}>
+                            {item.timeOfDay}
+                          </Typography>
+                          <Typography className={classes.temperature}>
+                            {item.temperature}
+                          </Typography>
+                        </Box>
+                      </Grid>
+                    ))}
+                    <Grid item xs={4}>
+                      <FormGroup>
+                        <FormControlLabel
+                          control={<Checkbox />}
+                          label="Add Weather Data"
+                        />
+                      </FormGroup>
+                    </Grid>
+                    <Grid item xs={4}>
+                      <MuiSelectField
+                        name="weatherStatus"
+                        id="weatherStatus"
+                        label="Weather Status"
+                        options={["Fine", "Rain", "Cloud", "Wind", "Snow"]}
+                      />
+                    </Grid>
+                    <Grid item xs={4}>
+                      <MuiSelectField
+                        name="groundConditions"
+                        id="groundConditions"
+                        label="Ground Conditions"
+                        options={["Dry", "Damp", "Wet", "Dusty", "Frozen"]}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <MuiTextArea
+                        name="weathernotes"
+                        id="weathernotes"
+                        label={"comments"}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sx={{ textAlign: "right" }}>
+                      <Button variant="contained" type="submit" size="small">
+                        Next
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </MuiAccordion>
+                <MuiAccordion
+                  title=" Add Schedule / Plan Change Details"
+                  selectedPanel="Schedule"
+                >
+                  <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                      <FieldArray name="schedule">
+                        {({ insert, remove, push }) => (
+                          <>
+                            <Grid item xs={12}>
+                              <Button
+                                variant="contained"
+                                size="small"
+                                onClick={() =>
+                                  push({
+                                    activity: "",
+                                    choose: "",
+                                    comments: "",
+                                  })
+                                }
+                              >
+                                Add Line Item
+                              </Button>
+                            </Grid>
+                            <Grid item xs={12}>
+                              <TableContainer component={Paper}>
+                                <Table
+                                  sx={{ minWidth: 650 }}
+                                  aria-label="simple table"
                                 >
-                                  Add Line Item
-                                </Button>
-                              </Grid>
-                              <Grid item xs={12}>
-                                <TableContainer component={Paper}>
-                                  <Table
-                                    sx={{ minWidth: 650 }}
-                                    aria-label="simple table"
-                                  >
-                                    <TableHead>
-                                      <TableRow>
-                                        <TableCell>Action</TableCell>
+                                  <TableHead>
+                                    <TableRow>
+                                      <TableCell>Action</TableCell>
+                                      <TableCell align="right">
+                                        Activity
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        Contractor
+                                      </TableCell>
+                                      <TableCell align="right">
+                                        Comments
+                                      </TableCell>
+                                    </TableRow>
+                                  </TableHead>
+                                  <TableBody>
+                                    {values.schedule.map((item, index) => (
+                                      <TableRow
+                                        key={index}
+                                        sx={{
+                                          "&:last-child td, &:last-child th": {
+                                            border: 0,
+                                          },
+                                        }}
+                                      >
                                         <TableCell align="right">
-                                          Activity
+                                          <Button
+                                            variant="contained"
+                                            size="small"
+                                            onClick={() => remove(index)}
+                                          >
+                                            Delete{" "}
+                                          </Button>
                                         </TableCell>
                                         <TableCell align="right">
-                                          Contractor
+                                          <MuiTextField
+                                            name={`schedule.${index}.activity`}
+                                            id={`schedule.${index}.activity`}
+                                            label="Activity"
+                                          />
                                         </TableCell>
                                         <TableCell align="right">
-                                          Comments
+                                          <MuiSelectField
+                                            name={`schedule.${index}.choose`}
+                                            id={`schedule.${index}.choose`}
+                                            label="Choose"
+                                            options={[]}
+                                          />
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          <MuiTextField
+                                            name={`schedule.${index}.comments`}
+                                            id={`schedule.${index}.comments`}
+                                            label="Comments"
+                                          />
                                         </TableCell>
                                       </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                      {values.schedule.map((item, index) => (
-                                        <TableRow
-                                          key={index}
-                                          sx={{
-                                            "&:last-child td, &:last-child th":
-                                              { border: 0 },
-                                          }}
-                                        >
-                                          <TableCell align="right">
-                                            <Button
-                                              variant="contained"
-                                              size="small"
-                                              onClick={() => remove(index)}
-                                            >
-                                              Delete{" "}
-                                            </Button>
-                                          </TableCell>
-                                          <TableCell align="right">
-                                            <MuiTextField
-                                              name={`schedule.${index}.activity`}
-                                              id={`schedule.${index}.activity`}
-                                              label="Activity"
-                                            />
-                                          </TableCell>
-                                          <TableCell align="right">
-                                            <MuiSelectField
-                                              name={`schedule.${index}.choose`}
-                                              id={`schedule.${index}.choose`}
-                                              label="Choose"
-                                              options={[]}
-                                            />
-                                          </TableCell>
-                                          <TableCell align="right">
-                                            <MuiTextField
-                                              name={`schedule.${index}.comments`}
-                                              id={`schedule.${index}.comments`}
-                                              label="Comments"
-                                            />
-                                          </TableCell>
-                                        </TableRow>
-                                      ))}
-                                    </TableBody>
-                                  </Table>
-                                </TableContainer>
-                              </Grid>
-                            </>
-                          )}
-                        </FieldArray>
-                      </Grid>
+                                    ))}
+                                  </TableBody>
+                                </Table>
+                              </TableContainer>
+                            </Grid>
+                          </>
+                        )}
+                      </FieldArray>
+                    </Grid>
 
-                      <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" size="small">
-                          Next
-                        </Button>
-                      </Grid>
+                    <Grid item xs={12} sx={{ textAlign: "right" }}>
+                      <Button variant="contained" size="small">
+                        Next
+                      </Button>
                     </Grid>
-                  </AccordionDetails>
-                </Accordion>{" "}
-                <Accordion
-                  expanded={expanded === "ManPower"}
-                  onChange={handleChange("ManPower")}
+                  </Grid>
+                </MuiAccordion>
+                <MuiAccordion
+                  title="Add ManPower Details"
+                  selectedPanel="ManPower"
                 >
-                  <AccordionSummary
-                    expandIcon={<AddIcon sx={{ color: expanded === "ManPower" ? "#FFFFFF" : ""}} />}
-                    aria-controls="ManPower-content"
-                    id="ManPower-header"
-                    sx={{
-                      backgroundColor: expanded === "ManPower" ? "#3A3A3C" : "",
-                      color: expanded === "ManPower" ? "#FFFFFF" : "",
-                    }}
-                  >
-                    <Typography className={classes.accordionTitle}>
-                      Add ManPower Details
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails sx={{paddingTop: "20px"}}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={3}>
-                        <MuiDatePicker
-                          name="date"
-                          id="date"
-                          label={"Date"}
-                          disablePast
-                          value={values?.Date}
-                        />
-                      </Grid>
-                      <Grid item xs={3}>
-                        <MuiTimePicker
-                          name="time"
-                          id="time"
-                          label={"Time"}
-                          disablePast
-                          value={values?.time}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
-                          Next
-                        </Button>
-                      </Grid>
+                  <Grid container spacing={2}>
+                    <Grid item xs={3}>
+                      <MuiDatePicker
+                        name="date"
+                        id="date"
+                        label={"Date"}
+                        disablePast
+                        value={values?.Date}
+                      />
                     </Grid>
-                  </AccordionDetails>
-                </Accordion>{" "}
-                <Accordion
-                  expanded={expanded === "Inspection"}
-                  onChange={handleChange("Inspection")}
+                    <Grid item xs={3}>
+                      <MuiTimePicker
+                        name="time"
+                        id="time"
+                        label={"Time"}
+                        disablePast
+                        value={values?.time}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sx={{ textAlign: "right" }}>
+                      <Button variant="contained" type="submit" size="small">
+                        Next
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </MuiAccordion>
+                <MuiAccordion
+                  title="Add Visitor / Inspection Details"
+                  selectedPanel="Inspection"
                 >
-                  <AccordionSummary
-                    expandIcon={<AddIcon sx={{ color: expanded === "Inspection" ? "#FFFFFF" : ""}}/>}
-                    aria-controls="Inspection-content"
-                    id="Inspection-header"
-                    sx={{
-                      backgroundColor: expanded === "Inspection" ? "#3A3A3C" : "",
-                      color: expanded === "Inspection" ? "#FFFFFF" : "",
-                    }}
-                  >
-                    <Typography className={classes.accordionTitle}>
-                      Add Visitor / Inspection Details
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails sx={{paddingTop: "20px"}}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={3}>
-                        <MuiDatePicker
-                          name="date"
-                          id="date"
-                          label={"Date"}
-                          disablePast
-                          value={values?.Date}
-                        />
-                      </Grid>
-                      <Grid item xs={3}>
-                        <MuiTimePicker
-                          name="time"
-                          id="time"
-                          label={"Time"}
-                          disablePast
-                          value={values?.time}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Button variant="contained" type="submit" size="small">
-                          Next
-                        </Button>
-                      </Grid>
+                  <Grid container spacing={2}>
+                    <Grid item xs={3}>
+                      <MuiDatePicker
+                        name="date"
+                        id="date"
+                        label={"Date"}
+                        disablePast
+                        value={values?.Date}
+                      />
                     </Grid>
-                  </AccordionDetails>
-                </Accordion>{" "}
-                <Accordion
-                  expanded={expanded === "Inventory"}
-                  onChange={handleChange("Inventory")}
+                    <Grid item xs={3}>
+                      <MuiTimePicker
+                        name="time"
+                        id="time"
+                        label={"Time"}
+                        disablePast
+                        value={values?.time}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sx={{ textAlign: "right" }}>
+                      <Button variant="contained" type="submit" size="small">
+                        Next
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </MuiAccordion>{" "}
+                <MuiAccordion
+                  title="Add Inventory Data"
+                  selectedPanel="Inventory"
                 >
-                  <AccordionSummary
-                    expandIcon={<AddIcon sx={{ color: expanded === "Inventory" ? "#FFFFFF" : ""}}/>}
-                    aria-controls="Inventory-content"
-                    id="Inventory-header"
-                    sx={{
-                      backgroundColor: expanded === "Inventory" ? "#3A3A3C" : "",
-                      color: expanded === "Inventory" ? "#FFFFFF" : "",
-                    }}
-                  >
-                    <Typography className={classes.accordionTitle}>
-                      Add Inventory Data
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails sx={{paddingTop: "20px"}}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={3}>
-                        <MuiDatePicker
-                          name="date"
-                          id="date"
-                          label={"Date"}
-                          disablePast
-                          value={values?.Date}
-                        />
-                      </Grid>
-                      <Grid item xs={3}>
-                        <MuiTimePicker
-                          name="time"
-                          id="time"
-                          label={"Time"}
-                          disablePast
-                          value={values?.time}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Button variant="contained" type="submit" size="small">
-                          Next
-                        </Button>
-                      </Grid>
+                  <Grid container spacing={2}>
+                    <Grid item xs={3}>
+                      <MuiDatePicker
+                        name="date"
+                        id="date"
+                        label={"Date"}
+                        disablePast
+                        value={values?.Date}
+                      />
                     </Grid>
-                  </AccordionDetails>
-                </Accordion>{" "}
-                <Accordion
-                  expanded={expanded === "On-Site"}
-                  onChange={handleChange("On-Site")}
+                    <Grid item xs={3}>
+                      <MuiTimePicker
+                        name="time"
+                        id="time"
+                        label={"Time"}
+                        disablePast
+                        value={values?.time}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sx={{ textAlign: "right" }}>
+                      <Button variant="contained" type="submit" size="small">
+                        Next
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </MuiAccordion>{" "}
+                <MuiAccordion
+                  title="Add On-Site Issues"
+                  selectedPanel="On-Site"
                 >
-                  <AccordionSummary
-                    expandIcon={<AddIcon sx={{ color: expanded === "On-Site" ? "#FFFFFF" : ""}}/>}
-                    aria-controls="On-Site-content"
-                    id="On-Site-header"
-                    sx={{
-                      backgroundColor: expanded === "On-Site" ? "#3A3A3C" : "",
-                      color: expanded === "On-Site" ? "#FFFFFF" : "",
-                    }}
-                  >
-                    <Typography className={classes.accordionTitle}>
-                      Add On-Site Issues
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails sx={{paddingTop: "20px"}}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={3}>
-                        <MuiDatePicker
-                          name="date"
-                          id="date"
-                          label={"Date"}
-                          disablePast
-                          value={values?.Date}
-                        />
-                      </Grid>
-                      <Grid item xs={3}>
-                        <MuiTimePicker
-                          name="time"
-                          id="time"
-                          label={"Time"}
-                          disablePast
-                          value={values?.time}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Button variant="contained" type="submit" size="small">
-                          Next
-                        </Button>
-                      </Grid>
+                  <Grid container spacing={2}>
+                    <Grid item xs={3}>
+                      <MuiDatePicker
+                        name="date"
+                        id="date"
+                        label={"Date"}
+                        disablePast
+                        value={values?.Date}
+                      />
                     </Grid>
-                  </AccordionDetails>
-                </Accordion>{" "}
-                <Accordion
-                  expanded={expanded === "Photos"}
-                  onChange={handleChange("Photos")}
+                    <Grid item xs={3}>
+                      <MuiTimePicker
+                        name="time"
+                        id="time"
+                        label={"Time"}
+                        disablePast
+                        value={values?.time}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sx={{ textAlign: "right" }}>
+                      <Button variant="contained" type="submit" size="small">
+                        Next
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </MuiAccordion>{" "}
+                <MuiAccordion
+                  title="Add Photos / Documents / Videos"
+                  selectedPanel="Photos"
                 >
-                  <AccordionSummary
-                    expandIcon={<AddIcon sx={{ color: expanded === "Photos" ? "#FFFFFF" : ""}}/>}
-                    aria-controls="Photos-content"
-                    id="Photos-header"
-                    sx={{
-                      backgroundColor: expanded === "Photos" ? "#3A3A3C" : "",
-                      color: expanded === "Photos" ? "#FFFFFF" : "",
-                    }}
-                  >
-                    <Typography className={classes.accordionTitle}>
-                      Add Photos / Documents / Videos
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails sx={{paddingTop: "20px"}}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={3}>
-                        <MuiDatePicker
-                          name="date"
-                          id="date"
-                          label={"Date"}
-                          disablePast
-                          value={values?.Date}
-                        />
-                      </Grid>
-                      <Grid item xs={3}>
-                        <MuiTimePicker
-                          name="time"
-                          id="time"
-                          label={"Time"}
-                          disablePast
-                          value={values?.time}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Button variant="contained" type="submit" size="small">
-                          Next
-                        </Button>
-                      </Grid>
+                  <Grid container spacing={2}>
+                    <Grid item xs={3}>
+                      <MuiDatePicker
+                        name="date"
+                        id="date"
+                        label={"Date"}
+                        disablePast
+                        value={values?.Date}
+                      />
                     </Grid>
-                  </AccordionDetails>
-                </Accordion>{" "}
-                <Accordion
-                  expanded={expanded === "Notes"}
-                  onChange={handleChange("Notes")}
-                >
-                  <AccordionSummary
-                    expandIcon={<AddIcon sx={{ color: expanded === "Notes" ? "#FFFFFF" : ""}}/>}
-                    aria-controls="Notes-content"
-                    id="Notes-header"
-                    sx={{
-                      backgroundColor: expanded === "Notes" ? "#3A3A3C" : "",
-                      color: expanded === "Notes" ? "#FFFFFF" : "",
-                    }}
-                  >
-                    <Typography className={classes.accordionTitle}>
-                      Notes / Comments
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails  sx={{paddingTop: "20px"}}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={12}>
-                        <MuiTextArea name="notes" id="notes" label={"Notes"} />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Button variant="contained" type="submit" size="small">
-                          Next
-                        </Button>
-                      </Grid>
+                    <Grid item xs={3}>
+                      <MuiTimePicker
+                        name="time"
+                        id="time"
+                        label={"Time"}
+                        disablePast
+                        value={values?.time}
+                      />
                     </Grid>
-                  </AccordionDetails>
-                </Accordion>
-                <Accordion
-                  expanded={expanded === "Signature"}
-                  onChange={handleChange("Signature")}
-                >
-                  <AccordionSummary
-                    expandIcon={<AddIcon sx={{ color: expanded === "Signature" ? "#FFFFFF" : ""}}/>}
-                    aria-controls="Signature-content"
-                    id="Signature-header"
-                    sx={{
-                      backgroundColor: expanded === "Signature" ? "#3A3A3C" : "",
-                      color: expanded === "Signature" ? "#FFFFFF" : "",
-                    }}
-                  >
-                    <Typography className={classes.accordionTitle}>
-                      Add Signature{" "}
-                    </Typography>
-                  </AccordionSummary>
-                  <AccordionDetails sx={{paddingTop: "20px"}}>
-                    <Grid container spacing={2}>
-                      <Grid item xs={3}>
-                        <MuiDatePicker
-                          name="date"
-                          id="date"
-                          label={"Date"}
-                          disablePast
-                          value={values?.Date}
-                        />
-                      </Grid>
-                      <Grid item xs={3}>
-                        <MuiTimePicker
-                          name="time"
-                          id="time"
-                          label={"Time"}
-                          disablePast
-                          value={values?.time}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <Button variant="contained" type="submit" size="small">
-                          Next
-                        </Button>
-                      </Grid>
+                    <Grid item xs={12} sx={{ textAlign: "right" }}>
+                      <Button variant="contained" type="submit" size="small">
+                        Next
+                      </Button>
                     </Grid>
-                  </AccordionDetails>
-                </Accordion>
+                  </Grid>
+                </MuiAccordion>{" "}
+                <MuiAccordion title="Notes / Comments" selectedPanel="Notes">
+                  <Grid container spacing={2}>
+                    <Grid item xs={3}>
+                      <MuiDatePicker
+                        name="date"
+                        id="date"
+                        label={"Date"}
+                        disablePast
+                        value={values?.Date}
+                      />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <MuiTimePicker
+                        name="time"
+                        id="time"
+                        label={"Time"}
+                        disablePast
+                        value={values?.time}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sx={{ textAlign: "right" }}>
+                      <Button variant="contained" type="submit" size="small">
+                        Next
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </MuiAccordion>{" "}
+                <MuiAccordion title="Add Signature" selectedPanel="Signature">
+                  <Grid container spacing={2}>
+                    <Grid item xs={3}>
+                      <MuiDatePicker
+                        name="date"
+                        id="date"
+                        label={"Date"}
+                        disablePast
+                        value={values?.Date}
+                      />
+                    </Grid>
+                    <Grid item xs={3}>
+                      <MuiTimePicker
+                        name="time"
+                        id="time"
+                        label={"Time"}
+                        disablePast
+                        value={values?.time}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sx={{ textAlign: "right" }}>
+                      <Button variant="contained" type="submit" size="small">
+                        Next
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </MuiAccordion>
               </Form>
             )}
           </Formik>
@@ -766,4 +604,4 @@ const CreateDailyLog = (props) => {
   );
 };
 
-export default CreateDailyLog;
+export default memo(CreateDailyLog);

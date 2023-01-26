@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import moment from "moment";
 import { IconButton } from "@mui/material";
 
@@ -90,6 +90,8 @@ const TabularView = (props) => {
   const handleChangeRowsPerPage = () => {
     console.log("test1");
   };
+
+  console.log("i am from child");
 
   return (
     <>
