@@ -1,5 +1,6 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState, useContext } from "react";
 import { makeStyles } from "@mui/styles";
+import { GlobalState } from "../Context/Context";
 
 import Accordion from "@mui/material/Accordion";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -22,15 +23,19 @@ const MuiAccordion = (props) => {
   const { title, selectedPanel, children } = props;
   const classes = useStyle();
 
-  const [expanded, setExpanded] = useState(false);
+  // const [expanded, setExpanded] = useState(false);
+  const { expanded, setExpanded } = useContext(GlobalState);
 
   const handleChange = (panel) => (event, isExpanded) => {
+    console.log("s1", panel)
+    console.log("e1",expanded)
     setExpanded(isExpanded ? panel : false);
   };
 
   return (
     <>
-      {console.log("selectedPanel", selectedPanel)}
+    {console.log("s2", selectedPanel)}
+    {console.log("e2", expanded)}
       <Accordion
         expanded={expanded === selectedPanel}
         onChange={handleChange(selectedPanel)}
