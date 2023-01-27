@@ -1,4 +1,4 @@
-import React, { Children } from "react";
+import React, { memo, Children } from "react";
 import { styled } from "@mui/material/styles";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
@@ -57,4 +57,4 @@ const MuiDialog = (props) => {
   );
 };
 
-export default MuiDialog;
+export default memo(MuiDialog);

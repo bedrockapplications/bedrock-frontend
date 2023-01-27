@@ -1,4 +1,4 @@
-import React, { memo, useState, useContext } from "react";
+import React, { memo, useState, useContext, useMemo } from "react";
 import { makeStyles } from "@mui/styles";
 import { GlobalState } from "../Context/Context";
 
@@ -20,44 +20,34 @@ const useStyle = makeStyles(() => ({
 }));
 
 const MuiAccordion = (props) => {
-  const { title, selectedPanel, children } = props;
+  const { title, selectedPanel, children, expanded, handleChange } = props;
   const classes = useStyle();
 
-  // const [expanded, setExpanded] = useState(false);
-  const { expanded, setExpanded } = useContext(GlobalState);
+  //   //   const [expanded, setExpanded] = useState(false);
+  //   // //   const { expanded, setExpanded } = useContext(GlobalState);
 
-  const handleChange = (panel) => (event, isExpanded) => {
-    console.log("s1", panel)
-    console.log("e1",expanded)
-    setExpanded(isExpanded ? panel : false);
-  };
+  //   const handleChange = (panel) => (event, isExpanded) => {
+  //     console.log("s1", panel);
+  //     console.log("e1", expanded);
+  //     setExpanded(isExpanded ? panel : false);
+  //   };
 
   return (
     <>
-    {console.log("s2", selectedPanel)}
-    {console.log("e2", expanded)}
-      <Accordion
-        expanded={expanded === selectedPanel}
-        onChange={handleChange(selectedPanel)}
-      >
+      {console.log("e2", expanded)}
+      <Accordion expanded={expanded} onChange={handleChange}>
         <AccordionSummary
-          expandIcon={
-            <AddIcon
-              sx={{ color: expanded === selectedPanel ? "#FFFFFF" : "" }}
-            />
-          }
+          expandIcon={<AddIcon sx={{ color: expanded ? "#FFFFFF" : "" }} />}
           aria-controls={selectedPanel}
           id={selectedPanel}
           sx={{
-            backgroundColor: expanded === selectedPanel ? "#3A3A3C" : "",
-            color: expanded === selectedPanel ? "#FFFFFF" : "",
+            backgroundColor: expanded ? "#3A3A3C" : "",
+            color: expanded ? "#FFFFFF" : "",
           }}
         >
           <Typography className={classes.accordionTitle}>{title}</Typography>
         </AccordionSummary>
-        <AccordionDetails>
-          {expanded === selectedPanel ? children : null}
-        </AccordionDetails>
+        <AccordionDetails>{expanded ? children : null}</AccordionDetails>
       </Accordion>
     </>
   );
