@@ -16,6 +16,7 @@ const Chatbot = () => {
   ]);
 
   const configuration = new Configuration({
+    organization: "org-MmWtzG90yXEXPrHbBZDe6uvp",
     apiKey: process.env.REACT_APP_API_KEY,
   });
 
