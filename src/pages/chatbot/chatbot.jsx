@@ -31,7 +31,6 @@ const Chatbot = () => {
 
   const handleApi = async (msg) => {
     if(msg.message !== ""){
-        console.log("hiii", process.env.REACT_APP_API_KEY)
     setisLoading(true)
     setallmessages([...allmessages, msg]);
     setqinput("");
