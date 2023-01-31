@@ -16,7 +16,7 @@ const Chatbot = () => {
   ]);
 
   const configuration = new Configuration({
-    apiKey: "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",
+    apiKey: process.env.REACT_APP_API_KEY,
   });
 
   const openai = new OpenAIApi(configuration);
