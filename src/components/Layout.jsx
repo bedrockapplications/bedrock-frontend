@@ -44,7 +44,8 @@ import { getMeetingsList } from "../services/request";
 import moment from "moment";
 import { GlobalState } from "../Context/Context";
 import GetDateAndTime from "../components/DigitalClock";
-
+import BookIcon from "@mui/icons-material/Book";
+import PsychologyIcon from '@mui/icons-material/Psychology';
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
 // import Dashboard from "../pages/Dashboard";
@@ -91,6 +92,18 @@ const sideLinks = [
     label: "my_projects",
     link: "/myprojects",
   },
+  // {
+  //   icon: <BookIcon />,
+  //   label: "Daily Logs",
+  //   link: "/dailylogs",
+  // },
+  {
+    icon: <PsychologyIcon />,
+    label: "Estimator.ai",
+    link: "/estimatorai",
+  },
+
+
   // { icon: <PersonAddIcon />, label: "User Creation", link: "/userCreation" },
 ];
 
