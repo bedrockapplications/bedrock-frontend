@@ -4,6 +4,7 @@ let headers = {
   "content-type": "multipart/form-data",
 };
 
+
 // user details api
 export const getUserDetails = async (id) => {
   return axios.get(`/user/details?_id=${id}`);
