@@ -1,0 +1,121 @@
+.chatbot-main{
+    border-radius: 15px;
+    border: 3px solid black;
+    height: 87vh;
+    width: 93vw;
+    overflow: hidden;
+    /* background-image: linear-gradient(
+    180deg,
+    #3A3A3C 0%,
+    rgba(41, 41, 41, 0) 205.83%
+  ); */
+  background: white;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+}
+
+.chatbot-title{
+    font-size: 30px;
+    font-weight: 800;
+    text-align: center;
+    color: white;
+    background: #3A3A3C;
+    padding: 20px 0px;
+    border-bottom: 3px solid #3A3A3C;
+}
+
+.chat-screen{
+    height: 65vh;
+    width: 90vw;
+    padding: 0px 30px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+.botmsg{
+    margin: 15px 0px;
+    background-color: white;
+    border: 1px solid #3A3A3C;
+    color: #3A3A3C;
+    font-size: 15px;
+    width: fit-content;
+    max-width: 70vw;
+    word-break: break-all;
+    padding: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    font-weight: 700;
+}
+
+.botmsg-box{
+    width: calc(90vw - 60px);
+    display: flex;
+    justify-content: flex-start;
+}
+
+.usermsg-box{
+    width: calc(90vw - 60px);
+    display: flex;
+    justify-content: flex-end;
+}
+
+.usermsg{
+    float: right;
+    margin: 15px 0px;
+    border: 1px solid #3A3A3C;
+    background-color: #3A3A3C;
+    color: white;
+    font-size: 15px;
+    width: fit-content;
+    max-width: 70vw;
+    word-break: break-all;
+    padding: 10px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    font-weight: 700;
+}
+
+.input-box{
+    border: 1px solid black;
+    position: fixed;
+    bottom: 30px;
+    width: calc(90vw - 60px);
+    margin: 0px 30px;
+    padding: 0px 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.textfiled{
+    width: 70vw;
+    padding: 12px;
+    font-size: 15px;
+    border: none;
+    outline: none;
+    border-radius: 10px;
+}
+
+.input-btn{
+    /* width: fit-content; */
+    cursor: pointer;
+    margin-left: 15px;
+    padding: 0px 15px;
+    /* color: #fff;
+    background-color: #242b3c;
+    font-size: 15px;
+    border-radius: 10px; */
+}
+
+.send-img{
+    margin-top: 10px;
+    height: 20px;
+    width: 20px;
+}

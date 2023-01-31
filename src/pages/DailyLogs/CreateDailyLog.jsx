@@ -153,6 +153,36 @@ const CreateDailyLog = (props) => {
                   comments: "",
                 },
               ],
+              manpower: [
+                {
+                  team: "",
+                  count: "",
+                  hours: "",
+                  comments: "",
+                },
+              ],
+              visitor: [
+                {
+                  entryType: "",
+                  name: "",
+                  comments: "",
+                },
+              ],
+              inventory: [
+                {
+                  type: "",
+                  material: "",
+                  quantity: "",
+                  unitOfMeasure: "",
+                },
+              ],
+              onsite: [
+                {
+                  type: "",
+                  reason: "",
+                  comments: "",
+                },
+              ],
             }}
             validationSchema={null}
             onSubmit={(values, { setSubmitting, resetForm }) => {
@@ -455,26 +485,111 @@ const CreateDailyLog = (props) => {
                 >
                   {expandedPanels.ManPower ? (
                     <Grid container spacing={2}>
-                      <Grid item xs={3}>
-                        <MuiDatePicker
-                          name="date"
-                          id="date"
-                          label={"Date"}
-                          disablePast
-                          value={values?.Date}
-                        />
+                      <Grid item xs={12}>
+                        <FieldArray name="manpower">
+                          {({ insert, remove, push }) => (
+                            <>
+                              <Grid item xs={12}>
+                                <Button
+                                  variant="contained"
+                                  size="small"
+                                  onClick={() =>
+                                    push({
+                                      team: "",
+                                      count: "",
+                                      hours: "",
+                                      comments: "",
+                                    })
+                                  }
+                                >
+                                  Add Line Item
+                                </Button>
+                              </Grid>
+                              <Grid item xs={12}>
+                                <TableContainer component={Paper}>
+                                  <Table
+                                    sx={{ minWidth: 650 }}
+                                    aria-label="simple table"
+                                  >
+                                    <TableHead>
+                                      <TableRow>
+                                        <TableCell>Action</TableCell>
+                                        <TableCell align="right">
+                                          Team
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          Count
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          Hours
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          Comments
+                                        </TableCell>
+                                      </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                      {values.manpower.map((item, index) => (
+                                        <TableRow
+                                          key={index}
+                                          sx={{
+                                            "&:last-child td, &:last-child th":
+                                              {
+                                                border: 0,
+                                              },
+                                          }}
+                                        >
+                                          <TableCell align="right">
+                                            <Button
+                                              variant="contained"
+                                              size="small"
+                                              onClick={() => remove(index)}
+                                            >
+                                              Delete{" "}
+                                            </Button>
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiSelectField
+                                              name={`manpower.${index}.team`}
+                                              id={`manpower.${index}.team`}
+                                              label="Choose"
+                                              options={[]}
+                                            />
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiTextField
+                                              name={`manpower.${index}.count`}
+                                              id={`manpower.${index}.count`}
+                                              label="0"
+                                            />
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiTextField
+                                              name={`manpower.${index}.hours`}
+                                              id={`manpower.${index}.hours`}
+                                              label="0"
+                                            />
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiTextField
+                                              name={`manpower.${index}.comments`}
+                                              id={`manpower.${index}.comments`}
+                                              label="Comments"
+                                            />
+                                          </TableCell>
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                </TableContainer>
+                              </Grid>
+                            </>
+                          )}
+                        </FieldArray>
                       </Grid>
-                      <Grid item xs={3}>
-                        <MuiTimePicker
-                          name="time"
-                          id="time"
-                          label={"Time"}
-                          disablePast
-                          value={values?.time}
-                        />
-                      </Grid>
+
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
+                        <Button variant="contained" size="small">
                           Next
                         </Button>
                       </Grid>
@@ -491,26 +606,104 @@ const CreateDailyLog = (props) => {
                 >
                   {expandedPanels.Inspection ? (
                     <Grid container spacing={2}>
-                      <Grid item xs={3}>
-                        <MuiDatePicker
-                          name="date"
-                          id="date"
-                          label={"Date"}
-                          disablePast
-                          value={values?.Date}
-                        />
+                      <Grid item xs={12}>
+                        <FieldArray name="visitor">
+                          {({ insert, remove, push }) => (
+                            <>
+                              <Grid item xs={12}>
+                                <Button
+                                  variant="contained"
+                                  size="small"
+                                  onClick={() =>
+                                    push({
+                                      entryType: "",
+                                      name: "",
+                                      comments: "",
+                                    })
+                                  }
+                                >
+                                  Add Line Item
+                                </Button>
+                              </Grid>
+                              <Grid item xs={12}>
+                                <TableContainer component={Paper}>
+                                  <Table
+                                    sx={{ minWidth: 650 }}
+                                    aria-label="simple table"
+                                  >
+                                    <TableHead>
+                                      <TableRow>
+                                        <TableCell>Action</TableCell>
+                                        <TableCell align="right">
+                                          Entry Type
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          Name
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          Comments
+                                        </TableCell>
+                                      </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                      {values.visitor.map((item, index) => (
+                                        <TableRow
+                                          key={index}
+                                          sx={{
+                                            "&:last-child td, &:last-child th":
+                                              {
+                                                border: 0,
+                                              },
+                                          }}
+                                        >
+                                          <TableCell align="right">
+                                            <Button
+                                              variant="contained"
+                                              size="small"
+                                              onClick={() => remove(index)}
+                                            >
+                                              Delete{" "}
+                                            </Button>
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiSelectField
+                                              name={`visitor.${index}.entryType`}
+                                              id={`visitor.${index}.entryType`}
+                                              label="Choose"
+                                              options={[
+                                                "Visitor",
+                                                "Inspector",
+                                                "Others",
+                                              ]}
+                                            />
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiTextField
+                                              name={`visitor.${index}.name`}
+                                              id={`visitor.${index}.name`}
+                                              label="Name"
+                                            />
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiTextField
+                                              name={`visitor.${index}.comments`}
+                                              id={`visitor.${index}.comments`}
+                                              label="Comments"
+                                            />
+                                          </TableCell>
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                </TableContainer>
+                              </Grid>
+                            </>
+                          )}
+                        </FieldArray>
                       </Grid>
-                      <Grid item xs={3}>
-                        <MuiTimePicker
-                          name="time"
-                          id="time"
-                          label={"Time"}
-                          disablePast
-                          value={values?.time}
-                        />
-                      </Grid>
+
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
+                        <Button variant="contained" size="small">
                           Next
                         </Button>
                       </Grid>
@@ -527,26 +720,111 @@ const CreateDailyLog = (props) => {
                 >
                   {expandedPanels.Inventory ? (
                     <Grid container spacing={2}>
-                      <Grid item xs={3}>
-                        <MuiDatePicker
-                          name="date"
-                          id="date"
-                          label={"Date"}
-                          disablePast
-                          value={values?.Date}
-                        />
+                      <Grid item xs={12}>
+                        <FieldArray name="inventory">
+                          {({ insert, remove, push }) => (
+                            <>
+                              <Grid item xs={12}>
+                                <Button
+                                  variant="contained"
+                                  size="small"
+                                  onClick={() =>
+                                    push({
+                                      type: "",
+                                      material: "",
+                                      quantity: "",
+                                      unitOfMeasure: "",
+                                    })
+                                  }
+                                >
+                                  Add Line Item
+                                </Button>
+                              </Grid>
+                              <Grid item xs={12}>
+                                <TableContainer component={Paper}>
+                                  <Table
+                                    sx={{ minWidth: 650 }}
+                                    aria-label="simple table"
+                                  >
+                                    <TableHead>
+                                      <TableRow>
+                                        <TableCell>Action</TableCell>
+                                        <TableCell align="right">
+                                          Type
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          Material
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          Quantity
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          Unit Of Measure
+                                        </TableCell>
+                                      </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                      {values.inventory.map((item, index) => (
+                                        <TableRow
+                                          key={index}
+                                          sx={{
+                                            "&:last-child td, &:last-child th":
+                                              {
+                                                border: 0,
+                                              },
+                                          }}
+                                        >
+                                          <TableCell align="right">
+                                            <Button
+                                              variant="contained"
+                                              size="small"
+                                              onClick={() => remove(index)}
+                                            >
+                                              Delete{" "}
+                                            </Button>
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiSelectField
+                                              name={`inventory.${index}.type`}
+                                              id={`inventory.${index}.type`}
+                                              label="Choose"
+                                              options={["Incoming", "Outing"]}
+                                            />
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiTextField
+                                              name={`inventory.${index}.material`}
+                                              id={`inventory.${index}.material`}
+                                              label="Name"
+                                            />
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiTextField
+                                              name={`inventory.${index}.quantity`}
+                                              id={`inventory.${index}.quantity`}
+                                              label="0"
+                                            />
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiTextField
+                                              name={`inventory.${index}.unitOfMeasure`}
+                                              id={`inventory.${index}.unitOfMeasure`}
+                                              label="Units"
+                                            />
+                                          </TableCell>
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                </TableContainer>
+                              </Grid>
+                            </>
+                          )}
+                        </FieldArray>
                       </Grid>
-                      <Grid item xs={3}>
-                        <MuiTimePicker
-                          name="time"
-                          id="time"
-                          label={"Time"}
-                          disablePast
-                          value={values?.time}
-                        />
-                      </Grid>
+
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
+                        <Button variant="contained" size="small">
                           Next
                         </Button>
                       </Grid>
@@ -563,26 +841,105 @@ const CreateDailyLog = (props) => {
                 >
                   {expandedPanels.OnSite ? (
                     <Grid container spacing={2}>
-                      <Grid item xs={3}>
-                        <MuiDatePicker
-                          name="date"
-                          id="date"
-                          label={"Date"}
-                          disablePast
-                          value={values?.Date}
-                        />
+                      <Grid item xs={12}>
+                        <FieldArray name="onsite">
+                          {({ insert, remove, push }) => (
+                            <>
+                              <Grid item xs={12}>
+                                <Button
+                                  variant="contained"
+                                  size="small"
+                                  onClick={() =>
+                                    push({
+                                      type: "",
+                                      reason: "",
+                                      comments: "",
+                                    })
+                                  }
+                                >
+                                  Add Line Item
+                                </Button>
+                              </Grid>
+                              <Grid item xs={12}>
+                                <TableContainer component={Paper}>
+                                  <Table
+                                    sx={{ minWidth: 650 }}
+                                    aria-label="simple table"
+                                  >
+                                    <TableHead>
+                                      <TableRow>
+                                        <TableCell>Action</TableCell>
+                                        <TableCell align="right">
+                                          Type
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          Reason
+                                        </TableCell>
+                                        <TableCell align="right">
+                                          Comments
+                                        </TableCell>
+                                      </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                      {values.inventory.map((item, index) => (
+                                        <TableRow
+                                          key={index}
+                                          sx={{
+                                            "&:last-child td, &:last-child th":
+                                              {
+                                                border: 0,
+                                              },
+                                          }}
+                                        >
+                                          <TableCell align="right">
+                                            <Button
+                                              variant="contained"
+                                              size="small"
+                                              onClick={() => remove(index)}
+                                            >
+                                              Delete{" "}
+                                            </Button>
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiSelectField
+                                              name={`onsite.${index}.type`}
+                                              id={`onsite.${index}.type`}
+                                              label="Choose"
+                                              options={[
+                                                "Damages",
+                                                "Saftey",
+                                                "Security",
+                                                "Other",
+                                              ]}
+                                            />
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiTextField
+                                              name={`onsite.${index}.reason`}
+                                              id={`onsite.${index}.reason`}
+                                              label="Reason"
+                                            />
+                                          </TableCell>
+                                          <TableCell align="right">
+                                            <MuiTextField
+                                              name={`onsite.${index}.comments`}
+                                              id={`onsite.${index}.comments`}
+                                              label="Comments"
+                                            />
+                                          </TableCell>
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                </TableContainer>
+                              </Grid>
+                            </>
+                          )}
+                        </FieldArray>
                       </Grid>
-                      <Grid item xs={3}>
-                        <MuiTimePicker
-                          name="time"
-                          id="time"
-                          label={"Time"}
-                          disablePast
-                          value={values?.time}
-                        />
-                      </Grid>
+
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
+                        <Button variant="contained" size="small">
                           Next
                         </Button>
                       </Grid>
@@ -635,22 +992,11 @@ const CreateDailyLog = (props) => {
                 >
                   {expandedPanels.Notes ? (
                     <Grid container spacing={2}>
-                      <Grid item xs={3}>
-                        <MuiDatePicker
-                          name="date"
-                          id="date"
-                          label={"Date"}
-                          disablePast
-                          value={values?.Date}
-                        />
-                      </Grid>
-                      <Grid item xs={3}>
-                        <MuiTimePicker
-                          name="time"
-                          id="time"
-                          label={"Time"}
-                          disablePast
-                          value={values?.time}
+                      <Grid item xs={12}>
+                        <MuiTextArea
+                          name="fullnotes"
+                          id="fullnotes"
+                          label={"comments"}
                         />
                       </Grid>
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
