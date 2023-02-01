@@ -47,7 +47,9 @@ const MuiAccordion = (props) => {
         >
           <Typography className={classes.accordionTitle}>{title}</Typography>
         </AccordionSummary>
-        <AccordionDetails>{expanded ? children : null}</AccordionDetails>
+        <AccordionDetails sx={{ padding: "1.5rem 1rem 1rem" }}>
+          {expanded ? children : null}
+        </AccordionDetails>
       </Accordion>
     </>
   );

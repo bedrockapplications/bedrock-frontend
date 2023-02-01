@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import Axios from "axios";
 import "./chatbot.css";
 import { Configuration, OpenAIApi } from "openai";
 import send from '../../Images/send.png';
@@ -14,9 +15,19 @@ const Chatbot = () => {
       message: "Welcome to Estimator.ai, How May I Help You?",
     }
   ]);
+  const [apikey, setApikey] = useState("");
+
+  useEffect(() => {
+    Axios.get(`https://nodejs-apis.bedrockapps.link/api/chats/getKey`)
+    .then(({ data }) => {
+      setApikey(data[0].value);
+    })
+    .catch((error) => {});
+  }, [])
 
   const configuration = new Configuration({
-    apiKey: process.env.REACT_APP_API_KEY,
+    organization: "org-MmWtzG90yXEXPrHbBZDe6uvp",
+    apiKey: apikey,
   });
 
   const openai = new OpenAIApi(configuration);
