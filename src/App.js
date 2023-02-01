@@ -6,6 +6,7 @@ import { createBrowserHistory } from "history";
 import Snackbar from "./components/Snackbar";
 import Loading from "./components/Loading";
 
+
 const newHistory = createBrowserHistory();
 
 function App() {
