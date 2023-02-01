@@ -8,6 +8,7 @@ import MuiTimePicker from "../../components/Formik/MuiTimePicker";
 import MuiTextField from "../../components/Formik/MuiTextField";
 import MuiSelectField from "../../components/Formik/MuiSelectField";
 import MuiTextArea from "../../components/Formik/MuiTextArea";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 import MuiDialog from "../../components/MuiDialog";
 import {
@@ -60,6 +61,11 @@ const useStyle = makeStyles(() => ({
     fontSize: "14px",
     textAlign: "center",
     color: "#3A3A3C",
+  },
+  headerText: {
+    backgroundColor: "#3A3A3C",
+    color: "#fff",
+    textAlign: "left",
   },
 }));
 
@@ -379,88 +385,114 @@ const CreateDailyLog = (props) => {
                         <FieldArray name="schedule">
                           {({ insert, remove, push }) => (
                             <>
-                              <Grid item xs={12}>
-                                <Button
-                                  variant="contained"
-                                  size="small"
-                                  onClick={() =>
-                                    push({
-                                      activity: "",
-                                      choose: "",
-                                      comments: "",
-                                    })
-                                  }
-                                >
-                                  Add Line Item
-                                </Button>
-                              </Grid>
-                              <Grid item xs={12}>
-                                <TableContainer component={Paper}>
-                                  <Table
-                                    sx={{ minWidth: 650 }}
-                                    aria-label="simple table"
+                              <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                  <Button
+                                    variant="contained"
+                                    size="small"
+                                    onClick={() =>
+                                      push({
+                                        activity: "",
+                                        choose: "",
+                                        comments: "",
+                                      })
+                                    }
                                   >
-                                    <TableHead>
-                                      <TableRow>
-                                        <TableCell>Action</TableCell>
-                                        <TableCell align="right">
-                                          Activity
-                                        </TableCell>
-                                        <TableCell align="right">
-                                          Contractor
-                                        </TableCell>
-                                        <TableCell align="right">
-                                          Comments
-                                        </TableCell>
-                                      </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                      {values.schedule.map((item, index) => (
-                                        <TableRow
-                                          key={index}
-                                          sx={{
-                                            "&:last-child td, &:last-child th":
-                                              {
-                                                border: 0,
-                                              },
-                                          }}
-                                        >
-                                          <TableCell align="right">
-                                            <Button
-                                              variant="contained"
-                                              size="small"
-                                              onClick={() => remove(index)}
-                                            >
-                                              Delete{" "}
-                                            </Button>
+                                    Add Line Item
+                                  </Button>
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <TableContainer component={Paper}>
+                                    <Table
+                                      // sx={{ minWidth: 650 }}
+                                      aria-label="simple table"
+                                    >
+                                      <TableHead>
+                                        <TableRow>
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Action
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiTextField
-                                              name={`schedule.${index}.activity`}
-                                              id={`schedule.${index}.activity`}
-                                              label="Activity"
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Activity
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiSelectField
-                                              name={`schedule.${index}.choose`}
-                                              id={`schedule.${index}.choose`}
-                                              label="Choose"
-                                              options={[]}
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Contractor
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiTextField
-                                              name={`schedule.${index}.comments`}
-                                              id={`schedule.${index}.comments`}
-                                              label="Comments"
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Comments
                                           </TableCell>
                                         </TableRow>
-                                      ))}
-                                    </TableBody>
-                                  </Table>
-                                </TableContainer>
+                                      </TableHead>
+                                      <TableBody>
+                                        {values?.schedule?.map(
+                                          (item, index) => (
+                                            <TableRow
+                                              key={index}
+                                              sx={{
+                                                "&:last-child td, &:last-child th":
+                                                  {
+                                                    border: 0,
+                                                  },
+                                              }}
+                                            >
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: "100px" }}
+                                              >
+                                                <Button
+                                                  variant="contained"
+                                                  size="small"
+                                                  onClick={() => remove(index)}
+                                                >
+                                                  Delete
+                                                </Button>
+                                              </TableCell>
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: "170px" }}
+                                              >
+                                                <MuiTextField
+                                                  name={`schedule.${index}.activity`}
+                                                  id={`schedule.${index}.activity`}
+                                                  label="Activity"
+                                                />
+                                              </TableCell>
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: "170px" }}
+                                              >
+                                                <MuiSelectField
+                                                  name={`schedule.${index}.choose`}
+                                                  id={`schedule.${index}.choose`}
+                                                  label="Choose"
+                                                  options={[]}
+                                                />
+                                              </TableCell>
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: "170px" }}
+                                              >
+                                                <MuiTextField
+                                                  name={`schedule.${index}.comments`}
+                                                  id={`schedule.${index}.comments`}
+                                                  label="Comments"
+                                                />
+                                              </TableCell>
+                                            </TableRow>
+                                          )
+                                        )}
+                                      </TableBody>
+                                    </Table>
+                                  </TableContainer>
+                                </Grid>
                               </Grid>
                             </>
                           )}
@@ -489,99 +521,128 @@ const CreateDailyLog = (props) => {
                         <FieldArray name="manpower">
                           {({ insert, remove, push }) => (
                             <>
-                              <Grid item xs={12}>
-                                <Button
-                                  variant="contained"
-                                  size="small"
-                                  onClick={() =>
-                                    push({
-                                      team: "",
-                                      count: "",
-                                      hours: "",
-                                      comments: "",
-                                    })
-                                  }
-                                >
-                                  Add Line Item
-                                </Button>
-                              </Grid>
-                              <Grid item xs={12}>
-                                <TableContainer component={Paper}>
-                                  <Table
-                                    sx={{ minWidth: 650 }}
-                                    aria-label="simple table"
+                              <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                  <Button
+                                    variant="contained"
+                                    size="small"
+                                    onClick={() =>
+                                      push({
+                                        team: "",
+                                        count: "",
+                                        hours: "",
+                                        comments: "",
+                                      })
+                                    }
                                   >
-                                    <TableHead>
-                                      <TableRow>
-                                        <TableCell>Action</TableCell>
-                                        <TableCell align="right">
-                                          Team
-                                        </TableCell>
-                                        <TableCell align="right">
-                                          Count
-                                        </TableCell>
-                                        <TableCell align="right">
-                                          Hours
-                                        </TableCell>
-                                        <TableCell align="right">
-                                          Comments
-                                        </TableCell>
-                                      </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                      {values.manpower.map((item, index) => (
-                                        <TableRow
-                                          key={index}
-                                          sx={{
-                                            "&:last-child td, &:last-child th":
-                                              {
-                                                border: 0,
-                                              },
-                                          }}
-                                        >
-                                          <TableCell align="right">
-                                            <Button
-                                              variant="contained"
-                                              size="small"
-                                              onClick={() => remove(index)}
-                                            >
-                                              Delete{" "}
-                                            </Button>
+                                    Add Line Item
+                                  </Button>
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <TableContainer component={Paper}>
+                                    <Table
+                                      sx={{ minWidth: 650 }}
+                                      aria-label="simple table"
+                                    >
+                                      <TableHead>
+                                        <TableRow>
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Action
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiSelectField
-                                              name={`manpower.${index}.team`}
-                                              id={`manpower.${index}.team`}
-                                              label="Choose"
-                                              options={[]}
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Team
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiTextField
-                                              name={`manpower.${index}.count`}
-                                              id={`manpower.${index}.count`}
-                                              label="0"
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Count
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiTextField
-                                              name={`manpower.${index}.hours`}
-                                              id={`manpower.${index}.hours`}
-                                              label="0"
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Hours
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiTextField
-                                              name={`manpower.${index}.comments`}
-                                              id={`manpower.${index}.comments`}
-                                              label="Comments"
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Comments
                                           </TableCell>
                                         </TableRow>
-                                      ))}
-                                    </TableBody>
-                                  </Table>
-                                </TableContainer>
+                                      </TableHead>
+                                      <TableBody>
+                                        {values.manpower.map((item, index) => (
+                                          <TableRow
+                                            key={index + 1}
+                                            sx={{
+                                              "&:last-child td, &:last-child th":
+                                                {
+                                                  border: 0,
+                                                },
+                                            }}
+                                          >
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: "100px" }}
+                                            >
+                                              <Button
+                                                variant="contained"
+                                                size="small"
+                                                onClick={() => remove(index)}
+                                              >
+                                                Delete{" "}
+                                              </Button>
+                                            </TableCell>
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: "200px" }}
+                                            >
+                                              <MuiSelectField
+                                                name={`manpower.${index}.team`}
+                                                id={`manpower.${index}.team`}
+                                                label="Choose"
+                                                options={[]}
+                                              />
+                                            </TableCell>
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: "200px" }}
+                                            >
+                                              <MuiTextField
+                                                name={`manpower.${index}.count`}
+                                                id={`manpower.${index}.count`}
+                                                label="0"
+                                              />
+                                            </TableCell>
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: "200px" }}
+                                            >
+                                              <MuiTextField
+                                                name={`manpower.${index}.hours`}
+                                                id={`manpower.${index}.hours`}
+                                                label="0"
+                                              />
+                                            </TableCell>
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: "200px" }}
+                                            >
+                                              <MuiTextField
+                                                name={`manpower.${index}.comments`}
+                                                id={`manpower.${index}.comments`}
+                                                label="Comments"
+                                              />
+                                            </TableCell>
+                                          </TableRow>
+                                        ))}
+                                      </TableBody>
+                                    </Table>
+                                  </TableContainer>
+                                </Grid>
                               </Grid>
                             </>
                           )}
@@ -610,92 +671,116 @@ const CreateDailyLog = (props) => {
                         <FieldArray name="visitor">
                           {({ insert, remove, push }) => (
                             <>
-                              <Grid item xs={12}>
-                                <Button
-                                  variant="contained"
-                                  size="small"
-                                  onClick={() =>
-                                    push({
-                                      entryType: "",
-                                      name: "",
-                                      comments: "",
-                                    })
-                                  }
-                                >
-                                  Add Line Item
-                                </Button>
-                              </Grid>
-                              <Grid item xs={12}>
-                                <TableContainer component={Paper}>
-                                  <Table
-                                    sx={{ minWidth: 650 }}
-                                    aria-label="simple table"
+                              <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                  <Button
+                                    variant="contained"
+                                    size="small"
+                                    onClick={() =>
+                                      push({
+                                        entryType: "",
+                                        name: "",
+                                        comments: "",
+                                      })
+                                    }
                                   >
-                                    <TableHead>
-                                      <TableRow>
-                                        <TableCell>Action</TableCell>
-                                        <TableCell align="right">
-                                          Entry Type
-                                        </TableCell>
-                                        <TableCell align="right">
-                                          Name
-                                        </TableCell>
-                                        <TableCell align="right">
-                                          Comments
-                                        </TableCell>
-                                      </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                      {values.visitor.map((item, index) => (
-                                        <TableRow
-                                          key={index}
-                                          sx={{
-                                            "&:last-child td, &:last-child th":
-                                              {
-                                                border: 0,
-                                              },
-                                          }}
-                                        >
-                                          <TableCell align="right">
-                                            <Button
-                                              variant="contained"
-                                              size="small"
-                                              onClick={() => remove(index)}
-                                            >
-                                              Delete{" "}
-                                            </Button>
+                                    Add Line Item
+                                  </Button>
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <TableContainer component={Paper}>
+                                    <Table
+                                      sx={{ minWidth: 650 }}
+                                      aria-label="simple table"
+                                    >
+                                      <TableHead>
+                                        <TableRow>
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Action
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiSelectField
-                                              name={`visitor.${index}.entryType`}
-                                              id={`visitor.${index}.entryType`}
-                                              label="Choose"
-                                              options={[
-                                                "Visitor",
-                                                "Inspector",
-                                                "Others",
-                                              ]}
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Entry Type
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiTextField
-                                              name={`visitor.${index}.name`}
-                                              id={`visitor.${index}.name`}
-                                              label="Name"
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Name
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiTextField
-                                              name={`visitor.${index}.comments`}
-                                              id={`visitor.${index}.comments`}
-                                              label="Comments"
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Comments
                                           </TableCell>
                                         </TableRow>
-                                      ))}
-                                    </TableBody>
-                                  </Table>
-                                </TableContainer>
+                                      </TableHead>
+                                      <TableBody>
+                                        {values.visitor.map((item, index) => (
+                                          <TableRow
+                                            key={index}
+                                            sx={{
+                                              "&:last-child td, &:last-child th":
+                                                {
+                                                  border: 0,
+                                                },
+                                            }}
+                                          >
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: "100px" }}
+                                            >
+                                              <Button
+                                                variant="contained"
+                                                size="small"
+                                                onClick={() => remove(index)}
+                                              >
+                                                Delete{" "}
+                                              </Button>
+                                            </TableCell>
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: "200px" }}
+                                            >
+                                              <MuiSelectField
+                                                name={`visitor.${index}.entryType`}
+                                                id={`visitor.${index}.entryType`}
+                                                label="Choose"
+                                                options={[
+                                                  "Visitor",
+                                                  "Inspector",
+                                                  "Others",
+                                                ]}
+                                              />
+                                            </TableCell>
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: "200px" }}
+                                            >
+                                              <MuiTextField
+                                                name={`visitor.${index}.name`}
+                                                id={`visitor.${index}.name`}
+                                                label="Name"
+                                              />
+                                            </TableCell>
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: "200px" }}
+                                            >
+                                              <MuiTextField
+                                                name={`visitor.${index}.comments`}
+                                                id={`visitor.${index}.comments`}
+                                                label="Comments"
+                                              />
+                                            </TableCell>
+                                          </TableRow>
+                                        ))}
+                                      </TableBody>
+                                    </Table>
+                                  </TableContainer>
+                                </Grid>
                               </Grid>
                             </>
                           )}
@@ -724,99 +809,128 @@ const CreateDailyLog = (props) => {
                         <FieldArray name="inventory">
                           {({ insert, remove, push }) => (
                             <>
-                              <Grid item xs={12}>
-                                <Button
-                                  variant="contained"
-                                  size="small"
-                                  onClick={() =>
-                                    push({
-                                      type: "",
-                                      material: "",
-                                      quantity: "",
-                                      unitOfMeasure: "",
-                                    })
-                                  }
-                                >
-                                  Add Line Item
-                                </Button>
-                              </Grid>
-                              <Grid item xs={12}>
-                                <TableContainer component={Paper}>
-                                  <Table
-                                    sx={{ minWidth: 650 }}
-                                    aria-label="simple table"
+                              <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                  <Button
+                                    variant="contained"
+                                    size="small"
+                                    onClick={() =>
+                                      push({
+                                        type: "",
+                                        material: "",
+                                        quantity: "",
+                                        unitOfMeasure: "",
+                                      })
+                                    }
                                   >
-                                    <TableHead>
-                                      <TableRow>
-                                        <TableCell>Action</TableCell>
-                                        <TableCell align="right">
-                                          Type
-                                        </TableCell>
-                                        <TableCell align="right">
-                                          Material
-                                        </TableCell>
-                                        <TableCell align="right">
-                                          Quantity
-                                        </TableCell>
-                                        <TableCell align="right">
-                                          Unit Of Measure
-                                        </TableCell>
-                                      </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                      {values.inventory.map((item, index) => (
-                                        <TableRow
-                                          key={index}
-                                          sx={{
-                                            "&:last-child td, &:last-child th":
-                                              {
-                                                border: 0,
-                                              },
-                                          }}
-                                        >
-                                          <TableCell align="right">
-                                            <Button
-                                              variant="contained"
-                                              size="small"
-                                              onClick={() => remove(index)}
-                                            >
-                                              Delete{" "}
-                                            </Button>
+                                    Add Line Item
+                                  </Button>
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <TableContainer component={Paper}>
+                                    <Table
+                                      sx={{ minWidth: 650 }}
+                                      aria-label="simple table"
+                                    >
+                                      <TableHead>
+                                        <TableRow>
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Action
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiSelectField
-                                              name={`inventory.${index}.type`}
-                                              id={`inventory.${index}.type`}
-                                              label="Choose"
-                                              options={["Incoming", "Outing"]}
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Type
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiTextField
-                                              name={`inventory.${index}.material`}
-                                              id={`inventory.${index}.material`}
-                                              label="Name"
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Material
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiTextField
-                                              name={`inventory.${index}.quantity`}
-                                              id={`inventory.${index}.quantity`}
-                                              label="0"
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Quantity
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiTextField
-                                              name={`inventory.${index}.unitOfMeasure`}
-                                              id={`inventory.${index}.unitOfMeasure`}
-                                              label="Units"
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Unit Of Measure
                                           </TableCell>
                                         </TableRow>
-                                      ))}
-                                    </TableBody>
-                                  </Table>
-                                </TableContainer>
+                                      </TableHead>
+                                      <TableBody>
+                                        {values.inventory.map((item, index) => (
+                                          <TableRow
+                                            key={index}
+                                            sx={{
+                                              "&:last-child td, &:last-child th":
+                                                {
+                                                  border: 0,
+                                                },
+                                            }}
+                                          >
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: "100px" }}
+                                            >
+                                              <Button
+                                                variant="contained"
+                                                size="small"
+                                                onClick={() => remove(index)}
+                                              >
+                                                Delete{" "}
+                                              </Button>
+                                            </TableCell>
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: "200px" }}
+                                            >
+                                              <MuiSelectField
+                                                name={`inventory.${index}.type`}
+                                                id={`inventory.${index}.type`}
+                                                label="Choose"
+                                                options={["Incoming", "Outing"]}
+                                              />
+                                            </TableCell>
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: "200px" }}
+                                            >
+                                              <MuiTextField
+                                                name={`inventory.${index}.material`}
+                                                id={`inventory.${index}.material`}
+                                                label="Name"
+                                              />
+                                            </TableCell>
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: "200px" }}
+                                            >
+                                              <MuiTextField
+                                                name={`inventory.${index}.quantity`}
+                                                id={`inventory.${index}.quantity`}
+                                                label="0"
+                                              />
+                                            </TableCell>
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: "200px" }}
+                                            >
+                                              <MuiTextField
+                                                name={`inventory.${index}.unitOfMeasure`}
+                                                id={`inventory.${index}.unitOfMeasure`}
+                                                label="Units"
+                                              />
+                                            </TableCell>
+                                          </TableRow>
+                                        ))}
+                                      </TableBody>
+                                    </Table>
+                                  </TableContainer>
+                                </Grid>
                               </Grid>
                             </>
                           )}
@@ -845,93 +959,117 @@ const CreateDailyLog = (props) => {
                         <FieldArray name="onsite">
                           {({ insert, remove, push }) => (
                             <>
-                              <Grid item xs={12}>
-                                <Button
-                                  variant="contained"
-                                  size="small"
-                                  onClick={() =>
-                                    push({
-                                      type: "",
-                                      reason: "",
-                                      comments: "",
-                                    })
-                                  }
-                                >
-                                  Add Line Item
-                                </Button>
-                              </Grid>
-                              <Grid item xs={12}>
-                                <TableContainer component={Paper}>
-                                  <Table
-                                    sx={{ minWidth: 650 }}
-                                    aria-label="simple table"
+                              <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                  <Button
+                                    variant="contained"
+                                    size="small"
+                                    onClick={() =>
+                                      push({
+                                        type: "",
+                                        reason: "",
+                                        comments: "",
+                                      })
+                                    }
                                   >
-                                    <TableHead>
-                                      <TableRow>
-                                        <TableCell>Action</TableCell>
-                                        <TableCell align="right">
-                                          Type
-                                        </TableCell>
-                                        <TableCell align="right">
-                                          Reason
-                                        </TableCell>
-                                        <TableCell align="right">
-                                          Comments
-                                        </TableCell>
-                                      </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                      {values.inventory.map((item, index) => (
-                                        <TableRow
-                                          key={index}
-                                          sx={{
-                                            "&:last-child td, &:last-child th":
-                                              {
-                                                border: 0,
-                                              },
-                                          }}
-                                        >
-                                          <TableCell align="right">
-                                            <Button
-                                              variant="contained"
-                                              size="small"
-                                              onClick={() => remove(index)}
-                                            >
-                                              Delete{" "}
-                                            </Button>
+                                    Add Line Item
+                                  </Button>
+                                </Grid>
+                                <Grid item xs={12}>
+                                  <TableContainer component={Paper}>
+                                    <Table
+                                      sx={{ minWidth: 650 }}
+                                      aria-label="simple table"
+                                    >
+                                      <TableHead>
+                                        <TableRow>
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Action
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiSelectField
-                                              name={`onsite.${index}.type`}
-                                              id={`onsite.${index}.type`}
-                                              label="Choose"
-                                              options={[
-                                                "Damages",
-                                                "Saftey",
-                                                "Security",
-                                                "Other",
-                                              ]}
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Type
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiTextField
-                                              name={`onsite.${index}.reason`}
-                                              id={`onsite.${index}.reason`}
-                                              label="Reason"
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Reason
                                           </TableCell>
-                                          <TableCell align="right">
-                                            <MuiTextField
-                                              name={`onsite.${index}.comments`}
-                                              id={`onsite.${index}.comments`}
-                                              label="Comments"
-                                            />
+                                          <TableCell
+                                            className={classes.headerText}
+                                          >
+                                            Comments
                                           </TableCell>
                                         </TableRow>
-                                      ))}
-                                    </TableBody>
-                                  </Table>
-                                </TableContainer>
+                                      </TableHead>
+                                      <TableBody>
+                                        {values.inventory.map((item, index) => (
+                                          <TableRow
+                                            key={index}
+                                            sx={{
+                                              "&:last-child td, &:last-child th":
+                                                {
+                                                  border: 0,
+                                                },
+                                            }}
+                                          >
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: 100 }}
+                                            >
+                                              <Button
+                                                variant="contained"
+                                                size="small"
+                                                onClick={() => remove(index)}
+                                              >
+                                                Delete{" "}
+                                              </Button>
+                                            </TableCell>
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: 200 }}
+                                            >
+                                              <MuiSelectField
+                                                name={`onsite.${index}.type`}
+                                                id={`onsite.${index}.type`}
+                                                label="Choose"
+                                                options={[
+                                                  "Damages",
+                                                  "Saftey",
+                                                  "Security",
+                                                  "Other",
+                                                ]}
+                                              />
+                                            </TableCell>
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: 200 }}
+                                            >
+                                              <MuiTextField
+                                                name={`onsite.${index}.reason`}
+                                                id={`onsite.${index}.reason`}
+                                                label="Reason"
+                                              />
+                                            </TableCell>
+                                            <TableCell
+                                              align="right"
+                                              sx={{ width: 200 }}
+                                            >
+                                              <MuiTextField
+                                                name={`onsite.${index}.comments`}
+                                                id={`onsite.${index}.comments`}
+                                                label="Comments"
+                                              />
+                                            </TableCell>
+                                          </TableRow>
+                                        ))}
+                                      </TableBody>
+                                    </Table>
+                                  </TableContainer>
+                                </Grid>
                               </Grid>
                             </>
                           )}

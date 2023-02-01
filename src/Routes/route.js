@@ -42,7 +42,7 @@ export const routes = (
     <PrivateRoute exact path="/docManager" component={DocumentManager} />
     <PrivateRoute exact path="/settings" component={Settings} />
     <PrivateRoute exact path="/userCreation" component={UserCreation} />
-    {/* <PrivateRoute exact path="/dailylogs" component={DailyLogs} /> */}
+    <PrivateRoute exact path="/dailylogs" component={DailyLogs} />
     <PrivateRoute exact path="/estimatorai" component={Chatbot} />
 
 
