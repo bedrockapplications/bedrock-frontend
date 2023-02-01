@@ -40,6 +40,7 @@ import AddIcon from "@mui/icons-material/Add";
 import weatherApp from "../../Images/weatherApp.svg";
 import MuiAccordion from "../../components/MuiAccordion";
 import { useCallback } from "react";
+import FileUpload from "../../components/docUpload";
 
 const useStyle = makeStyles(() => ({
   accordionTitle: {
@@ -189,6 +190,7 @@ const CreateDailyLog = (props) => {
                   comments: "",
                 },
               ],
+              docuploads: null,
             }}
             validationSchema={null}
             onSubmit={(values, { setSubmitting, resetForm }) => {
@@ -1094,24 +1096,38 @@ const CreateDailyLog = (props) => {
                 >
                   {expandedPanels.Photos ? (
                     <Grid container spacing={2}>
-                      <Grid item xs={3}>
-                        <MuiDatePicker
-                          name="date"
-                          id="date"
-                          label={"Date"}
-                          disablePast
-                          value={values?.Date}
-                        />
+                      <Grid item xs={12}>
+                       <FileUpload 
+                       id="docuploads"
+                       name="docuploads"
+                       maxFiles={5}
+                       multiple={true}
+                       />
+                       <Typography
+                      variant="h6"
+                      fontWeight="bold"
+                      sx={{ padding: "10px 0px" }}
+                    >
+                      Uploaded Files:
+                    </Typography>
+                    <Box>
+                      {values?.docuploads?.map((file, i) => (
+                        <Typography
+                          key={file + i}
+                          sx={{
+                            width: "fit-content",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            border:"1px solid rgba(1, 167, 104, 1)",
+                            borderRadius:"5px",
+                            padding:"5px 15px"
+                          }}
+                        >{`${i + 1}. ${file.name}`}</Typography>
+                      ))}
+                    </Box>
                       </Grid>
-                      <Grid item xs={3}>
-                        <MuiTimePicker
-                          name="time"
-                          id="time"
-                          label={"Time"}
-                          disablePast
-                          value={values?.time}
-                        />
-                      </Grid>
+                      
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
                         <Button variant="contained" type="submit" size="small">
                           Next

@@ -5,6 +5,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { makeStyles } from "@mui/styles";
 import { Typography } from "@mui/material";
 import PropTypes from "prop-types";
+import uploadIcon from '../Images/uploadIcon.svg';
 
 const useStyle = makeStyles(() => ({
   dropzone: {
@@ -15,17 +16,18 @@ const useStyle = makeStyles(() => ({
     padding: "1rem",
     borderWidth: 2,
     borderRadius: "5px",
-    borderColor: "#000000",
+    borderColor: "rgba(58, 58, 60, 0.3)",
     borderStyle: "dashed",
     color: "#bdbdbd",
     outline: "none",
     transition: "border .24s ease-in-out",
-    // background: " rgba(58, 58, 60, 0.6)",
+    background: "#E7E7E7",
+    cursor:"pointer",
     // backgroundColor: "#fafafa",
   },
 }));
 
-const RenderFileUpload = (props) => {
+const RenderDocUpload = (props) => {
   const { id, disabled, field, form, maxFiles, accept } = props;
   const classes = useStyle();
 
@@ -46,10 +48,13 @@ const RenderFileUpload = (props) => {
         <div {...getRootProps({ className: classes.dropzone })}>
           <input {...getInputProps()} />
           <div>
-            <CloudUploadIcon fontSize="large" />
+            <img src={uploadIcon} alt="" />
           </div>
-          <Typography sx={{ textAlign: "center" }}>
-            Drag 'n' drop some files here, or click to select files
+          <Typography sx={{ textAlign: "center", color:"#0F0F0F", fontWeight:"700", cursor:"pointer", margin:"10px 0px" }}>
+          Drag & drop files or <span style={{textDecoration: "underline"}}>Browse</span>
+          </Typography>
+          <Typography sx={{ textAlign: "center", color:"#676767", margin:"10px 0px" }}>
+          Supported formates: JPEG, PNG, GIF, PDF, Word, PPT
           </Typography>
         </div>
       </section>
@@ -71,7 +76,7 @@ const FileUpload = (props) => {
   return (
     <Field
       type="file"
-      component={RenderFileUpload}
+      component={RenderDocUpload}
       name={name}
       label={label}
       id={id}
@@ -96,8 +101,8 @@ FileUpload.defaultProps = {
   name: "file",
   id: "file",
   disabled: false,
-  multiple: false,
-  maxFiles: 1,
+  multiple: true,
+  maxFiles: 5,
   accept: {},
 };
 
