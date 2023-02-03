@@ -227,7 +227,7 @@ const CreateDailyLog = (props) => {
                         />
                       </Grid>
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
+                        <Button variant="contained" type="submit" size="small" onClick={handleChange("selectProject")}>
                           Next
                         </Button>
                       </Grid>
@@ -295,7 +295,7 @@ const CreateDailyLog = (props) => {
                         />
                       </Grid>
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
+                        <Button variant="contained" type="submit" size="small" onClick={handleChange("Weather")}>
                           Next
                         </Button>
                       </Grid>
@@ -367,7 +367,7 @@ const CreateDailyLog = (props) => {
                         />
                       </Grid>
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
+                        <Button variant="contained" type="submit" size="small" onClick={handleChange("Schedule")}>
                           Next
                         </Button>
                       </Grid>
@@ -503,7 +503,7 @@ const CreateDailyLog = (props) => {
                       </Grid>
 
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" size="small">
+                        <Button variant="contained" size="small" onClick={handleChange("ManPower")}>
                           Next
                         </Button>
                       </Grid>
@@ -653,7 +653,7 @@ const CreateDailyLog = (props) => {
                       </Grid>
 
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" size="small">
+                        <Button variant="contained" size="small" onClick={handleChange("Inspection")}>
                           Next
                         </Button>
                       </Grid>
@@ -791,7 +791,7 @@ const CreateDailyLog = (props) => {
                       </Grid>
 
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" size="small">
+                        <Button variant="contained" size="small" onClick={handleChange("Inventory")}>
                           Next
                         </Button>
                       </Grid>
@@ -941,7 +941,7 @@ const CreateDailyLog = (props) => {
                       </Grid>
 
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" size="small">
+                        <Button variant="contained" size="small"  onClick={handleChange("OnSite")}>
                           Next
                         </Button>
                       </Grid>
@@ -1080,7 +1080,7 @@ const CreateDailyLog = (props) => {
                       </Grid>
 
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" size="small">
+                        <Button variant="contained" size="small" onClick={handleChange("Photos")}>
                           Next
                         </Button>
                       </Grid>
@@ -1130,7 +1130,7 @@ const CreateDailyLog = (props) => {
                       </Grid>
                       
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
+                        <Button variant="contained" type="submit" size="small"  onClick={handleChange("Notes")}>
                           Next
                         </Button>
                       </Grid>
@@ -1155,7 +1155,7 @@ const CreateDailyLog = (props) => {
                         />
                       </Grid>
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
+                        <Button variant="contained" type="submit" size="small"  onClick={handleChange("Signature")}>
                           Next
                         </Button>
                       </Grid>

@@ -16,10 +16,11 @@ export default function PicUpload() {
         raw: e.target.files[0],
       });
     }
+    handleUpload();
   };
 
-  const handleUpload = async (e) => {
-    e.preventDefault();
+  const handleUpload = async () => {
+    // e.preventDefault();
     const formData = new FormData();
     formData.append("image", image.raw);
 
@@ -58,7 +59,7 @@ export default function PicUpload() {
             accept="image/*"
           />
         </Grid>
-        <Grid item xs={12} sx={{ textAlign: "right" }}>
+        {/* <Grid item xs={12} sx={{ textAlign: "right" }}>
           <Button
             variant="contained"
             type="submit"
@@ -67,7 +68,7 @@ export default function PicUpload() {
           >
             Next
           </Button>
-        </Grid>
+        </Grid> */}
       </Grid>
     </div>
   );
