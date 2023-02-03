@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState, useRef } from "react";
 import { Formik, Form, ErrorMessage, FieldArray } from "formik";
 import { makeStyles } from "@mui/styles";
 import { GlobalState } from "../../Context/Context";
@@ -8,7 +8,7 @@ import MuiTimePicker from "../../components/Formik/MuiTimePicker";
 import MuiTextField from "../../components/Formik/MuiTextField";
 import MuiSelectField from "../../components/Formik/MuiSelectField";
 import MuiTextArea from "../../components/Formik/MuiTextArea";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import MuiDialog from "../../components/MuiDialog";
 import {
@@ -94,6 +94,7 @@ const CreateDailyLog = (props) => {
   const { open, handleClose, id, title } = props;
   // const { expanded, setExpanded } = useContext(GlobalState);
   const classes = useStyle();
+  const formikRef = useRef();
 
   const [expandedPanels, setExpandedPanels] = useState({
     dateTime: false,
@@ -130,6 +131,13 @@ const CreateDailyLog = (props) => {
   //   setExpandedPanels(newExpandedPanels);
   //   setCopy(panel);
   // }, [expandedPanels, copy]);
+
+  const handleSubmitForm = () => {
+    if (formikRef.current) {
+      console.log("hello iam from form");
+      formikRef.current.handleSubmit();
+    }
+  };
 
   return (
     <>
@@ -194,6 +202,7 @@ const CreateDailyLog = (props) => {
               docuploads: null,
             }}
             validationSchema={null}
+            innerRef={formikRef}
             onSubmit={(values, { setSubmitting, resetForm }) => {
               console.log("values", values);
             }}
@@ -1098,37 +1107,37 @@ const CreateDailyLog = (props) => {
                   {expandedPanels.Photos ? (
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
-                       <FileUpload 
-                       id="docuploads"
-                       name="docuploads"
-                       maxFiles={5}
-                       multiple={true}
-                       />
-                       <Typography
-                      variant="h6"
-                      fontWeight="bold"
-                      sx={{ padding: "10px 0px" }}
-                    >
-                      Uploaded Files:
-                    </Typography>
-                    <Box>
-                      {values?.docuploads?.map((file, i) => (
+                        <FileUpload
+                          id="docuploads"
+                          name="docuploads"
+                          maxFiles={5}
+                          multiple={true}
+                        />
                         <Typography
-                          key={file + i}
-                          sx={{
-                            width: "fit-content",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            border:"1px solid rgba(1, 167, 104, 1)",
-                            borderRadius:"5px",
-                            padding:"5px 15px"
-                          }}
-                        >{`${i + 1}. ${file.name}`}</Typography>
-                      ))}
-                    </Box>
+                          variant="h6"
+                          fontWeight="bold"
+                          sx={{ padding: "10px 0px" }}
+                        >
+                          Uploaded Files:
+                        </Typography>
+                        <Box>
+                          {values?.docuploads?.map((file, i) => (
+                            <Typography
+                              key={file + i}
+                              sx={{
+                                width: "fit-content",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                border: "1px solid rgba(1, 167, 104, 1)",
+                                borderRadius: "5px",
+                                padding: "5px 15px",
+                              }}
+                            >{`${i + 1}. ${file.name}`}</Typography>
+                          ))}
+                        </Box>
                       </Grid>
-                      
+
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
                         <Button variant="contained" type="submit" size="small">
                           Next
@@ -1190,7 +1199,12 @@ const CreateDailyLog = (props) => {
           </Formik>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" type="submit" size="small">
+          <Button
+            variant="contained"
+            type="submit"
+            size="small"
+            onClick={handleSubmitForm}
+          >
             Submit
           </Button>
         </DialogActions>
