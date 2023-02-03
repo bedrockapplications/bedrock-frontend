@@ -41,6 +41,7 @@ import weatherApp from "../../Images/weatherApp.svg";
 import MuiAccordion from "../../components/MuiAccordion";
 import { useCallback } from "react";
 import FileUpload from "../../components/docUpload";
+import PicUpload from "./dropZone";
 
 const useStyle = makeStyles(() => ({
   accordionTitle: {
@@ -1171,29 +1172,14 @@ const CreateDailyLog = (props) => {
                 >
                   {expandedPanels.Signature ? (
                     <Grid container spacing={2}>
-                      <Grid item xs={3}>
-                        <MuiDatePicker
-                          name="date"
-                          id="date"
-                          label={"Date"}
-                          disablePast
-                          value={values?.Date}
-                        />
+                      <Grid item xs={12}>
+                        <PicUpload />
                       </Grid>
-                      <Grid item xs={3}>
-                        <MuiTimePicker
-                          name="time"
-                          id="time"
-                          label={"Time"}
-                          disablePast
-                          value={values?.time}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sx={{ textAlign: "right" }}>
+                      {/* <Grid item xs={12} sx={{ textAlign: "right" }}>
                         <Button variant="contained" type="submit" size="small">
                           Next
                         </Button>
-                      </Grid>
+                      </Grid> */}
                     </Grid>
                   ) : (
                     ""

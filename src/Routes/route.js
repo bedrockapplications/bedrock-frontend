@@ -22,6 +22,7 @@ import Settings from "../pages/Settings";
 import UserCreation from "../pages/UserCreation";
 import DailyLogs from "../pages/DailyLogs";
 import Chatbot from "../pages/chatbot/chatbot";
+import PicUpload from "../pages/DailyLogs/dropZone";
 
 
 export const routes = (
@@ -44,6 +45,7 @@ export const routes = (
     <PrivateRoute exact path="/userCreation" component={UserCreation} />
     <PrivateRoute exact path="/dailylogs" component={DailyLogs} />
     <PrivateRoute exact path="/estimatorai" component={Chatbot} />
+    <PrivateRoute exact path="/pic" component={PicUpload} />
 
 
     {/* <PrivateRoute exact path="/docManager" component={DocManager} /> */}

@@ -92,11 +92,11 @@ const sideLinks = [
     label: "my_projects",
     link: "/myprojects",
   },
-  // {
-  //   icon: <BookIcon />,
-  //   label: "Daily Logs",
-  //   link: "/dailylogs",
-  // },
+  {
+    icon: <BookIcon />,
+    label: "Daily Logs",
+    link: "/dailylogs",
+  },
   {
     icon: <PsychologyIcon />,
     label: "Estimator.ai",
