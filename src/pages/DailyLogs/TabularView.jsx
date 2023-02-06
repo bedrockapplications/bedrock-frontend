@@ -1,6 +1,6 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
 import moment from "moment";
-import { IconButton } from "@mui/material";
+import { Button, IconButton, Typography } from "@mui/material";
 
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -21,6 +21,14 @@ import EditIcon from "@mui/icons-material/Edit";
 import EmailIcon from "@mui/icons-material/Email";
 import DownloadForOfflineOutlinedIcon from "@mui/icons-material/DownloadForOfflineOutlined";
 import ShareIcon from "@mui/icons-material/Share";
+import MuiDialog from "../../components/MuiDialog";
+import DialogContent from "@mui/material/DialogContent";
+import cancelImage from "../../Images/cancel.svg";
+import { Box } from "@mui/system";
+import downloadLog from "../../Images/downloadLog.svg";
+import csvicon from "../../Images/csvicon.svg";
+import pdficon from "../../Images/pdficon.svg";
+
 const headCells = [
   {
     id: "actions",
@@ -76,6 +84,8 @@ const TabularView = (props) => {
   const { data, totalCount } = props;
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
+  const [openDeleteModel, setOpenDeleteModel] = useState(false);
+  const [openDownloadModel, setOpenDownloadModel] = useState(false);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
@@ -91,7 +101,23 @@ const TabularView = (props) => {
     console.log("test1");
   };
 
-  console.log("i am from child");
+  const handleDeleteLog = (deleteItem) => {
+    console.log("deleteItem", deleteItem);
+    setOpenDeleteModel(true);
+  };
+
+  const handleCloseDeleteLog = () => {
+    setOpenDeleteModel(false);
+  };
+
+  const handleOpenDownload = (deleteItem) => {
+    console.log("deleteItem", deleteItem);
+    setOpenDownloadModel(true);
+  };
+
+  const handleCloseDownload = () => {
+    setOpenDownloadModel(false);
+  };
 
   return (
     <>
@@ -122,13 +148,21 @@ const TabularView = (props) => {
                         <IconButton size="small" color="primary">
                           <EditIcon fontSize="small" />
                         </IconButton>
-                        <IconButton size="small" color="primary">
+                        <IconButton
+                          size="small"
+                          color="primary"
+                          onClick={() => handleOpenDownload(item)}
+                        >
                           <DownloadForOfflineOutlinedIcon fontSize="small" />
                         </IconButton>
                         <IconButton size="small" color="primary">
                           <ShareIcon fontSize="small" />
                         </IconButton>
-                        <IconButton size="small" color="primary">
+                        <IconButton
+                          size="small"
+                          color="primary"
+                          onClick={() => handleDeleteLog(item)}
+                        >
                           <DeleteIcon fontSize="small" />
                         </IconButton>
                       </TableCell>
@@ -170,6 +204,113 @@ const TabularView = (props) => {
           />
         )}
       </Paper>
+      <MuiDialog
+        open={openDeleteModel}
+        handleClose={handleCloseDeleteLog}
+        id={"deletelog"}
+        title={""}
+        maxWidth={"xs"}
+      >
+        <DialogContent
+          sx={{
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "1rem",
+          }}
+        >
+          <img src={cancelImage} alt="" />
+          <Typography
+            sx={{
+              width: "280px",
+              fontSize: "1rem",
+              lineHeight: "24px",
+              fontWeight: 700,
+              color: "#3A3A3A",
+            }}
+          >
+            Are You Sure You Want To Delete Selected Records ?
+          </Typography>
+
+          <Box sx={{ marginBottom: "2rem" }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              sx={{ marginRight: "10px", fontWeight: 700 }}
+              onClick={handleCloseDeleteLog}
+            >
+              Cancle
+            </Button>
+            <Button
+              variant="outlined"
+              color="error"
+              size="small"
+              sx={{ marginLeft: "10px", fontWeight: 700 }}
+              onClick={handleCloseDeleteLog}
+            >
+              Delete
+            </Button>
+          </Box>
+        </DialogContent>
+      </MuiDialog>
+
+      <MuiDialog
+        open={openDownloadModel}
+        handleClose={handleCloseDownload}
+        id={"downloadLog"}
+        title={""}
+        maxWidth={"xs"}
+      >
+        <DialogContent
+          sx={{
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "1rem",
+          }}
+        >
+          <img src={downloadLog} alt="" />
+          <Typography
+            sx={{
+              width: "280px",
+              fontSize: "1rem",
+              lineHeight: "24px",
+              fontWeight: 700,
+              color: "#3A3A3A",
+            }}
+          >
+            Please Select Download Format{" "}
+          </Typography>
+
+          <Box sx={{ marginBottom: "2rem" }}>
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              startIcon={<img src={csvicon} alt="" />}
+              sx={{ marginRight: "10px", fontWeight: 700 }}
+              onClick={handleCloseDeleteLog}
+            >
+              Download as CSV
+            </Button>
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              startIcon={<img src={pdficon} alt="" />}
+              sx={{ marginLeft: "10px", fontWeight: 700 }}
+              onClick={handleCloseDeleteLog}
+            >
+              Download as PDF
+            </Button>
+          </Box>
+        </DialogContent>
+      </MuiDialog>
     </>
   );
 };
