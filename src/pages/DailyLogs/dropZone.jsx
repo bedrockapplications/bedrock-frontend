@@ -1,22 +1,21 @@
 import React, { useState } from "react";
 import plsupload from "../../Images/plsupload.svg";
-import {
-  Grid,
-  Button,
-  Box,
-} from "@mui/material";
+import { Grid, Button, Box } from "@mui/material";
 
-export default function PicUpload() {
+export default function PicUpload(props) {
+  const { name, setFieldValue } = props;
   const [image, setImage] = useState({ preview: "", raw: "" });
 
   const handleChange = (e) => {
     if (e.target.files.length) {
-      setImage({
+      let imgObj = {
         preview: URL.createObjectURL(e.target.files[0]),
         raw: e.target.files[0],
-      });
+      };
+      setImage(imgObj);
+      setFieldValue(name, imgObj);
     }
-    handleUpload();
+    // handleUpload();
   };
 
   const handleUpload = async () => {
@@ -37,7 +36,7 @@ export default function PicUpload() {
     <div>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <label htmlFor="upload-button">
+          <label htmlFor={name}>
             {image.preview ? (
               <img src={image.preview} alt="dummy" width="150" height="150" />
             ) : (
@@ -53,22 +52,13 @@ export default function PicUpload() {
           </label>
           <input
             type="file"
-            id="upload-button"
+            name={name}
+            id={name}
             style={{ display: "none" }}
             onChange={handleChange}
             accept="image/*"
           />
         </Grid>
-        {/* <Grid item xs={12} sx={{ textAlign: "right" }}>
-          <Button
-            variant="contained"
-            type="submit"
-            size="small"
-            onClick={handleUpload}
-          >
-            Next
-          </Button>
-        </Grid> */}
       </Grid>
     </div>
   );

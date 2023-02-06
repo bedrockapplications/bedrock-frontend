@@ -34,7 +34,6 @@ const MuiAccordion = (props) => {
 
   return (
     <>
-      {console.log("e2", expanded)}
       <Accordion expanded={expanded} onChange={handleChange}>
         <AccordionSummary
           expandIcon={<AddIcon sx={{ color: expanded ? "#FFFFFF" : "" }} />}
