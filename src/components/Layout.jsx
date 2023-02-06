@@ -37,7 +37,7 @@ import TranslateIcon from "@mui/icons-material/Translate";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import favicon from "../Images/Bedrock_Rock_-removebg-preview.png";
-import { WindowSharp } from "@mui/icons-material";
+import { CleaningServices, WindowSharp } from "@mui/icons-material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { getMeetingsList } from "../services/request";
@@ -48,7 +48,10 @@ import BookIcon from "@mui/icons-material/Book";
 import PsychologyIcon from '@mui/icons-material/Psychology';
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
-// import Dashboard from "../pages/Dashboard";
+// import Dashboard from "../pages/Dashboard";\
+
+import io from 'socket.io-client';
+
 
 const drawerWidth = 240;
 
@@ -187,6 +190,16 @@ export default function MiniDrawer(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [account, setAccount] = React.useState(null);
   const [notification, setNotification] = React.useState(null);
+
+  const socket = io('http://nodejs-apis.bedrockapps.link/');
+
+  useEffect(() => {
+    socket.emit('getUser', localStorage.getItem("userId"));
+    socket.on("response", (data) => {
+      setNotification(data);
+      console.log("socketdata", data)
+    });
+  }, []);
 
   const [selected, setSelectedIndex] = React.useState(
     LanguagesList?.filter(
