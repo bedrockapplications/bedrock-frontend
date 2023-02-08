@@ -96,33 +96,39 @@ const CreateDailyLog = (props) => {
   const classes = useStyle();
   const formikRef = useRef();
 
-  const [expandedPanels, setExpandedPanels] = useState({
-    dateTime: false,
-    selectProject: false,
-    Weather: false,
-    Schedule: false,
-    ManPower: false,
-    Inspection: false,
-    Inventory: false,
-    OnSite: false,
-    Photos: false,
-    Notes: false,
-    Signature: false,
-  });
-  const [copy, setCopy] = useState("");
+  const [expanded, setExpanded] = React.useState(false);
 
-  const handleChange = useCallback(
-    (panel) => (event, isExpanded) => {
-      console.log({ ...expandedPanels, [panel]: !expandedPanels.panel });
-      setCopy(panel);
-      setExpandedPanels({
-        ...expandedPanels,
-        [panel]: !expandedPanels.panel,
-        [copy]: false,
-      });
-    },
-    []
-  );
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
+  // const [expandedPanels, setExpandedPanels] = useState({
+  //   dateTime: false,
+  //   selectProject: false,
+  //   Weather: false,
+  //   Schedule: false,
+  //   ManPower: false,
+  //   Inspection: false,
+  //   Inventory: false,
+  //   OnSite: false,
+  //   Photos: false,
+  //   Notes: false,
+  //   Signature: false,
+  // });
+  // const [copy, setCopy] = useState("");
+
+  // const handleChange = useCallback(
+  //   (panel) => (event, isExpanded) => {
+  //     console.log({ ...expandedPanels, [panel]: !expandedPanels.panel });
+  //     setCopy(panel);
+  //     setExpandedPanels({
+  //       ...expandedPanels,
+  //       [panel]: !expandedPanels.panel,
+  //       [copy]: false,
+  //     });
+  //   },
+  //   []
+  // );
 
   // const handleChange = useCallback((panel) => {
   //   const newExpandedPanels = {...expandedPanels};
@@ -220,10 +226,11 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Date & Time"
                   selectedPanel="dateTime"
-                  expanded={expandedPanels.dateTime}
+                  // expanded={expandedPanels.dateTime}
+                  expanded={expanded === "dateTime"}
                   handleChange={handleChange("dateTime")}
                 >
-                  {expandedPanels.dateTime ? (
+                  {expanded === "dateTime" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={3}>
                         <MuiDatePicker
@@ -261,10 +268,11 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Select Project"
                   selectedPanel="selectProject"
-                  expanded={expandedPanels.selectProject}
+                  // expanded={expandedPanels.selectProject}
+                  expanded={expanded === "selectProject"}
                   handleChange={handleChange("selectProject")}
                 >
-                  {expandedPanels.selectProject ? (
+                  {expanded === "selectProject" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={4}>
                         <MuiSelectField
@@ -334,10 +342,11 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Add Observed Weather Conditions"
                   selectedPanel="Weather"
-                  expanded={expandedPanels.Weather}
+                  // expanded={expandedPanels.Weather}
+                  expanded={expanded === "Weather"}
                   handleChange={handleChange("Weather")}
                 >
-                  {expandedPanels.Weather ? (
+                  {expanded === "Weather" ? (
                     <Grid container spacing={3}>
                       {weatherData.map((item, i) => (
                         <Grid item xs={3} key={item + i}>
@@ -422,10 +431,11 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title=" Add Schedule / Plan Change Details"
                   selectedPanel="Schedule"
-                  expanded={expandedPanels.Schedule}
+                  // expanded={expandedPanels.Schedule}
+                  expanded={expanded === "Schedule"}
                   handleChange={handleChange("Schedule")}
                 >
-                  {expandedPanels.Schedule ? (
+                  {expanded === "Schedule" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <FieldArray name="schedule">
@@ -562,10 +572,11 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Add ManPower Details"
                   selectedPanel="ManPower"
-                  expanded={expandedPanels.ManPower}
+                  // expanded={expandedPanels.ManPower}
+                  expanded={expanded === "ManPower"}
                   handleChange={handleChange("ManPower")}
                 >
-                  {expandedPanels.ManPower ? (
+                  {expanded === "ManPower" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <FieldArray name="manpower">
@@ -716,10 +727,11 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Add Visitor / Inspection Details"
                   selectedPanel="Inspection"
-                  expanded={expandedPanels.Inspection}
+                  // expanded={expandedPanels.Inspection}
+                  expanded={expanded === "Inspection"}
                   handleChange={handleChange("Inspection")}
                 >
-                  {expandedPanels.Inspection ? (
+                  {expanded === "Inspection" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <FieldArray name="visitor">
@@ -858,10 +870,11 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Add Inventory Data"
                   selectedPanel="Inventory"
-                  expanded={expandedPanels.Inventory}
+                  // expanded={expandedPanels.Inventory}
+                  expanded={expanded === "Inventory"}
                   handleChange={handleChange("Inventory")}
                 >
-                  {expandedPanels.Inventory ? (
+                  {expanded === "Inventory" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <FieldArray name="inventory">
@@ -1012,10 +1025,11 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Add On-Site Issues"
                   selectedPanel="OnSite"
-                  expanded={expandedPanels.OnSite}
+                  // expanded={expandedPanels.OnSite}
+                  expanded={expanded === "OnSite"}
                   handleChange={handleChange("OnSite")}
                 >
-                  {expandedPanels.OnSite ? (
+                  {expanded === "OnSite" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <FieldArray name="onsite">
@@ -1155,10 +1169,11 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Add Photos / Documents / Videos"
                   selectedPanel="Photos"
-                  expanded={expandedPanels.Photos}
+                  // expanded={expandedPanels.Photos}
+                  expanded={expanded === "Photos"}
                   handleChange={handleChange("Photos")}
                 >
-                  {expandedPanels.Photos ? (
+                  {expanded === "Photos" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <FileUpload
@@ -1210,10 +1225,11 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Notes / Comments"
                   selectedPanel="Notes"
-                  expanded={expandedPanels.Notes}
+                  // expanded={expandedPanels.Notes}
+                  expanded={expanded === "Notes"}
                   handleChange={handleChange("Notes")}
                 >
-                  {expandedPanels.Notes ? (
+                  {expanded === "Notes" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <MuiTextArea
@@ -1240,10 +1256,11 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Add Signature"
                   selectedPanel="Signature"
-                  expanded={expandedPanels.Signature}
+                  // expanded={expandedPanels.Signature}
+                  expanded={expanded === "Signature"}
                   handleChange={handleChange("Signature")}
                 >
-                  {expandedPanels.Signature ? (
+                  {expanded === "Signature" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <PicUpload

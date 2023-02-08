@@ -50,7 +50,7 @@ import PsychologyIcon from '@mui/icons-material/Psychology';
 // import dotted_img from "../Images/Dotted Circles.png";
 // import Dashboard from "../pages/Dashboard";\
 
-import io from 'socket.io-client';
+import { io } from "socket.io-client";
 
 
 const drawerWidth = 240;
@@ -180,6 +180,8 @@ const Drawer = styled(MuiDrawer, {
 
 const ITEM_HEIGHT = 48;
 
+const socket = io.connect('https://nodejs-apis.bedrockapps.link');
+
 export default function MiniDrawer(props) {
   let history = useHistory();
   const { i18n, t } = useTranslation();
@@ -191,12 +193,12 @@ export default function MiniDrawer(props) {
   const [account, setAccount] = React.useState(null);
   const [notification, setNotification] = React.useState(null);
 
-  const socket = io('http://nodejs-apis.bedrockapps.link/');
+  // const socket = io('https://nodejs-apis.bedrockapps.link');
 
   useEffect(() => {
-    socket.emit('getUser', localStorage.getItem("userId"));
+    socket.emit('getUser', "6388772dff2bf42b258d5c7a");
     socket.on("response", (data) => {
-      setNotification(data);
+      // setNotification(data);
       console.log("socketdata", data)
     });
   }, []);
@@ -286,14 +288,14 @@ export default function MiniDrawer(props) {
     // GetDateAndTime();
   }, []);
 
-  useEffect(() => {
-    const MINUTE_MS = 60000;
-    const interval = setInterval(() => {
-      GetTaskList();
-    }, MINUTE_MS);
+  // useEffect(() => {
+  //   const MINUTE_MS = 60000;
+  //   const interval = setInterval(() => {
+  //     GetTaskList();
+  //   }, MINUTE_MS);
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
