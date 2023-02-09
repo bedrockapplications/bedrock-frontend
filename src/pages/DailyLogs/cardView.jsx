@@ -34,6 +34,9 @@ const useStyle = makeStyles(() => ({
       marginBottom: "1rem",
     },
     titles: {
+      width:"120px",
+      textAlign:"right",
+      marginRight:"10px",
       fontWeight: 700,
       fontSize: "14px",
       color: "#000",
@@ -44,25 +47,38 @@ const useStyle = makeStyles(() => ({
       color: "#000",
       whiteSpace: "pre-wrap",
     },
+    stackbox: {
+      display:"flex",
+      justifyContent:"space-between",
+    },
+    containerBox: {
+      display:"flex",
+      justifyContent:"space-between",
+      padding:"15px 20px",
+      height:"65vh",
+      overflowY:"scroll",
+    },
   }));
 
 const CardView = () => {
     const classes = useStyle();
   return (
     <>
-      <Grid container spacing={2}>
-        {[1, 2, 3]?.map((item, i) => (
-          <Grid item xs={4}>
+      <Grid container spacing={2} className={classes.containerBox}>
+        {Array(10).fill().map((item, i) => (
+          <Grid item xs={12} sm={6} md={6} lg={3.9}>
             <Paper
               sx={{
                 background: "rgba(214, 214, 219, 0.48)",
                 padding: "1rem",
+                margin:"10px 0px",
               }}
             >
               <Stack
                 direction="row"
                 divider={<Divider orientation="vertical" flexItem />}
                 spacing={1}
+                className={classes.stackbox}
               >
                 <Box>
                   <Typography className={classes.dateText}>
@@ -89,6 +105,7 @@ const CardView = () => {
                       fontSize: "12px",
                       fontWeight: "600",
                       color: "#000",
+                      marginBottom:"10px",
                     }}
                   >
                     Project :{" "}
@@ -106,25 +123,28 @@ const CardView = () => {
                     >
                       Status :{" "}
                     </Typography>
+                    <Stack direction="column">
                     <Stack direction="row">
                       <Typography
-                        sx={{ fontSize: "10px", marginRight: "30px" }}
+                        sx={{ fontSize: "11px", marginLeft:"5px", marginRight: "30px" }}
                       >
                         Progress
                       </Typography>
-                      <Typography sx={{ fontSize: "10px" }}>80%</Typography>
+                      <Typography sx={{ fontSize: "11px" }}>80%</Typography>
+                    </Stack>
+                    <LinearProgress variant="determinate" value={80} color="secondary" />
                     </Stack>
                   </Stack>
-                  <LinearProgress variant="determinate" value={80} />
+                  {/*  */}
                 </Box>
                 <Box>
-                  <img src={projectImg} alt="" width={"70px"} />
+                  <img src={projectImg} alt="" width="fit-content" />
                 </Box>
               </Stack>
               <Stack direction="row" className={classes.stackcontainer}>
                 <Typography className={classes.titles}>Location :</Typography>
                 <Typography className={classes.valueText}>
-                  Alaska{" "}
+                <span style={{fontWeight:700, marginRight:"10px"}}>Alaska</span>
                   <span
                     style={{
                       background: "#2ED47A",
@@ -132,10 +152,11 @@ const CardView = () => {
                       padding: "3px 5px",
                       fontSize: "12px",
                       borderRadius: "5px",
+                      marginRight:"10px",
                     }}
                   >
                     Sunny
-                  </span>{" "}
+                  </span>
                   85 ° F
                 </Typography>
               </Stack>
@@ -147,25 +168,25 @@ const CardView = () => {
                 <Typography className={classes.titles}>
                   Created By :{" "}
                 </Typography>
-                <Stack direction="row" alignItems={"center"}>
-                  <img src={ownerImg} alt="" width={"55px"} />
-                  <Typography className={classes.valueText}>
-                    Aravind G. - Owner
+                <Stack direction="row" sx={{height:"45px", display:"flex", alignItems:"center"}}>
+                  <img src={ownerImg} alt="" width={"45px"}/>
+                  <Typography className={classes.valueText} sx={{marginLeft:"10px"}}>
+                    <span style={{fontWeight:700}}>Aravind G.</span> - Owner
                   </Typography>
                 </Stack>
               </Stack>
               <Stack
                 direction="row"
-                alignItems={"center"}
                 className={classes.stackcontainer}
+                alignItems={"center"}
               >
                 <Typography className={classes.titles}>
                   Reporting To :{" "}
                 </Typography>
-                <Stack direction="row" alignItems={"center"}>
-                  <img src={contarctorImg} alt="" width={"55px"} />
-                  <Typography className={classes.valueText}>
-                    Sarah M. - Contarctor
+                <Stack direction="row" sx={{height:"45px", display:"flex", alignItems:"center"}}>
+                  <img src={contarctorImg} alt="" width={"45px"}/>
+                  <Typography className={classes.valueText} sx={{marginLeft:"10px"}}>
+                    <span style={{fontWeight:"700"}}>Sarah M.</span> - Contarctor
                   </Typography>
                 </Stack>
               </Stack>
