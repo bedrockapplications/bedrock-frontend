@@ -93,3 +93,7 @@ export const getContactsList = async (ownerId, role) => {
 export const createContactApi = async (payload) => {
   return axios.post(`/user/saveContractors`, payload);
 };
+
+export const createDailyLogApi = (payload) => {
+  return axios.post(`/dailyLog/createDailyLogs`, payload);
+};
