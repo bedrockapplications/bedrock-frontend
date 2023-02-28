@@ -356,6 +356,7 @@ const DailyLogs = () => {
                 minHeight: "400px",
                 border: "3px solid #3A3A3C",
                 padding: "5px",
+                overflow:"hidden"
               }}
             >
               <CardView />

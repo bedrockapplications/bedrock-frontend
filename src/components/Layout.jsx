@@ -196,7 +196,7 @@ export default function MiniDrawer(props) {
   // const socket = io('https://nodejs-apis.bedrockapps.link');
 
   useEffect(() => {
-    socket.emit('getUser', "6388772dff2bf42b258d5c7a");
+    socket.emit('getUser', {id:localStorage.getItem('userId'), tz:Intl.DateTimeFormat().resolvedOptions().timeZone});
     socket.on("response", (data) => {
       // setNotification(data);
       console.log("socketdata", data)

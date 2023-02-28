@@ -25,6 +25,7 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
+  IconButton,
 } from "@mui/material";
 
 import Table from "@mui/material/Table";
@@ -71,6 +72,26 @@ const useStyle = makeStyles(() => ({
     color: "#fff",
     textAlign: "left",
   },
+  imgTexts:{
+    display:"flex",
+    flexWrap:"wrap",
+    width:"96%",
+    margin:"auto",
+  },
+  imgName:{
+    marginTop:"20px",
+    marginRight:"2%",
+    display:"flex",
+    justifyContent:"space-between",
+    width: "30%",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    border: "1px solid rgba(1, 167, 104, 1)",
+    borderRadius: "5px",
+    padding: "5px 15px",
+  },
+
 }));
 
 const weatherData = [
@@ -1197,24 +1218,21 @@ const CreateDailyLog = (props) => {
                         >
                           Uploaded Files:
                         </Typography>
-                        <Box>
+                      </Grid>
+                      <Box className={classes.imgTexts}>
                           {values?.docuploads?.map((file, i) => (
                             <Typography
                               key={file + i}
-                              sx={{
-                                width: "fit-content",
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                border: "1px solid rgba(1, 167, 104, 1)",
-                                borderRadius: "5px",
-                                padding: "5px 15px",
-                              }}
-                            >{`${i + 1}. ${file.name}`}</Typography>
+                              className={classes.imgName}
+                            >{`${i + 1}. ${file.name}`}
+                            <span>
+                            <IconButton size="small" color="primary" onClick={() => console.log()}>
+                              <DeleteIcon fontSize="16px" />
+                            </IconButton>
+                            </span>
+                            </Typography>
                           ))}
                         </Box>
-                      </Grid>
-
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
                         <Button
                           variant="contained"
