@@ -100,6 +100,7 @@ const AutoMeasure = () => {
       email: "adithya.namada@bedrockapps.org", 
       password: "Adithya@123"
     }
+    console.log("hello","kreo")
     axios.post('https://takeoff.kreo.net/api/auto-measure/v1/auth/login', payload)
     .then((res) => {
       if (res.status === 200) {
