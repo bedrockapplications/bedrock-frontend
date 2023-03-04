@@ -17,6 +17,7 @@ import PremiumDailog from "../../components/premiumDailog";
 import AutoMeasureTabularView from "./autoMeasureTable";
 import FileUpload from "../../components/docUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
+import axios from "axios";
 
 
 const useStyle = makeStyles(() => ({
@@ -84,7 +85,31 @@ const AutoMeasure = () => {
   const classes = useStyle();
   const { t } = useTranslation();
   const { popen, setPopen, setIsLoading } = useContext(GlobalState);
-  const {file, setfile} = useState([]);
+  const [file, setfile] = useState([]);
+
+  const handleUpload = (values) => {
+    if(values.docuploads !== null) {
+      setfile(values.docuploads[0]);
+      console.log(values?.docuploads[0], "mmmm")
+    }                   
+    
+  }
+
+  useEffect(() => {
+    let payload = {
+      email: "adithya.namada@bedrockapps.org", 
+      password: "Adithya@123"
+    }
+    axios.post('https://takeoff.kreo.net/api/auto-measure/v1/auth/login', payload)
+    .then((res) => {
+      if (res.status === 200) {
+        console.log("res", res);
+      }
+    })
+    .catch((error) => {
+      console.log("error", error);
+    });
+  }, [])
 
 
   return (
@@ -118,6 +143,7 @@ const AutoMeasure = () => {
               onSubmit={(values, { setSubmitting, resetForm }) => {
                 console.log("values", values);
                 // handleCreateDailyLog(values);
+                handleUpload(values);
               }}
             >
               {({
@@ -187,7 +213,6 @@ const AutoMeasure = () => {
                       variant="contained"
                       type="submit"
                       size="small"
-                      
                     >
                       Submit
                     </Button>
