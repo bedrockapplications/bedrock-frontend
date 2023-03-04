@@ -23,6 +23,7 @@ import UserCreation from "../pages/UserCreation";
 import DailyLogs from "../pages/DailyLogs";
 import Chatbot from "../pages/chatbot/chatbot";
 import PicUpload from "../pages/DailyLogs/dropZone";
+import autoMeasure from "../pages/AutoMeasure/autoMeasure";
 
 
 export const routes = (
@@ -38,6 +39,7 @@ export const routes = (
     <PrivateRoute exact path="/projectDirectory" component={ProjectDirectory} />
 
     <PrivateRoute exact path="/myprojects" component={MyProjects} />
+    <PrivateRoute exact path="/automeasure" component={autoMeasure} />
     <PrivateRoute exact path="/createProject" component={CreateProject} />
     <PrivateRoute exact path="/myProject/:id" component={MyProject} />
     <PrivateRoute exact path="/docManager" component={DocumentManager} />

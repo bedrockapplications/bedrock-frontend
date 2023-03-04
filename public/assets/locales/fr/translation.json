@@ -50,7 +50,9 @@
     "type": "Taper",
     "projectName": "Nom de projet",
     "uploadDate": "Date de téléchargement",
-    "actions": "Actions"
+    "actions": "Actions",
+    "id":"Id",
+    "pageNo":"Numéro de page"
   },
   "settings": {
     "account_overview": "Aperçu du compte",

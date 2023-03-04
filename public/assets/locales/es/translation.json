@@ -50,7 +50,9 @@
     "type": "Tipear",
     "projectName": "Nombre del proyecto",
     "uploadDate": "Fecha de carga",
-    "actions": "Acciones"
+    "actions": "Acciones",
+    "id":"Id",
+    "pageNo":"Número de página"
   },
   "settings": {
     "account_overview": "Descripción de cuenta",

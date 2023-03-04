@@ -46,6 +46,7 @@ import { GlobalState } from "../Context/Context";
 import GetDateAndTime from "../components/DigitalClock";
 import BookIcon from "@mui/icons-material/Book";
 import PsychologyIcon from '@mui/icons-material/Psychology';
+import CalculateIcon from '@mui/icons-material/Calculate';
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
 // import Dashboard from "../pages/Dashboard";\
@@ -104,6 +105,11 @@ const sideLinks = [
     icon: <PsychologyIcon />,
     label: "Estimator.ai",
     link: "/estimatorai",
+  },
+  {
+    icon: <CalculateIcon />,
+    label: "AI Auto Measure",
+    link: "/automeasure",
   },
 
 
