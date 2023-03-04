@@ -31,56 +31,44 @@ import pdficon from "../../Images/pdficon.svg";
 
 const headCells = [
   {
+    id: "id",
+    numeric: false,
+    disablePadding: false,
+    label: "id",
+  },
+  {
+    id: "fileName",
+    numeric: false,
+    disablePadding: false,
+    label: "fileName",
+  },
+  {
+    id: "pageNo",
+    numeric: false,
+    disablePadding: false,
+    label: "pageNo",
+  },
+  {
+    id: "type",
+    numeric: false,
+    disablePadding: false,
+    label: "type",
+  },
+  {
+    id: "uploadDate",
+    numeric: false,
+    disablePadding: false,
+    label: "uploadDate",
+  },
+  {
     id: "actions",
     numeric: false,
     disablePadding: false,
     label: "actions",
   },
-  {
-    id: "createdBy",
-    numeric: false,
-    disablePadding: false,
-    label: "createdBy",
-  },
-  {
-    id: "project",
-    numeric: false,
-    disablePadding: false,
-    label: "project",
-  },
-  {
-    id: "schedule",
-    numeric: false,
-    disablePadding: false,
-    label: "schedule",
-  },
-  {
-    id: "reportingTo",
-    numeric: false,
-    disablePadding: false,
-    label: "reportingTo",
-  },
-  {
-    id: "location",
-    numeric: false,
-    disablePadding: false,
-    label: "location",
-  },
-  {
-    id: "workActivity",
-    numeric: false,
-    disablePadding: false,
-    label: "workActivity",
-  },
-  {
-    id: "notes/comments",
-    numeric: false,
-    disablePadding: false,
-    label: "notes/comments",
-  },
 ];
 
-const TabularView = (props) => {
+const AutoMeasureTabularView = (props) => {
   const { data, totalCount } = props;
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
@@ -122,7 +110,7 @@ const TabularView = (props) => {
   return (
     <>
       <Paper
-        sx={{ width: "100%", border: "3px solid #3A3A3C", overflow: "hidden" }}
+        sx={{minHeight:"70vh", width: "100%", border: "3px solid #3A3A3C", overflow: "hidden" }}
       >
         <TableContainer
           sx={{
@@ -137,7 +125,7 @@ const TabularView = (props) => {
               order={order}
               orderBy={orderBy}
               onRequestSort={handleRequestSort}
-              rowCount={data?.length}
+              rowCount={8}
             />
             {data.length > 0 ? (
               <TableBody>
@@ -315,4 +303,4 @@ const TabularView = (props) => {
   );
 };
 
-export default TabularView;
+export default AutoMeasureTabularView;

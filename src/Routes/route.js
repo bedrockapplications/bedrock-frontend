@@ -22,6 +22,8 @@ import Settings from "../pages/Settings";
 import UserCreation from "../pages/UserCreation";
 import DailyLogs from "../pages/DailyLogs";
 import Chatbot from "../pages/chatbot/chatbot";
+import PicUpload from "../pages/DailyLogs/dropZone";
+import autoMeasure from "../pages/AutoMeasure/autoMeasure";
 
 
 export const routes = (
@@ -37,6 +39,7 @@ export const routes = (
     <PrivateRoute exact path="/projectDirectory" component={ProjectDirectory} />
 
     <PrivateRoute exact path="/myprojects" component={MyProjects} />
+    <PrivateRoute exact path="/automeasure" component={autoMeasure} />
     <PrivateRoute exact path="/createProject" component={CreateProject} />
     <PrivateRoute exact path="/myProject/:id" component={MyProject} />
     <PrivateRoute exact path="/docManager" component={DocumentManager} />
@@ -44,6 +47,7 @@ export const routes = (
     <PrivateRoute exact path="/userCreation" component={UserCreation} />
     <PrivateRoute exact path="/dailylogs" component={DailyLogs} />
     <PrivateRoute exact path="/estimatorai" component={Chatbot} />
+    <PrivateRoute exact path="/pic" component={PicUpload} />
 
 
     {/* <PrivateRoute exact path="/docManager" component={DocManager} /> */}

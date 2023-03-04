@@ -19,6 +19,7 @@ const RenderDatePicker = (props) => {
     disabled,
     form,
     required,
+    disableFuture,
   } = props;
   return (
     <>
@@ -32,6 +33,7 @@ const RenderDatePicker = (props) => {
           disablePast={disablePast}
           minDate={minDate}
           disabled={disabled}
+          disableFuture={disableFuture}
           onChange={(newValue) => form.setFieldValue(field?.name, newValue)}
           renderInput={(params) => (
             <TextField

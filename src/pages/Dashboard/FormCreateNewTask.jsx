@@ -123,13 +123,16 @@ const FormCreateNewTask = (props) => {
                   );
                   formData.append(
                     "startTime",
-                    moment(values.startTime).format("hh:mm A")
+                    moment(values.startTime).format("HH:mm")
                   );
                   formData.append(
                     "endTime",
-                    moment(values.endTime).format("hh:mm A")
+                    moment(values.endTime).format("HH:mm")
                   );
                   formData.append("userId", userId);
+
+                  console.log("formData", formData);
+
                   createMeetingApi(formData)
                     .then((res) => {
                       if (res.status === 200) {

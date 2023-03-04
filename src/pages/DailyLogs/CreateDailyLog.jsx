@@ -1,4 +1,4 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState, useRef } from "react";
 import { Formik, Form, ErrorMessage, FieldArray } from "formik";
 import { makeStyles } from "@mui/styles";
 import { GlobalState } from "../../Context/Context";
@@ -8,7 +8,7 @@ import MuiTimePicker from "../../components/Formik/MuiTimePicker";
 import MuiTextField from "../../components/Formik/MuiTextField";
 import MuiSelectField from "../../components/Formik/MuiSelectField";
 import MuiTextArea from "../../components/Formik/MuiTextArea";
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import MuiDialog from "../../components/MuiDialog";
 import {
@@ -25,6 +25,7 @@ import {
   FormGroup,
   FormControlLabel,
   Checkbox,
+  IconButton,
 } from "@mui/material";
 
 import Table from "@mui/material/Table";
@@ -41,6 +42,9 @@ import weatherApp from "../../Images/weatherApp.svg";
 import MuiAccordion from "../../components/MuiAccordion";
 import { useCallback } from "react";
 import FileUpload from "../../components/docUpload";
+import PicUpload from "./dropZone";
+
+import { createDailyLogApi } from "../../services/request";
 
 const useStyle = makeStyles(() => ({
   accordionTitle: {
@@ -68,6 +72,26 @@ const useStyle = makeStyles(() => ({
     color: "#fff",
     textAlign: "left",
   },
+  imgTexts:{
+    display:"flex",
+    flexWrap:"wrap",
+    width:"96%",
+    margin:"auto",
+  },
+  imgName:{
+    marginTop:"20px",
+    marginRight:"2%",
+    display:"flex",
+    justifyContent:"space-between",
+    width: "30%",
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    border: "1px solid rgba(1, 167, 104, 1)",
+    borderRadius: "5px",
+    padding: "5px 15px",
+  },
+
 }));
 
 const weatherData = [
@@ -89,38 +113,82 @@ const weatherData = [
   },
 ];
 
+const schedulePlanObj = {
+  activity: "",
+  contractor: "",
+  comments: "",
+};
+
+const manpowerObj = {
+  team: "",
+  count: "",
+  hours: "",
+  comments: "",
+};
+
+const visitorInspectionObj = {
+  entryType: "",
+  name: "",
+  comments: "",
+};
+
+const inventoryDataObj = {
+  type: "",
+  material: "",
+  quantity: "",
+  unitsOfMeasure: "",
+};
+
+const onSiteIssuesObj = {
+  type: "",
+  reasons: "",
+  comments: "",
+};
+
+const contractorList = ["srikanth", "nagesh", "adithya"];
+
+const manpowerTeam = ["srikanth", "nagesh", "adithya"];
+
 const CreateDailyLog = (props) => {
   const { open, handleClose, id, title } = props;
+  const userId = localStorage.getItem("userId");
   // const { expanded, setExpanded } = useContext(GlobalState);
   const classes = useStyle();
+  const formikRef = useRef();
 
-  const [expandedPanels, setExpandedPanels] = useState({
-    dateTime: false,
-    selectProject: false,
-    Weather: false,
-    Schedule: false,
-    ManPower: false,
-    Inspection: false,
-    Inventory: false,
-    OnSite: false,
-    Photos: false,
-    Notes: false,
-    Signature: false,
-  });
-  const [copy, setCopy] = useState("");
+  const [expanded, setExpanded] = React.useState(false);
 
-  const handleChange = useCallback(
-    (panel) => (event, isExpanded) => {
-      console.log({ ...expandedPanels, [panel]: !expandedPanels.panel });
-      setCopy(panel);
-      setExpandedPanels({
-        ...expandedPanels,
-        [panel]: !expandedPanels.panel,
-        [copy]: false,
-      });
-    },
-    []
-  );
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+  };
+
+  // const [expandedPanels, setExpandedPanels] = useState({
+  //   dateTime: false,
+  //   selectProject: false,
+  //   Weather: false,
+  //   Schedule: false,
+  //   ManPower: false,
+  //   Inspection: false,
+  //   Inventory: false,
+  //   OnSite: false,
+  //   Photos: false,
+  //   Notes: false,
+  //   Signature: false,
+  // });
+  // const [copy, setCopy] = useState("");
+
+  // const handleChange = useCallback(
+  //   (panel) => (event, isExpanded) => {
+  //     console.log({ ...expandedPanels, [panel]: !expandedPanels.panel });
+  //     setCopy(panel);
+  //     setExpandedPanels({
+  //       ...expandedPanels,
+  //       [panel]: !expandedPanels.panel,
+  //       [copy]: false,
+  //     });
+  //   },
+  //   []
+  // );
 
   // const handleChange = useCallback((panel) => {
   //   const newExpandedPanels = {...expandedPanels};
@@ -129,6 +197,26 @@ const CreateDailyLog = (props) => {
   //   setExpandedPanels(newExpandedPanels);
   //   setCopy(panel);
   // }, [expandedPanels, copy]);
+
+  const handleSubmitForm = () => {
+    if (formikRef.current) {
+      console.log("hello iam from form");
+      formikRef.current.handleSubmit();
+    }
+  };
+
+  const handleCreateDailyLog = (data) => {
+    createDailyLogApi(data)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("res", res);
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  };
+
 
   return (
     <>
@@ -145,75 +233,60 @@ const CreateDailyLog = (props) => {
             initialValues={{
               date: null,
               time: null,
-              selectProject: "",
+              projectId: "",
               reportingPerson: "",
-              workStatus: "",
+              workCompleted: "",
               address: "",
               country: "",
               state: "",
               city: "",
               zipcode: "",
-              schedule: [
-                {
-                  activity: "",
-                  choose: "",
-                  comments: "",
-                },
-              ],
-              manpower: [
-                {
-                  team: "",
-                  count: "",
-                  hours: "",
-                  comments: "",
-                },
-              ],
-              visitor: [
-                {
-                  entryType: "",
-                  name: "",
-                  comments: "",
-                },
-              ],
-              inventory: [
-                {
-                  type: "",
-                  material: "",
-                  quantity: "",
-                  unitOfMeasure: "",
-                },
-              ],
-              onsite: [
-                {
-                  type: "",
-                  reason: "",
-                  comments: "",
-                },
-              ],
+              addData: false,
+              weather: "",
+              weatherStatus: "",
+              weatherCondition: "",
+              comments: "",
+              notes: "",
+              userId: userId,
+              schedulePlanChange: [{ ...schedulePlanObj }],
+              manpower: [{ ...manpowerObj }],
+              visitorInspection: [{ ...visitorInspectionObj }],
+              inventoryData: [{ ...inventoryDataObj }],
+              onSiteIssues: [{ ...onSiteIssuesObj }],
               docuploads: null,
+              signature: null,
             }}
             validationSchema={null}
+            innerRef={formikRef}
             onSubmit={(values, { setSubmitting, resetForm }) => {
               console.log("values", values);
+              handleCreateDailyLog(values);
             }}
           >
-            {({ values, isValid, isSubmitting, handleSubmit }) => (
+            {({
+              values,
+              isValid,
+              isSubmitting,
+              handleSubmit,
+              setFieldValue,
+            }) => (
               <Form onSubmit={handleSubmit}>
                 <MuiAccordion
                   title="Date & Time"
                   selectedPanel="dateTime"
-                  expanded={expandedPanels.dateTime}
+                  // expanded={expandedPanels.dateTime}
+                  expanded={expanded === "dateTime"}
                   handleChange={handleChange("dateTime")}
                 >
-                  {expandedPanels.dateTime ? (
+                  {expanded === "dateTime" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={3}>
                         <MuiDatePicker
                           name="date"
                           id="date"
                           label={"Date"}
-                          disablePast
-                          value={values?.Date}
+                          disableFuture={true}
+                          value={values?.date}
                         />
                       </Grid>
                       <Grid item xs={3}>
@@ -226,7 +299,12 @@ const CreateDailyLog = (props) => {
                         />
                       </Grid>
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
+                        <Button
+                          variant="contained"
+                          type="submit"
+                          size="small"
+                          onClick={handleChange("selectProject")}
+                        >
                           Next
                         </Button>
                       </Grid>
@@ -238,17 +316,18 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Select Project"
                   selectedPanel="selectProject"
-                  expanded={expandedPanels.selectProject}
+                  // expanded={expandedPanels.selectProject}
+                  expanded={expanded === "selectProject"}
                   handleChange={handleChange("selectProject")}
                 >
-                  {expandedPanels.selectProject ? (
+                  {expanded === "selectProject" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={4}>
                         <MuiSelectField
-                          name="selectProject"
-                          id="selectProject"
+                          name="projectId"
+                          id="projectId"
                           label="Select Project"
-                          options={[]}
+                          options={contractorList}
                         />
                       </Grid>
                       <Grid item xs={4}>
@@ -256,13 +335,13 @@ const CreateDailyLog = (props) => {
                           name="reportingPerson"
                           id="reportingPerson"
                           label="Reporting Person"
-                          options={[]}
+                          options={contractorList}
                         />
                       </Grid>
                       <Grid item xs={4}>
                         <MuiTextField
-                          name="workStatus"
-                          id="workStatus"
+                          name="workCompleted"
+                          id="workCompleted"
                           label="% of Planned Work Completed Today"
                         />
                       </Grid>
@@ -294,7 +373,12 @@ const CreateDailyLog = (props) => {
                         />
                       </Grid>
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
+                        <Button
+                          variant="contained"
+                          type="submit"
+                          size="small"
+                          onClick={handleChange("Weather")}
+                        >
                           Next
                         </Button>
                       </Grid>
@@ -306,10 +390,11 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Add Observed Weather Conditions"
                   selectedPanel="Weather"
-                  expanded={expandedPanels.Weather}
+                  // expanded={expandedPanels.Weather}
+                  expanded={expanded === "Weather"}
                   handleChange={handleChange("Weather")}
                 >
-                  {expandedPanels.Weather ? (
+                  {expanded === "Weather" ? (
                     <Grid container spacing={3}>
                       {weatherData.map((item, i) => (
                         <Grid item xs={3} key={item + i}>
@@ -337,7 +422,16 @@ const CreateDailyLog = (props) => {
                       <Grid item xs={4}>
                         <FormGroup>
                           <FormControlLabel
-                            control={<Checkbox />}
+                            control={
+                              <Checkbox
+                                checked={values.addData}
+                                name="addData"
+                                id="addData"
+                                onChange={() =>
+                                  setFieldValue("addData", !values.addData)
+                                }
+                              />
+                            }
                             label="Add Weather Data"
                           />
                         </FormGroup>
@@ -348,25 +442,32 @@ const CreateDailyLog = (props) => {
                           id="weatherStatus"
                           label="Weather Status"
                           options={["Fine", "Rain", "Cloud", "Wind", "Snow"]}
+                          disabled={!values.addData}
                         />
                       </Grid>
                       <Grid item xs={4}>
                         <MuiSelectField
-                          name="groundConditions"
-                          id="groundConditions"
+                          name="weatherCondition"
+                          id="weatherCondition"
                           label="Ground Conditions"
                           options={["Dry", "Damp", "Wet", "Dusty", "Frozen"]}
+                          disabled={!values.addData}
                         />
                       </Grid>
                       <Grid item xs={12}>
                         <MuiTextArea
-                          name="weathernotes"
-                          id="weathernotes"
-                          label={"comments"}
+                          name="comments"
+                          id="comments"
+                          label={"Comments"}
                         />
                       </Grid>
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
+                        <Button
+                          variant="contained"
+                          type="submit"
+                          size="small"
+                          onClick={handleChange("Schedule")}
+                        >
                           Next
                         </Button>
                       </Grid>
@@ -378,13 +479,14 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title=" Add Schedule / Plan Change Details"
                   selectedPanel="Schedule"
-                  expanded={expandedPanels.Schedule}
+                  // expanded={expandedPanels.Schedule}
+                  expanded={expanded === "Schedule"}
                   handleChange={handleChange("Schedule")}
                 >
-                  {expandedPanels.Schedule ? (
+                  {expanded === "Schedule" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
-                        <FieldArray name="schedule">
+                        <FieldArray name="schedulePlanChange">
                           {({ insert, remove, push }) => (
                             <>
                               <Grid container spacing={2}>
@@ -392,13 +494,7 @@ const CreateDailyLog = (props) => {
                                   <Button
                                     variant="contained"
                                     size="small"
-                                    onClick={() =>
-                                      push({
-                                        activity: "",
-                                        choose: "",
-                                        comments: "",
-                                      })
-                                    }
+                                    onClick={() => push({ ...schedulePlanObj })}
                                   >
                                     Add Line Item
                                   </Button>
@@ -434,7 +530,7 @@ const CreateDailyLog = (props) => {
                                         </TableRow>
                                       </TableHead>
                                       <TableBody>
-                                        {values?.schedule?.map(
+                                        {values?.schedulePlanChange?.map(
                                           (item, index) => (
                                             <TableRow
                                               key={index}
@@ -462,8 +558,8 @@ const CreateDailyLog = (props) => {
                                                 sx={{ width: "170px" }}
                                               >
                                                 <MuiTextField
-                                                  name={`schedule.${index}.activity`}
-                                                  id={`schedule.${index}.activity`}
+                                                  name={`schedulePlanChange.${index}.activity`}
+                                                  id={`schedulePlanChange.${index}.activity`}
                                                   label="Activity"
                                                 />
                                               </TableCell>
@@ -472,10 +568,10 @@ const CreateDailyLog = (props) => {
                                                 sx={{ width: "170px" }}
                                               >
                                                 <MuiSelectField
-                                                  name={`schedule.${index}.choose`}
-                                                  id={`schedule.${index}.choose`}
+                                                  name={`schedulePlanChange.${index}.contractor`}
+                                                  id={`schedulePlanChange.${index}.contractor`}
                                                   label="Choose"
-                                                  options={[]}
+                                                  options={contractorList}
                                                 />
                                               </TableCell>
                                               <TableCell
@@ -483,8 +579,8 @@ const CreateDailyLog = (props) => {
                                                 sx={{ width: "170px" }}
                                               >
                                                 <MuiTextField
-                                                  name={`schedule.${index}.comments`}
-                                                  id={`schedule.${index}.comments`}
+                                                  name={`schedulePlanChange.${index}.comments`}
+                                                  id={`schedulePlanChange.${index}.comments`}
                                                   label="Comments"
                                                 />
                                               </TableCell>
@@ -502,7 +598,11 @@ const CreateDailyLog = (props) => {
                       </Grid>
 
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" size="small">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          onClick={handleChange("ManPower")}
+                        >
                           Next
                         </Button>
                       </Grid>
@@ -514,10 +614,11 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Add ManPower Details"
                   selectedPanel="ManPower"
-                  expanded={expandedPanels.ManPower}
+                  // expanded={expandedPanels.ManPower}
+                  expanded={expanded === "ManPower"}
                   handleChange={handleChange("ManPower")}
                 >
-                  {expandedPanels.ManPower ? (
+                  {expanded === "ManPower" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <FieldArray name="manpower">
@@ -528,14 +629,7 @@ const CreateDailyLog = (props) => {
                                   <Button
                                     variant="contained"
                                     size="small"
-                                    onClick={() =>
-                                      push({
-                                        team: "",
-                                        count: "",
-                                        hours: "",
-                                        comments: "",
-                                      })
-                                    }
+                                    onClick={() => push({ ...manpowerObj })}
                                   >
                                     Add Line Item
                                   </Button>
@@ -606,7 +700,7 @@ const CreateDailyLog = (props) => {
                                                 name={`manpower.${index}.team`}
                                                 id={`manpower.${index}.team`}
                                                 label="Choose"
-                                                options={[]}
+                                                options={manpowerTeam}
                                               />
                                             </TableCell>
                                             <TableCell
@@ -652,7 +746,11 @@ const CreateDailyLog = (props) => {
                       </Grid>
 
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" size="small">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          onClick={handleChange("Inspection")}
+                        >
                           Next
                         </Button>
                       </Grid>
@@ -664,13 +762,14 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Add Visitor / Inspection Details"
                   selectedPanel="Inspection"
-                  expanded={expandedPanels.Inspection}
+                  // expanded={expandedPanels.Inspection}
+                  expanded={expanded === "Inspection"}
                   handleChange={handleChange("Inspection")}
                 >
-                  {expandedPanels.Inspection ? (
+                  {expanded === "Inspection" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
-                        <FieldArray name="visitor">
+                        <FieldArray name="visitorInspection">
                           {({ insert, remove, push }) => (
                             <>
                               <Grid container spacing={2}>
@@ -679,11 +778,7 @@ const CreateDailyLog = (props) => {
                                     variant="contained"
                                     size="small"
                                     onClick={() =>
-                                      push({
-                                        entryType: "",
-                                        name: "",
-                                        comments: "",
-                                      })
+                                      push({ ...visitorInspectionObj })
                                     }
                                   >
                                     Add Line Item
@@ -720,65 +815,67 @@ const CreateDailyLog = (props) => {
                                         </TableRow>
                                       </TableHead>
                                       <TableBody>
-                                        {values.visitor.map((item, index) => (
-                                          <TableRow
-                                            key={index}
-                                            sx={{
-                                              "&:last-child td, &:last-child th":
-                                                {
-                                                  border: 0,
-                                                },
-                                            }}
-                                          >
-                                            <TableCell
-                                              align="right"
-                                              sx={{ width: "100px" }}
+                                        {values?.visitorInspection?.map(
+                                          (item, index) => (
+                                            <TableRow
+                                              key={index}
+                                              sx={{
+                                                "&:last-child td, &:last-child th":
+                                                  {
+                                                    border: 0,
+                                                  },
+                                              }}
                                             >
-                                              <Button
-                                                variant="contained"
-                                                size="small"
-                                                onClick={() => remove(index)}
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: "100px" }}
                                               >
-                                                Delete{" "}
-                                              </Button>
-                                            </TableCell>
-                                            <TableCell
-                                              align="right"
-                                              sx={{ width: "200px" }}
-                                            >
-                                              <MuiSelectField
-                                                name={`visitor.${index}.entryType`}
-                                                id={`visitor.${index}.entryType`}
-                                                label="Choose"
-                                                options={[
-                                                  "Visitor",
-                                                  "Inspector",
-                                                  "Others",
-                                                ]}
-                                              />
-                                            </TableCell>
-                                            <TableCell
-                                              align="right"
-                                              sx={{ width: "200px" }}
-                                            >
-                                              <MuiTextField
-                                                name={`visitor.${index}.name`}
-                                                id={`visitor.${index}.name`}
-                                                label="Name"
-                                              />
-                                            </TableCell>
-                                            <TableCell
-                                              align="right"
-                                              sx={{ width: "200px" }}
-                                            >
-                                              <MuiTextField
-                                                name={`visitor.${index}.comments`}
-                                                id={`visitor.${index}.comments`}
-                                                label="Comments"
-                                              />
-                                            </TableCell>
-                                          </TableRow>
-                                        ))}
+                                                <Button
+                                                  variant="contained"
+                                                  size="small"
+                                                  onClick={() => remove(index)}
+                                                >
+                                                  Delete{" "}
+                                                </Button>
+                                              </TableCell>
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: "200px" }}
+                                              >
+                                                <MuiSelectField
+                                                  name={`visitorInspection.${index}.entryType`}
+                                                  id={`visitorInspection.${index}.entryType`}
+                                                  label="Choose"
+                                                  options={[
+                                                    "Visitor",
+                                                    "Inspector",
+                                                    "Others",
+                                                  ]}
+                                                />
+                                              </TableCell>
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: "200px" }}
+                                              >
+                                                <MuiTextField
+                                                  name={`visitorInspection.${index}.name`}
+                                                  id={`visitorInspection.${index}.name`}
+                                                  label="Name"
+                                                />
+                                              </TableCell>
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: "200px" }}
+                                              >
+                                                <MuiTextField
+                                                  name={`visitorInspection.${index}.comments`}
+                                                  id={`visitorInspection.${index}.comments`}
+                                                  label="Comments"
+                                                />
+                                              </TableCell>
+                                            </TableRow>
+                                          )
+                                        )}
                                       </TableBody>
                                     </Table>
                                   </TableContainer>
@@ -790,7 +887,11 @@ const CreateDailyLog = (props) => {
                       </Grid>
 
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" size="small">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          onClick={handleChange("Inventory")}
+                        >
                           Next
                         </Button>
                       </Grid>
@@ -798,17 +899,18 @@ const CreateDailyLog = (props) => {
                   ) : (
                     ""
                   )}
-                </MuiAccordion>{" "}
+                </MuiAccordion>
                 <MuiAccordion
                   title="Add Inventory Data"
                   selectedPanel="Inventory"
-                  expanded={expandedPanels.Inventory}
+                  // expanded={expandedPanels.Inventory}
+                  expanded={expanded === "Inventory"}
                   handleChange={handleChange("Inventory")}
                 >
-                  {expandedPanels.Inventory ? (
+                  {expanded === "Inventory" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
-                        <FieldArray name="inventory">
+                        <FieldArray name="inventoryData">
                           {({ insert, remove, push }) => (
                             <>
                               <Grid container spacing={2}>
@@ -817,12 +919,7 @@ const CreateDailyLog = (props) => {
                                     variant="contained"
                                     size="small"
                                     onClick={() =>
-                                      push({
-                                        type: "",
-                                        material: "",
-                                        quantity: "",
-                                        unitOfMeasure: "",
-                                      })
+                                      push({ ...inventoryDataObj })
                                     }
                                   >
                                     Add Line Item
@@ -864,71 +961,76 @@ const CreateDailyLog = (props) => {
                                         </TableRow>
                                       </TableHead>
                                       <TableBody>
-                                        {values.inventory.map((item, index) => (
-                                          <TableRow
-                                            key={index}
-                                            sx={{
-                                              "&:last-child td, &:last-child th":
-                                                {
-                                                  border: 0,
-                                                },
-                                            }}
-                                          >
-                                            <TableCell
-                                              align="right"
-                                              sx={{ width: "100px" }}
+                                        {values.inventoryData.map(
+                                          (item, index) => (
+                                            <TableRow
+                                              key={index}
+                                              sx={{
+                                                "&:last-child td, &:last-child th":
+                                                  {
+                                                    border: 0,
+                                                  },
+                                              }}
                                             >
-                                              <Button
-                                                variant="contained"
-                                                size="small"
-                                                onClick={() => remove(index)}
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: "100px" }}
                                               >
-                                                Delete{" "}
-                                              </Button>
-                                            </TableCell>
-                                            <TableCell
-                                              align="right"
-                                              sx={{ width: "200px" }}
-                                            >
-                                              <MuiSelectField
-                                                name={`inventory.${index}.type`}
-                                                id={`inventory.${index}.type`}
-                                                label="Choose"
-                                                options={["Incoming", "Outing"]}
-                                              />
-                                            </TableCell>
-                                            <TableCell
-                                              align="right"
-                                              sx={{ width: "200px" }}
-                                            >
-                                              <MuiTextField
-                                                name={`inventory.${index}.material`}
-                                                id={`inventory.${index}.material`}
-                                                label="Name"
-                                              />
-                                            </TableCell>
-                                            <TableCell
-                                              align="right"
-                                              sx={{ width: "200px" }}
-                                            >
-                                              <MuiTextField
-                                                name={`inventory.${index}.quantity`}
-                                                id={`inventory.${index}.quantity`}
-                                                label="0"
-                                              />
-                                            </TableCell>
-                                            <TableCell
-                                              align="right"
-                                              sx={{ width: "200px" }}
-                                            >
-                                              <MuiTextField
-                                                name={`inventory.${index}.unitOfMeasure`}
-                                                id={`inventory.${index}.unitOfMeasure`}
-                                                label="Units"
-                                              />
-                                            </TableCell>
-                                          </TableRow>
-                                        ))}
+                                                <Button
+                                                  variant="contained"
+                                                  size="small"
+                                                  onClick={() => remove(index)}
+                                                >
+                                                  Delete{" "}
+                                                </Button>
+                                              </TableCell>
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: "200px" }}
+                                              >
+                                                <MuiSelectField
+                                                  name={`inventoryData.${index}.type`}
+                                                  id={`inventoryData.${index}.type`}
+                                                  label="Choose"
+                                                  options={[
+                                                    "Incoming",
+                                                    "Outing",
+                                                  ]}
+                                                />
+                                              </TableCell>
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: "200px" }}
+                                              >
+                                                <MuiTextField
+                                                  name={`inventoryData.${index}.material`}
+                                                  id={`inventoryData.${index}.material`}
+                                                  label="Name"
+                                                />
+                                              </TableCell>
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: "200px" }}
+                                              >
+                                                <MuiTextField
+                                                  name={`inventoryData.${index}.quantity`}
+                                                  id={`inventoryData.${index}.quantity`}
+                                                  label="0"
+                                                />
+                                              </TableCell>
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: "200px" }}
+                                              >
+                                                <MuiTextField
+                                                  name={`inventoryData.${index}.unitsOfMeasure`}
+                                                  id={`inventoryData.${index}.unitsOfMeasure`}
+                                                  label="Units"
+                                                />
+                                              </TableCell>
+                                            </TableRow>
+                                          )
+                                        )}
                                       </TableBody>
                                     </Table>
                                   </TableContainer>
@@ -940,7 +1042,11 @@ const CreateDailyLog = (props) => {
                       </Grid>
 
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" size="small">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          onClick={handleChange("OnSite")}
+                        >
                           Next
                         </Button>
                       </Grid>
@@ -948,17 +1054,18 @@ const CreateDailyLog = (props) => {
                   ) : (
                     ""
                   )}
-                </MuiAccordion>{" "}
+                </MuiAccordion>
                 <MuiAccordion
                   title="Add On-Site Issues"
                   selectedPanel="OnSite"
-                  expanded={expandedPanels.OnSite}
+                  // expanded={expandedPanels.OnSite}
+                  expanded={expanded === "OnSite"}
                   handleChange={handleChange("OnSite")}
                 >
-                  {expandedPanels.OnSite ? (
+                  {expanded === "OnSite" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
-                        <FieldArray name="onsite">
+                        <FieldArray name="onSiteIssues">
                           {({ insert, remove, push }) => (
                             <>
                               <Grid container spacing={2}>
@@ -966,13 +1073,7 @@ const CreateDailyLog = (props) => {
                                   <Button
                                     variant="contained"
                                     size="small"
-                                    onClick={() =>
-                                      push({
-                                        type: "",
-                                        reason: "",
-                                        comments: "",
-                                      })
-                                    }
+                                    onClick={() => push({ ...onSiteIssuesObj })}
                                   >
                                     Add Line Item
                                   </Button>
@@ -1008,66 +1109,68 @@ const CreateDailyLog = (props) => {
                                         </TableRow>
                                       </TableHead>
                                       <TableBody>
-                                        {values.inventory.map((item, index) => (
-                                          <TableRow
-                                            key={index}
-                                            sx={{
-                                              "&:last-child td, &:last-child th":
-                                                {
-                                                  border: 0,
-                                                },
-                                            }}
-                                          >
-                                            <TableCell
-                                              align="right"
-                                              sx={{ width: 100 }}
+                                        {values.onSiteIssues.map(
+                                          (item, index) => (
+                                            <TableRow
+                                              key={index}
+                                              sx={{
+                                                "&:last-child td, &:last-child th":
+                                                  {
+                                                    border: 0,
+                                                  },
+                                              }}
                                             >
-                                              <Button
-                                                variant="contained"
-                                                size="small"
-                                                onClick={() => remove(index)}
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: 100 }}
                                               >
-                                                Delete{" "}
-                                              </Button>
-                                            </TableCell>
-                                            <TableCell
-                                              align="right"
-                                              sx={{ width: 200 }}
-                                            >
-                                              <MuiSelectField
-                                                name={`onsite.${index}.type`}
-                                                id={`onsite.${index}.type`}
-                                                label="Choose"
-                                                options={[
-                                                  "Damages",
-                                                  "Saftey",
-                                                  "Security",
-                                                  "Other",
-                                                ]}
-                                              />
-                                            </TableCell>
-                                            <TableCell
-                                              align="right"
-                                              sx={{ width: 200 }}
-                                            >
-                                              <MuiTextField
-                                                name={`onsite.${index}.reason`}
-                                                id={`onsite.${index}.reason`}
-                                                label="Reason"
-                                              />
-                                            </TableCell>
-                                            <TableCell
-                                              align="right"
-                                              sx={{ width: 200 }}
-                                            >
-                                              <MuiTextField
-                                                name={`onsite.${index}.comments`}
-                                                id={`onsite.${index}.comments`}
-                                                label="Comments"
-                                              />
-                                            </TableCell>
-                                          </TableRow>
-                                        ))}
+                                                <Button
+                                                  variant="contained"
+                                                  size="small"
+                                                  onClick={() => remove(index)}
+                                                >
+                                                  Delete{" "}
+                                                </Button>
+                                              </TableCell>
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: 200 }}
+                                              >
+                                                <MuiSelectField
+                                                  name={`onSiteIssues.${index}.type`}
+                                                  id={`onSiteIssues.${index}.type`}
+                                                  label="Choose"
+                                                  options={[
+                                                    "Damages",
+                                                    "Saftey",
+                                                    "Security",
+                                                    "Other",
+                                                  ]}
+                                                />
+                                              </TableCell>
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: 200 }}
+                                              >
+                                                <MuiTextField
+                                                  name={`onSiteIssues.${index}.reasons`}
+                                                  id={`onSiteIssues.${index}.reasons`}
+                                                  label="Reason"
+                                                />
+                                              </TableCell>
+                                              <TableCell
+                                                align="right"
+                                                sx={{ width: 200 }}
+                                              >
+                                                <MuiTextField
+                                                  name={`onSiteIssues.${index}.comments`}
+                                                  id={`onSiteIssues.${index}.comments`}
+                                                  label="Comments"
+                                                />
+                                              </TableCell>
+                                            </TableRow>
+                                          )
+                                        )}
                                       </TableBody>
                                     </Table>
                                   </TableContainer>
@@ -1079,7 +1182,11 @@ const CreateDailyLog = (props) => {
                       </Grid>
 
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" size="small">
+                        <Button
+                          variant="contained"
+                          size="small"
+                          onClick={handleChange("Photos")}
+                        >
                           Next
                         </Button>
                       </Grid>
@@ -1091,45 +1198,48 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Add Photos / Documents / Videos"
                   selectedPanel="Photos"
-                  expanded={expandedPanels.Photos}
+                  // expanded={expandedPanels.Photos}
+                  expanded={expanded === "Photos"}
                   handleChange={handleChange("Photos")}
                 >
-                  {expandedPanels.Photos ? (
+                  {expanded === "Photos" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
-                       <FileUpload 
-                       id="docuploads"
-                       name="docuploads"
-                       maxFiles={5}
-                       multiple={true}
-                       />
-                       <Typography
-                      variant="h6"
-                      fontWeight="bold"
-                      sx={{ padding: "10px 0px" }}
-                    >
-                      Uploaded Files:
-                    </Typography>
-                    <Box>
-                      {values?.docuploads?.map((file, i) => (
+                        <FileUpload
+                          id="docuploads"
+                          name="docuploads"
+                          maxFiles={5}
+                          multiple={true}
+                        />
                         <Typography
-                          key={file + i}
-                          sx={{
-                            width: "fit-content",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            border:"1px solid rgba(1, 167, 104, 1)",
-                            borderRadius:"5px",
-                            padding:"5px 15px"
-                          }}
-                        >{`${i + 1}. ${file.name}`}</Typography>
-                      ))}
-                    </Box>
+                          variant="h6"
+                          fontWeight="bold"
+                          sx={{ padding: "10px 0px" }}
+                        >
+                          Uploaded Files:
+                        </Typography>
                       </Grid>
-                      
+                      <Box className={classes.imgTexts}>
+                          {values?.docuploads?.map((file, i) => (
+                            <Typography
+                              key={file + i}
+                              className={classes.imgName}
+                            >{`${i + 1}. ${file.name}`}
+                            <span>
+                            <IconButton size="small" color="primary" onClick={() => console.log()}>
+                              <DeleteIcon fontSize="16px" />
+                            </IconButton>
+                            </span>
+                            </Typography>
+                          ))}
+                        </Box>
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
+                        <Button
+                          variant="contained"
+                          type="submit"
+                          size="small"
+                          onClick={handleChange("Notes")}
+                        >
                           Next
                         </Button>
                       </Grid>
@@ -1141,20 +1251,26 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Notes / Comments"
                   selectedPanel="Notes"
-                  expanded={expandedPanels.Notes}
+                  // expanded={expandedPanels.Notes}
+                  expanded={expanded === "Notes"}
                   handleChange={handleChange("Notes")}
                 >
-                  {expandedPanels.Notes ? (
+                  {expanded === "Notes" ? (
                     <Grid container spacing={2}>
                       <Grid item xs={12}>
                         <MuiTextArea
-                          name="fullnotes"
-                          id="fullnotes"
+                          name="notes"
+                          id="notes"
                           label={"comments"}
                         />
                       </Grid>
                       <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
+                        <Button
+                          variant="contained"
+                          type="submit"
+                          size="small"
+                          onClick={handleChange("Signature")}
+                        >
                           Next
                         </Button>
                       </Grid>
@@ -1166,33 +1282,17 @@ const CreateDailyLog = (props) => {
                 <MuiAccordion
                   title="Add Signature"
                   selectedPanel="Signature"
-                  expanded={expandedPanels.Signature}
+                  // expanded={expandedPanels.Signature}
+                  expanded={expanded === "Signature"}
                   handleChange={handleChange("Signature")}
                 >
-                  {expandedPanels.Signature ? (
+                  {expanded === "Signature" ? (
                     <Grid container spacing={2}>
-                      <Grid item xs={3}>
-                        <MuiDatePicker
-                          name="date"
-                          id="date"
-                          label={"Date"}
-                          disablePast
-                          value={values?.Date}
+                      <Grid item xs={12}>
+                        <PicUpload
+                          name="signature"
+                          setFieldValue={setFieldValue}
                         />
-                      </Grid>
-                      <Grid item xs={3}>
-                        <MuiTimePicker
-                          name="time"
-                          id="time"
-                          label={"Time"}
-                          disablePast
-                          value={values?.time}
-                        />
-                      </Grid>
-                      <Grid item xs={12} sx={{ textAlign: "right" }}>
-                        <Button variant="contained" type="submit" size="small">
-                          Next
-                        </Button>
                       </Grid>
                     </Grid>
                   ) : (
@@ -1204,7 +1304,12 @@ const CreateDailyLog = (props) => {
           </Formik>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" type="submit" size="small">
+          <Button
+            variant="contained"
+            type="submit"
+            size="small"
+            onClick={handleSubmitForm}
+          >
             Submit
           </Button>
         </DialogActions>

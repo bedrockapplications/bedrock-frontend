@@ -37,7 +37,7 @@ import TranslateIcon from "@mui/icons-material/Translate";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import favicon from "../Images/Bedrock_Rock_-removebg-preview.png";
-import { WindowSharp } from "@mui/icons-material";
+import { CleaningServices, WindowSharp } from "@mui/icons-material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { getMeetingsList } from "../services/request";
@@ -46,9 +46,13 @@ import { GlobalState } from "../Context/Context";
 import GetDateAndTime from "../components/DigitalClock";
 import BookIcon from "@mui/icons-material/Book";
 import PsychologyIcon from '@mui/icons-material/Psychology';
+import CalculateIcon from '@mui/icons-material/Calculate';
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
-// import Dashboard from "../pages/Dashboard";
+// import Dashboard from "../pages/Dashboard";\
+
+import { io } from "socket.io-client";
+
 
 const drawerWidth = 240;
 
@@ -92,15 +96,20 @@ const sideLinks = [
     label: "my_projects",
     link: "/myprojects",
   },
-  // {
-  //   icon: <BookIcon />,
-  //   label: "Daily Logs",
-  //   link: "/dailylogs",
-  // },
+  {
+    icon: <BookIcon />,
+    label: "Daily Logs",
+    link: "/dailylogs",
+  },
   {
     icon: <PsychologyIcon />,
     label: "Estimator.ai",
     link: "/estimatorai",
+  },
+  {
+    icon: <CalculateIcon />,
+    label: "AI Auto Measure",
+    link: "/automeasure",
   },
 
 
@@ -177,6 +186,8 @@ const Drawer = styled(MuiDrawer, {
 
 const ITEM_HEIGHT = 48;
 
+const socket = io.connect('https://nodejs-apis.bedrockapps.link');
+
 export default function MiniDrawer(props) {
   let history = useHistory();
   const { i18n, t } = useTranslation();
@@ -187,6 +198,16 @@ export default function MiniDrawer(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [account, setAccount] = React.useState(null);
   const [notification, setNotification] = React.useState(null);
+
+  // const socket = io('https://nodejs-apis.bedrockapps.link');
+
+  useEffect(() => {
+    socket.emit('getUser', {id:localStorage.getItem('userId'), tz:Intl.DateTimeFormat().resolvedOptions().timeZone});
+    socket.on("response", (data) => {
+      // setNotification(data);
+      console.log("socketdata", data)
+    });
+  }, []);
 
   const [selected, setSelectedIndex] = React.useState(
     LanguagesList?.filter(
@@ -273,14 +294,14 @@ export default function MiniDrawer(props) {
     // GetDateAndTime();
   }, []);
 
-  useEffect(() => {
-    const MINUTE_MS = 60000;
-    const interval = setInterval(() => {
-      GetTaskList();
-    }, MINUTE_MS);
+  // useEffect(() => {
+  //   const MINUTE_MS = 60000;
+  //   const interval = setInterval(() => {
+  //     GetTaskList();
+  //   }, MINUTE_MS);
 
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);

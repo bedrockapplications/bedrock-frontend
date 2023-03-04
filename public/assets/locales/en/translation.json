@@ -52,6 +52,8 @@
     "projectName": "Project Name",
     "uploadDate": "Upload Date",
     "actions": "Actions",
+    "id":"Id",
+    "pageNo":"Page No",
     
     "createdBy": "Created By",
     "project": "Project",
