@@ -1,4 +1,4 @@
-import React, { useState, memo, useEffect, useContext } from "react";
+import React, { useState, memo, useEffect, useContext, useCallback } from "react";
 import {
   Button,
   Grid,
@@ -18,6 +18,7 @@ import AutoMeasureTabularView from "./autoMeasureTable";
 import FileUpload from "../../components/docUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
+import PDFViewer from './PDFViewer';
 
 
 const useStyle = makeStyles(() => ({
@@ -86,6 +87,7 @@ const AutoMeasure = () => {
   const { t } = useTranslation();
   const { popen, setPopen, setIsLoading } = useContext(GlobalState);
   const [file, setfile] = useState([]);
+  const [openData, setOpenData] = useState(false);
 
   const handleUpload = (values) => {
     if(values.docuploads !== null) {
@@ -111,6 +113,14 @@ const AutoMeasure = () => {
       console.log("error", error);
     });
   }, [])
+
+  const handleOpenData = () => {
+    setOpenData(true);
+  };
+
+  const handleCloseData = useCallback(() => {
+    setOpenData(false);
+  }, []);
 
 
   return (
@@ -214,6 +224,7 @@ const AutoMeasure = () => {
                       variant="contained"
                       type="submit"
                       size="small"
+                      onClick={() => handleOpenData()}
                     >
                       Submit
                     </Button>
@@ -224,6 +235,13 @@ const AutoMeasure = () => {
           </Paper>
         </Grid>
       </Grid>
+      {file && <PDFViewer 
+        title="MEASURED DATA :"
+        id="measureddata"
+        open={openData}
+        handleClose={handleCloseData} 
+        myPdfFile={file} 
+        />}
       <>{popen ? <PremiumDailog /> : ""}</>
     </>
   );
