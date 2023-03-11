@@ -19,6 +19,8 @@ import FileUpload from "../../components/docUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 import PDFViewer from './PDFViewer';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 
 const useStyle = makeStyles(() => ({
@@ -150,10 +152,7 @@ const AutoMeasure = () => {
                 docuploads: null,
               }}
               validationSchema={null}
-              // innerRef={formikRef}
               onSubmit={(values, { setSubmitting, resetForm }) => {
-                console.log("values", values);
-                // handleCreateDailyLog(values);
                 handleUpload(values);
               }}
             >
@@ -184,7 +183,10 @@ const AutoMeasure = () => {
                         />
                       </Box>
                       <Box className={classes.imgTexts}>
-                        {values?.docuploads?.map((file, i) => (
+                        <>
+                        {values?.docuploads?
+                        <>
+                        {values.docuploads.map((file, i) => (
                           <Typography
                             key={file + i}
                             className={classes.imgName}
@@ -201,7 +203,29 @@ const AutoMeasure = () => {
                               </IconButton>
                             </span>
                           </Typography>
-                        ))}
+                        ))
+                        }
+                        </>
+                          :
+                          <Typography
+                              sx={{visibility:"hidden", display: values.docuploads !== null ? "none" : ""}}
+                              className={classes.imgName}
+                            >
+                              abcd
+                              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              <span>
+                                <IconButton
+                                  size="small"
+                                  color="primary"
+                                  onClick={() => console.log()}
+                                >
+                                  <DeleteIcon fontSize="16px" />
+                                </IconButton>
+                              </span>
+                            </Typography>
+                        }
+                        </>
+                        
                       </Box>
                     </Grid>
                     <Grid item xs={6}>
@@ -224,7 +248,16 @@ const AutoMeasure = () => {
                       variant="contained"
                       type="submit"
                       size="small"
-                      onClick={() => handleOpenData()}
+                      onClick={() => values.docuploads !== null ? handleOpenData() : toast.error("Please Upload File", {
+                        position: "top-right",
+                        autoClose: 5000,
+                        hideProgressBar: false,
+                        closeOnClick: true,
+                        pauseOnHover: true,
+                        draggable: true,
+                        progress: undefined,
+                      })
+                      }
                     >
                       Submit
                     </Button>
@@ -235,14 +268,26 @@ const AutoMeasure = () => {
           </Paper>
         </Grid>
       </Grid>
-      {file && <PDFViewer 
+      {(file?.type?.startsWith('application/pdf') || file?.type?.startsWith('image')) && 
+       <PDFViewer 
         title="MEASURED DATA :"
         id="measureddata"
         open={openData}
         handleClose={handleCloseData} 
         myPdfFile={file} 
-        />}
+        />
+    }
       <>{popen ? <PremiumDailog /> : ""}</>
+      <>
+      <ToastContainer
+        newestOnTop
+        pauseOnFocusLoss
+        pauseOnHover
+        draggable
+        closeOnClick
+        limit={1}
+      />
+    </>
     </>
   );
 };
