@@ -23,7 +23,22 @@ axiosIntance.interceptors.response.use(
     if (status && status === 500) {
       //   showAlert("error", "Internal Server Error");
     }
-    if (status && status === 401) {
+    const originalRequest = error.config;
+    if (status && status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      return api
+        .get("/external/authenticate")
+        .then((res) => {
+          if (res.status === 200) {
+            console.log("res", res);
+            let token = res?.data[0]?.split("=")[1]?.split(";")[0];
+            localStorage.setItem("kreoToken", token);
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
+
       let errorobj = error?.response?.data;
       console.log("error400", errorobj);
     }

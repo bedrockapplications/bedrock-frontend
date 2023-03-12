@@ -1,4 +1,10 @@
-import React, { useState, memo, useEffect, useContext, useCallback } from "react";
+import React, {
+  useState,
+  memo,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 import {
   Button,
   Grid,
@@ -18,8 +24,12 @@ import AutoMeasureTabularView from "./autoMeasureTable";
 import FileUpload from "../../components/docUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
-import PDFViewer from './PDFViewer';
-
+import PDFViewer from "./PDFViewer";
+import {
+  getKreoLoginApi,
+  uploadFiletoKero,
+  getKreoProjectDetails,
+} from "../../services/request";
 
 const useStyle = makeStyles(() => ({
   projectHeader: {
@@ -80,48 +90,43 @@ const useStyle = makeStyles(() => ({
   },
 }));
 
-
-
 const AutoMeasure = () => {
   const classes = useStyle();
   const { t } = useTranslation();
   const { popen, setPopen, setIsLoading } = useContext(GlobalState);
   const [file, setfile] = useState([]);
-  const [openData, setOpenData] = useState(false);
+  const [openData, setOpenData] = useState(true);
+  const [KreoProjectDetails, setKreoProjectDetails] = useState({});
 
   const handleUpload = (values) => {
-    if(values.docuploads !== null) {
+    if (values.docuploads !== null) {
       setfile(values.docuploads[0]);
-      console.log(values?.docuploads[0], "mmmm")
-    }                   
-    
-  }
+      console.log(values?.docuploads[0], "mmmm");
+    }
+  };
 
   useEffect(() => {
-    let payload = {
-      email: "adithya.namada@bedrockapps.org", 
-      password: "Adithya@123"
-    }
-    console.log("hello","kreo")
-    axios.post('https://takeoff.kreo.net/api/auto-measure/v1/auth/login', payload)
-    .then((res) => {
-      if (res.status === 200) {
-        console.log("res", res);
-      }
-    })
-    .catch((error) => {
-      console.log("error", error);
-    });
-  }, [])
+    getKreoLoginApi()
+      .then((res) => {
+        if (res.status === 200) {
+          if (res?.data?.length > 0) {
+            let token = res?.data[0]?.split("=")[1]?.split(";")[0];
+            localStorage.setItem("kreoToken", token);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  }, []);
 
   const handleOpenData = () => {
-    setOpenData(true);
+    // setOpenData(true);
   };
 
   const handleCloseData = useCallback(() => {
     setOpenData(false);
   }, []);
-
 
   return (
     <>
@@ -148,12 +153,31 @@ const AutoMeasure = () => {
             <Formik
               initialValues={{
                 docuploads: null,
+                pageIndexFrom: "",
+                pageIndexTo: "",
               }}
               validationSchema={null}
               // innerRef={formikRef}
               onSubmit={(values, { setSubmitting, resetForm }) => {
-                console.log("values", values);
-                // handleCreateDailyLog(values);
+                let formData = new FormData();
+                formData.append("attachment", values?.docuploads[0]);
+                formData.append(
+                  "kreo_auth_access_token",
+                  localStorage.getItem("kreoToken")
+                );
+                formData.append("pageIndexFrom", values?.pageIndexFrom);
+                formData.append("pageIndexTo", values?.pageIndexTo);
+                uploadFiletoKero(formData)
+                  .then((res) => {
+                    if (res.status === 200) {
+                      let data = res.data;
+                      setKreoProjectDetails({ ...data });
+                      setOpenData(true);
+                    }
+                  })
+                  .catch((error) => {
+                    console.log("error", error);
+                  });
                 handleUpload(values);
               }}
             >
@@ -206,26 +230,21 @@ const AutoMeasure = () => {
                     </Grid>
                     <Grid item xs={6}>
                       <MuiTextField
-                        name="frompageno"
-                        id="frompageno"
+                        name="pageIndexFrom"
+                        id="pageIndexFrom"
                         label="From Page No"
                       />
                     </Grid>
                     <Grid item xs={6}>
                       <MuiTextField
-                        name="topageno"
-                        id="topageno"
+                        name="pageIndexTo"
+                        id="pageIndexTo"
                         label="To Page No"
                       />
                     </Grid>
                   </Grid>
-                  <Grid item xs={12} align="right" sx={{paddingTop:"5vh"}}>
-                    <Button
-                      variant="contained"
-                      type="submit"
-                      size="small"
-                      onClick={() => handleOpenData()}
-                    >
+                  <Grid item xs={12} align="right" sx={{ paddingTop: "5vh" }}>
+                    <Button variant="contained" type="submit" size="small">
                       Submit
                     </Button>
                   </Grid>
@@ -235,16 +254,18 @@ const AutoMeasure = () => {
           </Paper>
         </Grid>
       </Grid>
-      {file && <PDFViewer 
-        title="MEASURED DATA :"
-        id="measureddata"
-        open={openData}
-        handleClose={handleCloseData} 
-        myPdfFile={file} 
-        />}
+      {file && (
+        <PDFViewer
+          title="MEASURED DATA :"
+          id="measureddata"
+          open={openData}
+          handleClose={handleCloseData}
+          myPdfFile={file}
+          kreoProjectObj={KreoProjectDetails}
+        />
+      )}
       <>{popen ? <PremiumDailog /> : ""}</>
     </>
   );
 };
 export default memo(AutoMeasure);
-

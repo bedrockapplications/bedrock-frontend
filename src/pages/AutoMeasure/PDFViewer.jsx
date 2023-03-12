@@ -1,43 +1,79 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import MuiDialog from "../../components/MuiDialog";
-import {
-  DialogContent,
-  Button,
-  DialogActions,
-  Box,
-  Grid
-} from "@mui/material";
-
+import { DialogContent, Button, DialogActions, Box, Grid } from "@mui/material";
+import { getKreoProjectDetails } from "../../services/request";
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const PDFViewer = (props) => {
-  const { open, handleClose, id, title, myPdfFile } = props;
+  const { open, handleClose, id, title, myPdfFile, kreoProjectObj } = props;
   // const [numPages, setNumPages] = useState(null);
   const [numPages, setNumPages] = useState(null);
-    const [pageNumber, setPageNumber] = useState(1);
-    function onDocumentLoadSuccess({ numPages }) {
-      setNumPages(numPages);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [individualDetails, setIndividualDetails] = useState({});
+  function onDocumentLoadSuccess({ numPages }) {
+    setNumPages(numPages);
+  }
+
+  function changePage(offSet) {
+    setPageNumber((prevPageNumber) => prevPageNumber + offSet);
+  }
+
+  function changePageBack() {
+    if (pageNumber > 1) {
+      changePage(-1);
+      getProjectDetailsApi(numPages - 1);
     }
-  
-    function changePage(offSet) {
-      setPageNumber((prevPageNumber) => prevPageNumber + offSet);
+  }
+
+  function changePageNext() {
+    if (pageNumber < numPages) {
+      changePage(+1);
+      getProjectDetailsApi(numPages - 1);
     }
-  
-    function changePageBack() {
-      if(pageNumber > 1 ){
-          changePage(-1);
-      }
-    }
-  
-    function changePageNext() {
-      if(pageNumber < numPages){
-          changePage(+1);
-      }
-    }
+  }
+
+  const getProjectDetailsApi = (index) => {
+    let token = localStorage.getItem("kreoToken");
+    // if (kreoProjectObj.projectId) {
+    getKreoProjectDetails(token, 67817, index || 0)
+      .then((res) => {
+        if (res.status === 200) {
+          let data = res?.data?.polygons?.Element;
+          let data1 = res?.data?.polygons?.Space;
+          let detailObj = {
+            Window: data?.Window?.length,
+            Wall: data?.Wall?.length,
+            Door: data?.Door?.length,
+            Opening: data?.Opening?.length,
+            Vent: data1?.Vent?.length,
+            Corridor: data1?.Corridor.length,
+            Riser: data1?.Riser?.length,
+            Stair: data1?.Stair?.length,
+            GEA: data1?.GEA?.length,
+            NIA: data1?.NIA.length,
+            GIA: data1.GIA?.length,
+            Elevator: data1?.Elevator?.length,
+            Cupboard: data1?.Cupboard?.length,
+          };
+          console.log("res", detailObj);
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+    // }
+  };
+
+  useEffect(() => {
+    // if (kreoProjectObj.projectId) {
+    getProjectDetailsApi();
+    // }
+  }, [kreoProjectObj?.projectId]);
 
   return (
     <>
+      {console.log("kreoProjectObj", kreoProjectObj)}
       <MuiDialog
         open={open}
         handleClose={handleClose}
@@ -48,25 +84,45 @@ const PDFViewer = (props) => {
         {/* <Divider /> */}
         <DialogContent dividers>
           <Grid container spacing={0}>
-          <Grid item xs={4} sx={{background:"#3A3A3C"}}></Grid>
-          <Grid item xs={8}>
-          <Box>
-          <center>
-                <Document file={myPdfFile} onLoadSuccess={onDocumentLoadSuccess}
-                style={{height:'calc(100vh - 100px)', width:"70vw"}}>
+            <Grid item xs={4} sx={{ background: "#3A3A3C" }}></Grid>
+            <Grid item xs={8}>
+              <Box>
+                <center>
+                  <Document
+                    file={myPdfFile}
+                    onLoadSuccess={onDocumentLoadSuccess}
+                    style={{ height: "calc(100vh - 100px)", width: "70vw" }}
+                  >
                     <Page pageNumber={pageNumber} />
-                </Document>
-            </center>
-            <div className="end-box">
-                <div className="pagestext">
+                  </Document>
+                </center>
+                <div className="end-box">
+                  <div className="pagestext">
                     Page {pageNumber} of {numPages}
+                  </div>
+                  <div className="buttonbox">
+                    <div
+                      className="backbutton"
+                      style={{
+                        cursor: pageNumber > 1 ? "pointer" : "not-allowed",
+                      }}
+                      onClick={changePageBack}
+                    >
+                      Previous
+                    </div>
+                    <div
+                      className="nextbutton"
+                      style={{
+                        cursor:
+                          pageNumber < numPages ? "pointer" : "not-allowed",
+                      }}
+                      onClick={changePageNext}
+                    >
+                      Next
+                    </div>
+                  </div>
                 </div>
-                <div className="buttonbox">
-                    <div className="backbutton" style={{cursor: pageNumber > 1 ? "pointer" : "not-allowed"}} onClick={changePageBack}>Previous</div>
-                    <div className="nextbutton" style={{cursor: pageNumber < numPages ? "pointer" : "not-allowed"}} onClick={changePageNext}>Next</div>
-                </div>
-            </div>
-            {/* <Document
+                {/* <Document
               file={myPdfFile}
               onLoadSuccess={({ numPages }) => setNumPages(numPages)}
             >
@@ -79,8 +135,8 @@ const PDFViewer = (props) => {
                 />
               ))}
             </Document> */}
-          </Box>
-          </Grid>
+              </Box>
+            </Grid>
           </Grid>
         </DialogContent>
         <DialogActions>
