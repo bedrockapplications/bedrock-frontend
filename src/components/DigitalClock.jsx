@@ -31,8 +31,29 @@ const DigitalClock = () => {
   const [clockState, setClockState] = useState("");
   const [dayState, setDayState] = useState("");
 
-  const GetDateAndTime = () => {
-    setInterval(() => {
+  // const GetDateAndTime = () => {
+  //   setInterval(() => {
+  //     const date = new Date();
+  //     let time = date.toLocaleString("en-US", {
+  //       hour: "2-digit",
+  //       minute: "2-digit",
+  //       second: "2-digit",
+  //       hour12: true,
+  //     });
+  //     setClockState(time);
+  //     let hrs = date.getHours();
+  //     if (hrs < 12) {
+  //       setDayState("good_morning");
+  //     } else if (hrs < 17) {
+  //       setDayState("good_afternoon");
+  //     } else {
+  //       setDayState("good_evening");
+  //     }
+  //   }, 1000);
+  // };
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
       const date = new Date();
       let time = date.toLocaleString("en-US", {
         hour: "2-digit",
@@ -50,10 +71,7 @@ const DigitalClock = () => {
         setDayState("good_evening");
       }
     }, 1000);
-  };
-
-  useEffect(() => {
-    GetDateAndTime();
+    return () => clearInterval(intervalId);
   }, []);
 
   return (

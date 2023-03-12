@@ -9,7 +9,7 @@
 }
 ::-webkit-scrollbar-track {
   border-radius: 10px;
-  background: rgba(0,0,0,0.1);
+  background: rgb(216, 216, 216);
 }
 ::-webkit-scrollbar-thumb{
   border-radius: 10px;
@@ -1440,4 +1440,81 @@ p span.round::after {
 
 .react-input-emoji--button__show svg {
   fill: #48484A !important;
+}
+
+
+
+.pdf-box{
+  overflow: hidden;
+}
+
+.end-box{
+  height: 75px;
+  background-color: #3A3A3C;
+  /* width: 100vw; */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+}
+
+.pagestext{
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.buttonbox{
+  display: flex;
+  z-index: 999999999;
+}
+
+.nextbutton{
+  background-color: white;
+    color: #3A3A3C;
+    border-radius: 8px;
+    margin-left: 0px;
+    font-weight: 700;
+    font-size: 13px;
+    height: 35px;
+    width: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+
+
+.backbutton{
+    border: 1px solid white;
+    border-radius: 8px;
+    background-color: #3A3A3C;
+    color: white;
+    margin-right: 20px;
+    font-weight: 700;
+    font-size: 13px;
+    height: 35px;
+    width: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin-right: 20px;
+}
+
+.react-pdf__Document{
+  overflow: scroll !important;
+  /* width: 30vw; */
+  height: 50vh !important;
+  
+}
+
+.textLayer, .annotationLayer{
+  display: none;
+}
+
+canvas{
+    width: 100% !important;
+    height: 50vh !important;
 }

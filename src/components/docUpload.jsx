@@ -54,7 +54,7 @@ const RenderDocUpload = (props) => {
           Drag & drop files or <span style={{textDecoration: "underline"}}>Browse</span>
           </Typography>
           <Typography sx={{ textAlign: "center", color:"#676767", margin:"10px 0px" }}>
-          Supported formates: JPEG, PNG, GIF, PDF, Word, PPT
+          Supported formates: JPEG, PNG, PDF
           </Typography>
         </div>
       </section>

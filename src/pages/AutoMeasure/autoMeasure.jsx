@@ -1,4 +1,10 @@
-import React, { useState, memo, useEffect, useContext } from "react";
+import React, {
+  useState,
+  memo,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 import {
   Button,
   Grid,
@@ -17,8 +23,10 @@ import PremiumDailog from "../../components/premiumDailog";
 import AutoMeasureTabularView from "./autoMeasureTable";
 import FileUpload from "../../components/docUpload";
 import DeleteIcon from "@mui/icons-material/Delete";
-import axios from "axios";
-
+import PDFViewer from "./PDFViewer";
+import { getKreoLoginApi, uploadFiletoKero } from "../../services/request";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const useStyle = makeStyles(() => ({
   projectHeader: {
@@ -79,39 +87,43 @@ const useStyle = makeStyles(() => ({
   },
 }));
 
-
-
 const AutoMeasure = () => {
   const classes = useStyle();
   const { t } = useTranslation();
   const { popen, setPopen, setIsLoading } = useContext(GlobalState);
   const [file, setfile] = useState([]);
+  const [openData, setOpenData] = useState(false);
+  const [KreoProjectDetails, setKreoProjectDetails] = useState({});
 
   const handleUpload = (values) => {
-    if(values.docuploads !== null) {
+    if (values.docuploads !== null) {
       setfile(values.docuploads[0]);
-      console.log(values?.docuploads[0], "mmmm")
-    }                   
-    
-  }
+      console.log(values?.docuploads[0], "mmmm");
+    }
+  };
 
   useEffect(() => {
-    let payload = {
-      email: "adithya.namada@bedrockapps.org", 
-      password: "Adithya@123"
-    }
-    console.log("hello","kreo")
-    axios.post('https://takeoff.kreo.net/api/auto-measure/v1/auth/login', payload)
-    .then((res) => {
-      if (res.status === 200) {
-        console.log("res", res);
-      }
-    })
-    .catch((error) => {
-      console.log("error", error);
-    });
-  }, [])
+    getKreoLoginApi()
+      .then((res) => {
+        if (res.status === 200) {
+          if (res?.data?.length > 0) {
+            let token = res?.data[0]?.split("=")[1]?.split(";")[0];
+            localStorage.setItem("kreoToken", token);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+  }, []);
 
+  const handleOpenData = () => {
+    // setOpenData(true);
+  };
+
+  const handleCloseData = useCallback(() => {
+    setOpenData(false);
+  }, []);
 
   return (
     <>
@@ -123,14 +135,14 @@ const AutoMeasure = () => {
             </Typography>
           </Paper>
         </Grid>
-        <Grid item xs={12} md={8} sx={{ minHeight: "72vh" }}>
+        {/* <Grid item xs={12} md={8} sx={{ minHeight: "72vh" }}>
           <AutoMeasureTabularView data="" />
-        </Grid>
-        <Grid item xs={12} md={4}>
+        </Grid> */}
+        <Grid item xs={12} md={12}>
           <Paper
             elevation={2}
             sx={{
-              height: "100%",
+              // height: "100%",
               padding: "1rem",
               border: "3px solid #3A3A3C",
             }}
@@ -138,13 +150,38 @@ const AutoMeasure = () => {
             <Formik
               initialValues={{
                 docuploads: null,
+                pageIndexFrom: "",
+                pageIndexTo: "",
               }}
               validationSchema={null}
-              // innerRef={formikRef}
               onSubmit={(values, { setSubmitting, resetForm }) => {
-                console.log("values", values);
-                // handleCreateDailyLog(values);
+                if(values.docuploads !== null  && values.pageIndexFrom !== "" && values.pageIndexTo !==""){
+                  setIsLoading(true);
+                
+                let formData = new FormData();
+                formData.append("attachment", values?.docuploads[0]);
+                formData.append(
+                  "kreo_auth_access_token",
+                  localStorage.getItem("kreoToken")
+                );
+                formData.append("pageIndexFrom", values?.pageIndexFrom);
+                formData.append("pageIndexTo", values?.pageIndexTo);
+                uploadFiletoKero(formData)
+                  .then((res) => {
+                    if (res.status === 200) {
+                      let data = res.data;
+                      setKreoProjectDetails({ ...data });
+                      setOpenData(true);
+                      resetForm();
+                      setIsLoading(false);
+                    }
+                  })
+                  .catch((error) => {
+                    console.log("error", error);
+                    setIsLoading(false);
+                  });
                 handleUpload(values);
+              }
               }}
             >
               {({
@@ -174,46 +211,105 @@ const AutoMeasure = () => {
                         />
                       </Box>
                       <Box className={classes.imgTexts}>
-                        {values?.docuploads?.map((file, i) => (
-                          <Typography
-                            key={file + i}
-                            className={classes.imgName}
-                          >
-                            {`${i + 1}. ${file.name.substring(0, 20)}`}
-                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <span>
-                              <IconButton
-                                size="small"
-                                color="primary"
-                                onClick={() => console.log()}
-                              >
-                                <DeleteIcon fontSize="16px" />
-                              </IconButton>
-                            </span>
-                          </Typography>
-                        ))}
+                        <>
+                          {values?.docuploads ? (
+                            <>
+                              {values.docuploads.map((file, i) => (
+                                <Typography
+                                  key={file + i}
+                                  className={classes.imgName}
+                                >
+                                  {`${i + 1}. ${file.name.substring(0, 20)}`}
+                                  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                  <span>
+                                    <IconButton
+                                      size="small"
+                                      color="primary"
+                                      onClick={() => console.log()}
+                                    >
+                                      <DeleteIcon fontSize="16px" />
+                                    </IconButton>
+                                  </span>
+                                </Typography>
+                              ))}
+                            </>
+                          ) : (
+                            <Typography
+                              sx={{
+                                visibility: "hidden",
+                                display:
+                                  values.docuploads !== null ? "none" : "",
+                              }}
+                              className={classes.imgName}
+                            >
+                              abcd &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                              <span>
+                                <IconButton
+                                  size="small"
+                                  color="primary"
+                                  onClick={() => console.log()}
+                                >
+                                  <DeleteIcon fontSize="16px" />
+                                </IconButton>
+                              </span>
+                            </Typography>
+                          )}
+                        </>
                       </Box>
                     </Grid>
                     <Grid item xs={6}>
                       <MuiTextField
-                        name="frompageno"
-                        id="frompageno"
+                        name="pageIndexFrom"
+                        id="pageIndexFrom"
                         label="From Page No"
                       />
                     </Grid>
                     <Grid item xs={6}>
                       <MuiTextField
-                        name="topageno"
-                        id="topageno"
+                        name="pageIndexTo"
+                        id="pageIndexTo"
                         label="To Page No"
                       />
                     </Grid>
                   </Grid>
-                  <Grid item xs={12} align="right" sx={{paddingTop:"5vh"}}>
+                  <Grid item xs={12} align="right" sx={{ paddingTop: "5vh" }}>
                     <Button
                       variant="contained"
                       type="submit"
                       size="small"
+                      onClick={() =>
+                         values.docuploads === null ?
+                          toast.error("Please Upload File", {
+                              position: "top-right",
+                              autoClose: 5000,
+                              hideProgressBar: false,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                              draggable: true,
+                              progress: undefined,
+                            })
+                            :values.pageIndexFrom === "" ? 
+                            toast.error("Please Enter Page From Index", {
+                              position: "top-right",
+                              autoClose: 5000,
+                              hideProgressBar: false,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                              draggable: true,
+                              progress: undefined,
+                            })
+                            : values.pageIndexTo === "" ? 
+                          toast.error("Please Enter Page To Index", {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                          })
+                          :handleOpenData()
+                      }
                     >
                       Submit
                     </Button>
@@ -224,9 +320,29 @@ const AutoMeasure = () => {
           </Paper>
         </Grid>
       </Grid>
+      {(file?.type?.startsWith("application/pdf") ||
+        file?.type?.startsWith("image")) && (
+        <PDFViewer
+          title="MEASURED DATA :"
+          id="measureddata"
+          open={openData}
+          handleClose={handleCloseData}
+          myPdfFile={file}
+          kreoProjectObj={KreoProjectDetails}
+        />
+      )}
       <>{popen ? <PremiumDailog /> : ""}</>
+      <>
+        <ToastContainer
+          newestOnTop
+          pauseOnFocusLoss
+          pauseOnHover
+          draggable
+          closeOnClick
+          limit={1}
+        />
+      </>
     </>
   );
 };
 export default memo(AutoMeasure);
-

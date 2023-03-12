@@ -97,3 +97,18 @@ export const createContactApi = async (payload) => {
 export const createDailyLogApi = (payload) => {
   return axios.post(`/dailyLog/createDailyLogs`, payload);
 };
+
+//kreo apis
+export const getKreoLoginApi = async () => {
+  return axios.get(`/external/authenticate`);
+};
+
+export const uploadFiletoKero = async (payload) => {
+  return axios.post(`/external/uploadToKreo`, payload, { headers });
+};
+
+export const getKreoProjectDetails = async (token, projectId, pageIndex) => {
+  return axios.get(
+    `/external/getProjectDetails?kreo_auth_access_token=${token}&projectId=${projectId}&pageIndex=${pageIndex}`
+  );
+};
