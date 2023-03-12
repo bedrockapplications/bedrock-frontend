@@ -1,9 +1,121 @@
 import React, { useEffect, useState } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import MuiDialog from "../../components/MuiDialog";
-import { DialogContent, Button, DialogActions, Box, Grid } from "@mui/material";
 import { getKreoProjectDetails } from "../../services/request";
+import {
+  DialogContent,
+  Button,
+  DialogActions,
+  Box,
+  Grid,
+  Typography,
+} from "@mui/material";
+import PicUpload from "../DailyLogs/dropZone";
+
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
+const dataList = [
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+  {
+    id: "1.",
+    name: "Doors",
+    value: "→ 20",
+  },
+];
 
 const PDFViewer = (props) => {
   const { open, handleClose, id, title, myPdfFile, kreoProjectObj } = props;
@@ -46,6 +158,7 @@ const PDFViewer = (props) => {
             Wall: data?.Wall?.length,
             Door: data?.Door?.length,
             Opening: data?.Opening?.length,
+            // BATHROOM :
             Vent: data1?.Vent?.length,
             Corridor: data1?.Corridor.length,
             Riser: data1?.Riser?.length,
@@ -84,20 +197,91 @@ const PDFViewer = (props) => {
         {/* <Divider /> */}
         <DialogContent dividers>
           <Grid container spacing={0}>
-            <Grid item xs={4} sx={{ background: "#3A3A3C" }}></Grid>
+            <Grid
+              item
+              xs={4}
+              sx={{
+                background: "#3A3A3C",
+                overflowY: "scroll",
+                padding: "25px",
+                height: "calc(50vh + 75px)",
+              }}
+            >
+              <Typography
+                sx={{
+                  color: "#FFFFFF",
+                  fontSize: "24px",
+                  fontWeight: "600",
+                  marginBottom: "25px",
+                }}
+              >
+                Count :
+              </Typography>
+              <Box>
+                {dataList.map((each, i) => (
+                  <Grid container spacing={2} sx={{ marginBottom: "15px" }}>
+                    <Grid item xs={5}>
+                      <Typography
+                        sx={{
+                          color: "#FFFFFF",
+                          fontSize: "16px",
+                          fontWeight: "400",
+                        }}
+                      >{`${each.id} ${each.name}`}</Typography>
+                    </Grid>
+                    <Grid item xs={3}></Grid>
+                    <Grid item xs={4}>
+                      <Typography
+                        sx={{
+                          color: "#FFFFFF",
+                          fontSize: "16px",
+                          fontWeight: "400",
+                        }}
+                      >
+                        {each.value}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                ))}
+              </Box>
+            </Grid>
             <Grid item xs={8}>
               <Box>
                 <center>
-                  <Document
-                    file={myPdfFile}
-                    onLoadSuccess={onDocumentLoadSuccess}
-                    style={{ height: "calc(100vh - 100px)", width: "70vw" }}
-                  >
-                    <Page pageNumber={pageNumber} />
-                  </Document>
+                  {myPdfFile?.type?.startsWith("application/pdf") ? (
+                    <Document
+                      file={myPdfFile}
+                      onLoadSuccess={onDocumentLoadSuccess}
+                      style={{ height: "calc(100vh - 100px)", width: "70vw" }}
+                    >
+                      <Page pageNumber={pageNumber} />
+                    </Document>
+                  ) : (
+                    <Box
+                      sx={{
+                        height: "calc(50vh)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <img
+                        style={{ width: "32.5vw" }}
+                        src={URL.createObjectURL(myPdfFile)}
+                        alt=""
+                      />
+                    </Box>
+                  )}
                 </center>
                 <div className="end-box">
-                  <div className="pagestext">
+                  <div
+                    className="pagestext"
+                    style={{
+                      visibility: myPdfFile.type.startsWith("image/")
+                        ? "hidden"
+                        : "",
+                    }}
+                  >
                     Page {pageNumber} of {numPages}
                   </div>
                   <div className="buttonbox">

@@ -110,14 +110,10 @@ const AutoMeasureTabularView = (props) => {
   return (
     <>
       <Paper
-        sx={{minHeight:"70vh", width: "100%", border: "3px solid #3A3A3C", overflow: "hidden" }}
+        sx={{height:"100%", width: "100%", border: "3px solid #3A3A3C", overflow: "hidden" }}
       >
         <TableContainer
-          sx={{
-            height: "350px",
-            maxHeight: "350px",
-            position: "relative",
-          }}
+        
         >
           <Table stickyHeader aria-label="simple table" sx={{ minWidth: 750 }}>
             <SortingTableHeader
