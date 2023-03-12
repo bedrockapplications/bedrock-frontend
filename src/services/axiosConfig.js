@@ -26,6 +26,7 @@ axiosIntance.interceptors.response.use(
     const originalRequest = error.config;
     if (status && status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+      console.log("hello from ")
       return api
         .get("/external/authenticate")
         .then((res) => {

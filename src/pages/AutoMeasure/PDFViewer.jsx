@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Document, Page, pdfjs } from "react-pdf";
 import MuiDialog from "../../components/MuiDialog";
 import { getKreoProjectDetails } from "../../services/request";
@@ -11,113 +11,23 @@ import {
   Typography,
 } from "@mui/material";
 import PicUpload from "../DailyLogs/dropZone";
+import { makeStyles } from "@mui/styles";
+import { GlobalState } from "../../Context/Context";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-const dataList = [
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
+const useStyle = makeStyles(() => ({
+  titleText: {
+    color: "#FFFFFF",
+    fontSize: "16px",
+    fontWeight: "400",
   },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-  {
-    id: "1.",
-    name: "Doors",
-    value: "→ 20",
-  },
-];
+}));
 
 const PDFViewer = (props) => {
+  const classes = useStyle();
+  const { setIsLoading } = useContext(GlobalState);
+
   const { open, handleClose, id, title, myPdfFile, kreoProjectObj } = props;
   // const [numPages, setNumPages] = useState(null);
   const [numPages, setNumPages] = useState(null);
@@ -134,59 +44,66 @@ const PDFViewer = (props) => {
   function changePageBack() {
     if (pageNumber > 1) {
       changePage(-1);
-      getProjectDetailsApi(numPages - 1);
+      getProjectDetailsApi(pageNumber - 1);
     }
   }
 
   function changePageNext() {
     if (pageNumber < numPages) {
       changePage(+1);
-      getProjectDetailsApi(numPages - 1);
+      getProjectDetailsApi(pageNumber);
     }
   }
 
   const getProjectDetailsApi = (index) => {
+    setIsLoading(true);
     let token = localStorage.getItem("kreoToken");
-    // if (kreoProjectObj.projectId) {
-    getKreoProjectDetails(token, 67817, index || 0)
-      .then((res) => {
-        if (res.status === 200) {
-          let data = res?.data?.polygons?.Element;
-          let data1 = res?.data?.polygons?.Space;
-          let detailObj = {
-            Window: data?.Window?.length,
-            Wall: data?.Wall?.length,
-            Door: data?.Door?.length,
-            Opening: data?.Opening?.length,
-            // BATHROOM :
-            Vent: data1?.Vent?.length,
-            Corridor: data1?.Corridor.length,
-            Riser: data1?.Riser?.length,
-            Stair: data1?.Stair?.length,
-            GEA: data1?.GEA?.length,
-            NIA: data1?.NIA.length,
-            GIA: data1.GIA?.length,
-            Elevator: data1?.Elevator?.length,
-            Cupboard: data1?.Cupboard?.length,
-          };
-          console.log("res", detailObj);
-        }
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
-    // }
+    if (kreoProjectObj.projectId) {
+      getKreoProjectDetails(token, kreoProjectObj?.projectId, index || 0)
+        .then((res) => {
+          if (res.status === 200) {
+            let data = res?.data?.polygons?.Element;
+            let data1 = res?.data?.polygons?.Space;
+            let detailObj = {
+              Door: data?.Door?.length || 0,
+              Opening: data?.Opening?.length || 0,
+              Wall: data?.Wall?.length || 0,
+              Bathroom: data1?.Bathroom?.length || 0,
+              Bedroom: data1?.Bedroom?.length || 0,
+              // Living_Room: data1["Living Room"]?.length || 0,
+              Corridor: data1?.Corridor?.length,
+              Hall: data1?.Hall?.length || 0,
+              Cupboard: data1?.Cupboard?.length,
+              //GARAGE:
+              Balcony: data1?.Balcony?.length || 0,
+              Elevator: data1?.Elevator?.length,
+              Vent: data1?.Vent?.length,
+              Riser: data1?.Riser?.length,
+              Stair: data1?.Stair?.length,
+              GIA: data1.GIA?.length,
+              GEA: data1?.GEA?.length,
+              NIA: data1?.NIA.length,
+              Window: data?.Window?.length,
+            };
+            setIsLoading(false);
+            setIndividualDetails({ ...detailObj });
+          }
+        })
+        .catch((error) => {
+          console.log("error", error);
+          setIsLoading(false);
+        });
+    }
   };
 
   useEffect(() => {
-    // if (kreoProjectObj.projectId) {
-    getProjectDetailsApi();
-    // }
+    if (kreoProjectObj.projectId) {
+      getProjectDetailsApi();
+    }
   }, [kreoProjectObj?.projectId]);
 
   return (
     <>
-      {console.log("kreoProjectObj", kreoProjectObj)}
       <MuiDialog
         open={open}
         handleClose={handleClose}
@@ -218,7 +135,90 @@ const PDFViewer = (props) => {
                 Count :
               </Typography>
               <Box>
-                {dataList.map((each, i) => (
+                <Grid container spacing={2} sx={{ marginBottom: "15px" }}>
+                  <Grid item xs={12}>
+                    <Typography className={classes.titleText}>
+                      Doors : {individualDetails?.Door}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography className={classes.titleText}>
+                      Opening : {individualDetails?.Opening}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography className={classes.titleText}>
+                      Wall : {individualDetails?.Wall}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography className={classes.titleText}>
+                      Bathroom : {individualDetails?.Bathroom}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography className={classes.titleText}>
+                      Corridor : {individualDetails?.Corridor}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography className={classes.titleText}>
+                      Hall : {individualDetails?.Hall}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography className={classes.titleText}>
+                      Cupboard : {individualDetails?.Cupboard}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography className={classes.titleText}>
+                      Balcony : {individualDetails?.Balcony}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography className={classes.titleText}>
+                      Elevator : {individualDetails?.Elevator}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography className={classes.titleText}>
+                      Vent : {individualDetails?.Vent}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography className={classes.titleText}>
+                      Riser : {individualDetails?.Riser}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography className={classes.titleText}>
+                      Stair : {individualDetails?.Stair}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography className={classes.titleText}>
+                      GIA : {individualDetails?.GIA}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography className={classes.titleText}>
+                      GEA : {individualDetails?.GEA}
+                    </Typography>
+                  </Grid>{" "}
+                  <Grid item xs={12}>
+                    <Typography className={classes.titleText}>
+                      NIA : {individualDetails?.NIA}
+                    </Typography>
+                  </Grid>{" "}
+                  <Grid item xs={12}>
+                    <Typography className={classes.titleText}>
+                      Window : {individualDetails?.Window}
+                    </Typography>
+                  </Grid>
+                </Grid>
+
+                {/* {dataList.map((each, i) => (
                   <Grid container spacing={2} sx={{ marginBottom: "15px" }}>
                     <Grid item xs={5}>
                       <Typography
@@ -242,7 +242,7 @@ const PDFViewer = (props) => {
                       </Typography>
                     </Grid>
                   </Grid>
-                ))}
+                ))} */}
               </Box>
             </Grid>
             <Grid item xs={8}>

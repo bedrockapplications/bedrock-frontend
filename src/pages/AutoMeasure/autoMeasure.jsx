@@ -155,6 +155,7 @@ const AutoMeasure = () => {
               }}
               validationSchema={null}
               onSubmit={(values, { setSubmitting, resetForm }) => {
+                setIsLoading(true);
                 let formData = new FormData();
                 formData.append("attachment", values?.docuploads[0]);
                 formData.append(
@@ -169,10 +170,13 @@ const AutoMeasure = () => {
                       let data = res.data;
                       setKreoProjectDetails({ ...data });
                       setOpenData(true);
+                      resetForm();
+                      setIsLoading(false);
                     }
                   })
                   .catch((error) => {
                     console.log("error", error);
+                    setIsLoading(false);
                   });
                 handleUpload(values);
               }}
