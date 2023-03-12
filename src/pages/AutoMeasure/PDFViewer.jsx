@@ -32,26 +32,30 @@ const PDFViewer = (props) => {
   // const [numPages, setNumPages] = useState(null);
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
+  const [pageIndex, setPageIndex] = useState(0);
   const [individualDetails, setIndividualDetails] = useState({});
   function onDocumentLoadSuccess({ numPages }) {
     setNumPages(numPages);
   }
 
   function changePage(offSet) {
+    console.log(pageNumber, "oooo")
+    console.log(offSet, "pppp")
+    console.log(pageIndex, "num")
     setPageNumber((prevPageNumber) => prevPageNumber + offSet);
+    getProjectDetailsApi(pageIndex + offSet);
+    setPageIndex(pageIndex + offSet);
   }
 
   function changePageBack() {
     if (pageNumber > 1) {
       changePage(-1);
-      getProjectDetailsApi(pageNumber - 1);
     }
   }
 
   function changePageNext() {
     if (pageNumber < numPages) {
       changePage(+1);
-      getProjectDetailsApi(pageNumber);
     }
   }
 
@@ -323,7 +327,7 @@ const PDFViewer = (props) => {
             </Grid>
           </Grid>
         </DialogContent>
-        <DialogActions>
+        {/* <DialogActions>
           <Button
             variant="contained"
             type="submit"
@@ -332,7 +336,7 @@ const PDFViewer = (props) => {
           >
             Save
           </Button>
-        </DialogActions>
+        </DialogActions> */}
       </MuiDialog>
     </>
   );

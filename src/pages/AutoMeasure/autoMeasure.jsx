@@ -135,14 +135,14 @@ const AutoMeasure = () => {
             </Typography>
           </Paper>
         </Grid>
-        <Grid item xs={12} md={8} sx={{ minHeight: "72vh" }}>
+        {/* <Grid item xs={12} md={8} sx={{ minHeight: "72vh" }}>
           <AutoMeasureTabularView data="" />
-        </Grid>
-        <Grid item xs={12} md={4}>
+        </Grid> */}
+        <Grid item xs={12} md={12}>
           <Paper
             elevation={2}
             sx={{
-              height: "100%",
+              // height: "100%",
               padding: "1rem",
               border: "3px solid #3A3A3C",
             }}
@@ -155,7 +155,9 @@ const AutoMeasure = () => {
               }}
               validationSchema={null}
               onSubmit={(values, { setSubmitting, resetForm }) => {
-                setIsLoading(true);
+                if(values.docuploads !== null  && values.pageIndexFrom !== "" && values.pageIndexTo !==""){
+                  setIsLoading(true);
+                
                 let formData = new FormData();
                 formData.append("attachment", values?.docuploads[0]);
                 formData.append(
@@ -179,6 +181,7 @@ const AutoMeasure = () => {
                     setIsLoading(false);
                   });
                 handleUpload(values);
+              }
               }}
             >
               {({
@@ -275,9 +278,8 @@ const AutoMeasure = () => {
                       type="submit"
                       size="small"
                       onClick={() =>
-                        values.docuploads !== null
-                          ? handleOpenData()
-                          : toast.error("Please Upload File", {
+                         values.docuploads === null ?
+                          toast.error("Please Upload File", {
                               position: "top-right",
                               autoClose: 5000,
                               hideProgressBar: false,
@@ -286,6 +288,27 @@ const AutoMeasure = () => {
                               draggable: true,
                               progress: undefined,
                             })
+                            :values.pageIndexFrom === "" ? 
+                            toast.error("Please Enter Page From Index", {
+                              position: "top-right",
+                              autoClose: 5000,
+                              hideProgressBar: false,
+                              closeOnClick: true,
+                              pauseOnHover: true,
+                              draggable: true,
+                              progress: undefined,
+                            })
+                            : values.pageIndexTo === "" ? 
+                          toast.error("Please Enter Page To Index", {
+                            position: "top-right",
+                            autoClose: 5000,
+                            hideProgressBar: false,
+                            closeOnClick: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            progress: undefined,
+                          })
+                          :handleOpenData()
                       }
                     >
                       Submit
