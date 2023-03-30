@@ -10,7 +10,8 @@ const RenderEmail = (props) => {
       <TextField
         {...field}
         id={id}
-        name={name}
+        name={field.name}
+        type="email"
         label={label}
         error={error}
         disabled={disabled}
@@ -18,7 +19,6 @@ const RenderEmail = (props) => {
         size="small"
         fullWidth
         autoComplete="off"
-        type="email"
         required={required}
       />
     </>

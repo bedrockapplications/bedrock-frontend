@@ -4,6 +4,10 @@ let headers = {
   "content-type": "multipart/form-data",
 };
 
+export const loginApi = async (data) => {
+  return axios.post(`/user/login`, data);
+};
+
 // user details api
 export const getUserDetails = async (id) => {
   return axios.get(`/user/details?_id=${id}`);
