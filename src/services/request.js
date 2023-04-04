@@ -88,6 +88,12 @@ export const deleteDocumentApi = (deleteItem) => {
   return axios.delete(`/document/deleteDocument/${deleteItem}`);
 };
 
+export const getNotifications = (userId, startDate, tz) => {
+  return axios.get(
+    `/document/getMeetingList?userId=${userId}&startDate=${startDate}&tz=${tz}`
+  );
+};
+
 // contacts apis
 
 export const getContactsList = async (ownerId, role) => {

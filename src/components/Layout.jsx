@@ -40,19 +40,21 @@ import favicon from "../Images/Bedrock_Rock_-removebg-preview.png";
 import { CleaningServices, WindowSharp } from "@mui/icons-material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { getMeetingsList } from "../services/request";
+import { getMeetingsList, getNotifications } from "../services/request";
 import moment from "moment";
 import { GlobalState } from "../Context/Context";
 import GetDateAndTime from "../components/DigitalClock";
 import BookIcon from "@mui/icons-material/Book";
-import PsychologyIcon from '@mui/icons-material/Psychology';
-import CalculateIcon from '@mui/icons-material/Calculate';
+import PsychologyIcon from "@mui/icons-material/Psychology";
+import CalculateIcon from "@mui/icons-material/Calculate";
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
 // import Dashboard from "../pages/Dashboard";\
 
 import { io } from "socket.io-client";
 
+import Notification from "./Notification";
+import { useCallback } from "react";
 
 const drawerWidth = 240;
 
@@ -112,7 +114,6 @@ const sideLinks = [
     link: "/automeasure",
   },
 
-
   // { icon: <PersonAddIcon />, label: "User Creation", link: "/userCreation" },
 ];
 
@@ -150,7 +151,7 @@ const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
   width: `calc(100% - 65px)`,
-  zIndex: theme.zIndex.drawer + 1,
+  // zIndex: theme.zIndex.drawer + 1,
   backgroundColor: "#D6D6DB",
   transition: theme.transitions.create(["width", "margin"], {
     easing: theme.transitions.easing.sharp,
@@ -186,7 +187,7 @@ const Drawer = styled(MuiDrawer, {
 
 const ITEM_HEIGHT = 48;
 
-const socket = io.connect('https://nodejs-apis.bedrockapps.link');
+const socket = io.connect("https://nodejs-apis.bedrockapps.link");
 
 export default function MiniDrawer(props) {
   let history = useHistory();
@@ -194,46 +195,68 @@ export default function MiniDrawer(props) {
   const theme = useTheme();
   const classes = useStyle();
   const userName = localStorage.getItem("userName");
+  const userId = localStorage.getItem("userId");
+
   const [open, setOpen] = React.useState(false);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [account, setAccount] = React.useState(null);
   const [notification, setNotification] = React.useState(null);
-
-  // const socket = io('https://nodejs-apis.bedrockapps.link');
-
-  useEffect(() => {
-    socket.emit('getUser', {id:localStorage.getItem('userId'), tz:Intl.DateTimeFormat().resolvedOptions().timeZone});
-    socket.on("response", (data) => {
-      // setNotification(data);
-      console.log("socketdata", data)
-    });
-  }, []);
-
+  const [openNotification, setOpenNotification] = useState(false);
+  const [NotificationCount, setNotificationCount] = useState(0);
+  const [notificationList, setNotificationList] = useState([]);
   const [selected, setSelectedIndex] = React.useState(
     LanguagesList?.filter(
       (lang) => lang?.local === localStorage?.getItem("i18nextLng")
     )[0]
   );
-
   const { taskList, setTaskList } = useContext(GlobalState);
-
   const openLang = Boolean(anchorEl);
   const openAccount = Boolean(account);
-  const openNotification = Boolean(notification);
+  // const openNotification = Boolean(notification);
+
+  // const socket = io('https://nodejs-apis.bedrockapps.link');
+
+  // dont remove the useEffect
+  useEffect(() => {
+    socket.emit("getUser", {
+      id: localStorage.getItem("userId"),
+      tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+    });
+    socket.on("response", (data) => {
+      // setNotification(data);
+      console.log("socketdata", data);
+      setNotificationCount(data);
+    });
+  }, []);
 
   const handleAccountClick = (event) => {
     setAccount(event.currentTarget);
   };
 
-  const handleNotificationClick = (event) => {
-    setNotification(event.currentTarget);
-  };
+  const handleOpenNotification = useCallback(() => {
+    let startDate = moment(new Date()).format("YYYY-MM-DD");
+    let tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    getNotifications(userId, startDate, tz)
+      .then((res) => {
+        if (res.status === 200) {
+          let data = res?.data?.slice(1);
+          if (data.length > 0) {
+            setNotificationList([...data]);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log("error", error);
+      });
+    setOpenNotification(true);
+  }, []);
 
-  const handleCloseNotification = () => {
-    setTaskList([]);
-    localStorage.removeItem("listItem");
-    setNotification(null);
-  };
+  const handleCloseNotification = useCallback(() => {
+    setOpenNotification(false);
+    // setTaskList([]);
+    // localStorage.removeItem("listItem");
+    // setNotification(null);
+  }, []);
 
   const handleClose = () => {
     setAccount(null);
@@ -254,45 +277,45 @@ export default function MiniDrawer(props) {
 
   //task list api call
 
-  const GetTaskList = () => {
-    let userId = localStorage.getItem("userId");
-    let listData =
-      localStorage.getItem("listItem") !== null
-        ? JSON.parse(localStorage.getItem("listItem"))
-        : [];
-    setTaskList(listData);
-    let time = new Date().toLocaleTimeString("en-US", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    let current = moment(time, "HH:mm:ss A").format("hh:mm:ss A");
-    getMeetingsList(userId, moment(new Date()).format("YYYY-MM-DD"))
-      .then((res) => {
-        if (res.status === 200) {
-          let data = res.data;
-          let finalData = data?.filter((item) => {
-            let start_time = moment(item.startTime, "HH:mm:ss A").subtract(
-              5,
-              "minutes"
-            );
-            let finalTime = moment(start_time?._d).format("hh:mm:ss A");
-            return finalTime === current;
-          });
-          if (finalData?.length > 0) {
-            let filteredList = [...listData, ...finalData];
-            localStorage.setItem("listItem", JSON.stringify(filteredList));
-            setTaskList([...filteredList]);
-          }
-        }
-      })
-      .catch((error) => {
-        console.log("error", error);
-      });
-  };
+  // const GetTaskList = () => {
+  //   let userId = localStorage.getItem("userId");
+  //   let listData =
+  //     localStorage.getItem("listItem") !== null
+  //       ? JSON.parse(localStorage.getItem("listItem"))
+  //       : [];
+  //   setTaskList(listData);
+  //   let time = new Date().toLocaleTimeString("en-US", {
+  //     hour: "2-digit",
+  //     minute: "2-digit",
+  //   });
+  //   let current = moment(time, "HH:mm:ss A").format("hh:mm:ss A");
+  //   getMeetingsList(userId, moment(new Date()).format("YYYY-MM-DD"))
+  //     .then((res) => {
+  //       if (res.status === 200) {
+  //         let data = res.data;
+  //         let finalData = data?.filter((item) => {
+  //           let start_time = moment(item.startTime, "HH:mm:ss A").subtract(
+  //             5,
+  //             "minutes"
+  //           );
+  //           let finalTime = moment(start_time?._d).format("hh:mm:ss A");
+  //           return finalTime === current;
+  //         });
+  //         if (finalData?.length > 0) {
+  //           let filteredList = [...listData, ...finalData];
+  //           localStorage.setItem("listItem", JSON.stringify(filteredList));
+  //           setTaskList([...filteredList]);
+  //         }
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log("error", error);
+  //     });
+  // };
 
-  useEffect(() => {
-    // GetDateAndTime();
-  }, []);
+  // useEffect(() => {
+  //   // GetDateAndTime();
+  // }, []);
 
   // useEffect(() => {
   //   const MINUTE_MS = 60000;
@@ -378,21 +401,21 @@ export default function MiniDrawer(props) {
               } New Notifications!`}
             >
               <IconButton
-                onClick={handleNotificationClick}
+                onClick={handleOpenNotification}
                 size="small"
                 sx={{ ml: 5 }}
-                aria-controls={
-                  openNotification ? "notification-menu" : undefined
-                }
-                aria-haspopup="true"
-                aria-expanded={openNotification ? "true" : undefined}
+                // aria-controls={
+                //   openNotification ? "notification-menu" : undefined
+                // }
+                // aria-haspopup="true"
+                // aria-expanded={openNotification ? "true" : undefined}
               >
-                <Badge badgeContent={taskList?.length} color="error">
+                <Badge badgeContent={NotificationCount} color="error">
                   <NotificationsIcon color="action" />
                 </Badge>
               </IconButton>
             </Tooltip>
-            <Menu
+            {/* <Menu
               anchorEl={notification}
               id="notification-menu"
               open={openNotification}
@@ -437,10 +460,10 @@ export default function MiniDrawer(props) {
                     key={each?._id}
                     sx={{ fontSize: "12px" }}
                   >{`Your Meeting Regarding ${each?.title} will be starting on ${each?.startTime}`}</MenuItem>
-                  {/* <Divider sx={{background:"#FFFFFF"}} /> */}
+                  <Divider sx={{background:"#FFFFFF"}} />
                 </>
               ))}
-            </Menu>
+            </Menu> */}
 
             <Typography sx={{ ml: 5 }} className={classes.userText}>
               {userName}
@@ -616,6 +639,11 @@ export default function MiniDrawer(props) {
         <DrawerHeader />
         {React.cloneElement(props.children)}
       </Box>
+      <Notification
+        open={openNotification}
+        handleClose={handleCloseNotification}
+        meetingList={notificationList}
+      />
     </Box>
   );
 }

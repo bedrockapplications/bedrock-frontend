@@ -70,7 +70,7 @@ const LoginPage = () => {
             history.push({
               pathname: "/dashboard",
             });
-          }, 1000);
+          }, 500);
         }
       })
       .catch((error) => {
