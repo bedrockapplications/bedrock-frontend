@@ -1,6 +1,9 @@
 import React from "react";
-import { Button, Grid, Stack, Typography } from "@mui/material";
-import loginSideImg from "../../Images/login_side_img.svg";
+import { Button, Grid, Stack, Typography, Box } from "@mui/material";
+// import loginSideImg from "../../Images/login_side_img.svg";
+import bubble from "../../Images/bubble.svg";
+import bedlogin from "../../Images/bedlogin.svg";
+import welcome from "../../Images/welcome.svg";
 import { makeStyles } from "@mui/styles";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
@@ -12,10 +15,8 @@ import { ShowSnackbar } from "../../components/Snackbar";
 
 const useStyle = makeStyles((theme) => ({
   bgImgContainer: {
-    backgroundImage: `url(${loginSideImg})`,
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    backgroundRepeat: "no-repeat",
+    background:"#3A3A3C",
+    height:'100vh',
     width: "inherit",
     height: "inherit",
     [theme.breakpoints.only("xs")]: {
@@ -24,6 +25,25 @@ const useStyle = makeStyles((theme) => ({
     [theme.breakpoints.only("sm")]: {
       display: "none",
     },
+  },
+  bgInnerContainer: {
+    padding:"0vh 0px 12vh 0px",
+    display:"flex",
+    flexDirection:"column",
+    justifyContent:"space-around",
+    alignItems:"center",
+    height:"100vh",
+    width:"50vw",
+    backgroundImage: `url(${bubble})`,
+    backgroundSize: "100%",
+    backgroundPosition: "bottom",
+    backgroundRepeat: "no-repeat",
+  },
+  bgwelcome:{
+    height:"20vh"
+  },
+  bgbedicon:{
+    height:"48vh"
   },
   formContainer: {
     padding: "5rem 7rem 3rem",
@@ -89,7 +109,16 @@ const LoginPage = () => {
   return (
     <>
       <Grid container sx={{ height: "100vh", backgroundColor: "#fff" }}>
-        <Grid item xs={6} className={classes.bgImgContainer}></Grid>
+        <Grid item xs={6} className={classes.bgImgContainer}>
+          <Box xs={12} className={classes.bgInnerContainer}>
+            <div className={classes.bgwelcome}>
+              <img className={classes.bgwelcome} src={welcome} alt="" />
+            </div>
+            <div className={classes.bgbedicon}>
+              <img className={classes.bgbedicon} src={bedlogin} alt="" />
+            </div>
+          </Box>
+        </Grid>
         <Grid
           item
           xs={12}
@@ -135,21 +164,21 @@ const LoginPage = () => {
                   {({ values, isValid, isSubmitting, handleSubmit }) => (
                     <Form onSubmit={handleSubmit}>
                       <Grid container spacing={3}>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sx={{marginTop:"3vh"}}>
                           <MuiEmailField
                             id="email"
                             name="email"
                             label="Email Address"
                           />
                         </Grid>
-                        <Grid item xs={12}>
+                        <Grid item xs={12} sx={{marginTop:"3vh"}}>
                           <MuiPasswordField
                             id="password"
                             name="password"
                             label="Password"
                           />
                         </Grid>
-                        <Grid item xs={12} sx={{ textAlign: "center" }}>
+                        <Grid item xs={12} sx={{ textAlign: "center", marginTop:"3vh" }}>
                           <Button
                             variant="contained"
                             color="primary"
