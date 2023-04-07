@@ -1,5 +1,6 @@
 import React, { memo } from "react";
 import { makeStyles } from "@mui/styles";
+import moment from "moment";
 
 import {
     Drawer,
@@ -8,12 +9,18 @@ import {
     IconButton,
     CloseIcon,
     Divider,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemIcon,
+    Checkbox,
+    ListItemText,
 } from "../material";
 
 const useStyle = makeStyles(() => ({
     drawerContainer: {
         "& .MuiPaper-root": {
-            width: "350px",
+            width: "360px",
             backgroundColor: "#FFFFFF",
         },
     },
@@ -21,11 +28,14 @@ const useStyle = makeStyles(() => ({
         fontSize: "1.5rem",
         fontWeight: "bold",
     },
+    list: {
+        padding: "0px",
+    },
 }));
 
 const BellNotification = (props) => {
     const classes = useStyle();
-    const { open, handleClose, meetingList } = props;
+    const { open, handleClose, meetingList, handleRead } = props;
 
     return (
         <Drawer
@@ -48,7 +58,34 @@ const BellNotification = (props) => {
                 </IconButton>
             </Stack>
             <Divider />
-            {/* {JSON.stringify(meetingList)} */}
+            <List className={classes.list}>
+                {meetingList?.map((item, i) => (
+                    <React.Fragment key={i}>
+                        <ListItem disablePadding>
+                            <ListItemButton onClick={() => handleRead(item)}>
+                                <ListItemIcon>
+                                    <Checkbox edge="start" checked={item?.isRead} disableRipple />
+                                </ListItemIcon>
+                                <ListItemText
+                                    primary={
+                                        <Typography fontSize={20} fontWeight={500}>
+                                            {item?.title}
+                                        </Typography>
+                                    }
+                                    secondary={
+                                        <Typography fontSize={10}>
+                                            {`Scheduled on ${moment(item?.startDate).format(
+                                                "DD-MMM-YYYY"
+                                            )} from ${item?.startTime} - ${item?.endTime}`}
+                                        </Typography>
+                                    }
+                                />
+                            </ListItemButton>
+                        </ListItem>
+                        <Divider />
+                    </React.Fragment>
+                ))}
+            </List>
         </Drawer>
     );
 };

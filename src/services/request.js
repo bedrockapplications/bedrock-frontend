@@ -94,6 +94,10 @@ export const getNotifications = (userId, startDate, tz) => {
   );
 };
 
+export const updateNotificationStatus = (id) => {
+  return axios.put(`/document/updateRead/${id}`);
+};
+
 // contacts apis
 
 export const getContactsList = async (ownerId, role) => {

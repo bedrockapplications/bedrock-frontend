@@ -40,7 +40,11 @@ import favicon from "../Images/Bedrock_Rock_-removebg-preview.png";
 import { CleaningServices, WindowSharp } from "@mui/icons-material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import { getMeetingsList, getNotifications } from "../services/request";
+import {
+  getMeetingsList,
+  getNotifications,
+  updateNotificationStatus,
+} from "../services/request";
 import moment from "moment";
 import { GlobalState } from "../Context/Context";
 import GetDateAndTime from "../components/DigitalClock";
@@ -235,20 +239,41 @@ export default function MiniDrawer(props) {
 
   const handleOpenNotification = useCallback(() => {
     let startDate = moment(new Date()).format("YYYY-MM-DD");
-    let tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    let tz = Intl.DateTimeFormat()?.resolvedOptions()?.timeZone;
     getNotifications(userId, startDate, tz)
       .then((res) => {
         if (res.status === 200) {
           let data = res?.data?.slice(1);
           if (data.length > 0) {
             setNotificationList([...data]);
+            setOpenNotification(true);
           }
         }
       })
       .catch((error) => {
         console.log("error", error);
       });
-    setOpenNotification(true);
+  }, []);
+
+  const handleReadNotification = useCallback((selectedItem) => {
+    let id = selectedItem?._id;
+    let mettingList = [...notificationList].map((item) => {
+      if (selectedItem._id === item._id) {
+        return { ...item, isRead: true };
+      }
+      return item;
+    });
+
+    console.log("mettingList", mettingList)
+    updateNotificationStatus(id)
+      .then((res) => {
+        if (res.status === 200) {
+          console.log("Hello", res.data);
+        }
+      })
+      .catch((error) => {
+        console.log("Hello1", error);
+      });
   }, []);
 
   const handleCloseNotification = useCallback(() => {
@@ -396,19 +421,18 @@ export default function MiniDrawer(props) {
               {taskList && taskList[taskList.length - 1]?.title}
             </Typography>
             <Tooltip
-              title={`You Have ${
-                taskList !== null ? taskList.length : 0
-              } New Notifications!`}
+              title={`You Have ${taskList !== null ? taskList.length : 0
+                } New Notifications!`}
             >
               <IconButton
                 onClick={handleOpenNotification}
                 size="small"
                 sx={{ ml: 5 }}
-                // aria-controls={
-                //   openNotification ? "notification-menu" : undefined
-                // }
-                // aria-haspopup="true"
-                // aria-expanded={openNotification ? "true" : undefined}
+              // aria-controls={
+              //   openNotification ? "notification-menu" : undefined
+              // }
+              // aria-haspopup="true"
+              // aria-expanded={openNotification ? "true" : undefined}
               >
                 <Badge badgeContent={NotificationCount} color="error">
                   <NotificationsIcon color="action" />
@@ -643,6 +667,7 @@ export default function MiniDrawer(props) {
         open={openNotification}
         handleClose={handleCloseNotification}
         meetingList={notificationList}
+        handleRead={handleReadNotification}
       />
     </Box>
   );
