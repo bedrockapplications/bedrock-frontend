@@ -103,6 +103,10 @@ export const getKreoLoginApi = async () => {
   return axios.get(`/external/authenticate`);
 };
 
+export const loginApi = async (data) => {
+  return axios.post(`/user/login`, data);
+};
+
 export const uploadFiletoKero = async (payload) => {
   return axios.post(`/external/uploadToKreo`, payload, { headers });
 };

@@ -22,6 +22,7 @@ const ContextProvider = (props) => {
   const [show, setShow] = useState("Direct Contact");
   const [taskDetails, setTaskDetails] = useState(null);
   const [expanded, setExpanded] = useState(false);
+  const [profKey, setProfKey] = useState(true)
 
   return (
     <GlobalState.Provider
@@ -54,6 +55,7 @@ const ContextProvider = (props) => {
         setTaskDetails,
         expanded, 
         setExpanded,
+        profKey, setProfKey
       }}
     >
       {props.children}

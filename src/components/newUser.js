@@ -1,8 +1,19 @@
 import React, { useState } from "react";
+import { Button, Grid, Stack, Typography, Box } from "@mui/material";
 import { useHistory } from "react-router-dom";
 import logo from "../Images/Bedrock Rock .png";
 import Footer from "./footer";
 import Header from "./header";
+import bubble from "../../Images/bubble.svg";
+import bedlogin from "../../Images/bedlogin.svg";
+import welcome from "../../Images/welcome.svg";
+import { makeStyles } from "@mui/styles";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import MuiEmailField from "../../components/Formik/MuiEmailField";
+import MuiPasswordField from "../../components/Formik/MuiPassword";
+import { loginApi, getUserDetails } from "../../services/request";
+import { ShowSnackbar } from "../../components/Snackbar";
 
 const NewUser = () => {
   const initialValues = {

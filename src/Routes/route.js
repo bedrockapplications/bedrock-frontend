@@ -5,7 +5,7 @@ import PublicRoute from "./publicRoute";
 
 import Welcome from "../components/welcome";
 import Login from "../components/login";
-import NewUser from "../components/newUser";
+// import NewUser from "../components/newUser";
 import CompanyInfo from "../components/companyInfo";
 import ForgotPassword from "../components/forgotPassword";
 import Billing from "../components/billing";
@@ -24,13 +24,15 @@ import UserCreation from "../pages/UserCreation";
 import Chatbot from "../pages/chatbot/chatbot";
 import PicUpload from "../pages/DailyLogs/dropZone";
 import autoMeasure from "../pages/AutoMeasure/autoMeasure";
+import LoginPage from "../pages/Login/Login";
+import RegistrationPage from "../pages/SignUp/SignUp";
 
 
 export const routes = (
   <Switch>
     <Route exact path="/" render={() => <Redirect to="/login" />} />
-    <PublicRoute exact path="/login" component={Login} />
-    <PublicRoute exact path="/signup" component={NewUser} />
+    <PublicRoute exact path="/login" component={LoginPage} />
+    <PublicRoute exact path="/signup" component={RegistrationPage} />
     <PublicRoute exact path="/companyinfo" component={CompanyInfo} />
     <PublicRoute exact path="/forgotpassword" component={ForgotPassword} />
     <PublicRoute exact path="/billing" component={Billing} />

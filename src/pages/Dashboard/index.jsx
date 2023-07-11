@@ -43,6 +43,7 @@ import * as Yup from "yup";
 import { GlobalState } from "../../Context/Context";
 import PremiumDailog from "../../components/premiumDailog";
 import FormCreateNewTask from "./FormCreateNewTask";
+import UpdateProfileBox from "./UpdateProfileBox";
 import CreateUserForm from "./CreateUserForm";
 import ChatBox from "../../components/Chat/chat";
 import noTasks from "../../Images/noTasks.svg";
@@ -276,6 +277,8 @@ const Dashboard = () => {
     taskDetails,
     setTaskDetails,
     setIsLoading,
+    profKey, 
+    setProfKey
   } = useContext(GlobalState);
   const [detailsList, setDetailsList] = useState([]);
   const [openCancle, setOpenCancle] = useState(false);
@@ -291,6 +294,10 @@ const Dashboard = () => {
   const handleCloseForm = useCallback(() => {
     setOpenForm(false);
   }, []);
+
+  const handleCloseProfile = useCallback(() => {
+    setProfKey(false)
+  },[])
 
   const handleCloseUserForm = useCallback(() => {
     setOpenUserForm(false);
@@ -546,6 +553,11 @@ const Dashboard = () => {
       <FormCreateNewTask
         open={openForm}
         handleCloseForm={handleCloseForm}
+        getAllTasksList={getAllTasksList}
+      />
+      <UpdateProfileBox
+        open={profKey}
+        handleCloseUserForm={handleCloseProfile}
         getAllTasksList={getAllTasksList}
       />
       <CreateUserForm
