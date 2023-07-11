@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import PrivateRoute from "./privateRoute";
 import PublicRoute from "./publicRoute";
 
@@ -28,7 +28,7 @@ import autoMeasure from "../pages/AutoMeasure/autoMeasure";
 
 export const routes = (
   <Switch>
-    <PublicRoute exact path="/" component={Welcome} />
+    <Route exact path="/" render={() => <Redirect to="/login" />} />
     <PublicRoute exact path="/login" component={Login} />
     <PublicRoute exact path="/signup" component={NewUser} />
     <PublicRoute exact path="/companyinfo" component={CompanyInfo} />
