@@ -20,8 +20,8 @@ import Dashboard from "../pages/Dashboard";
 import DocumentManager from "../pages/DocumentManager";
 import Settings from "../pages/Settings";
 import UserCreation from "../pages/UserCreation";
-// import DailyLogs from "../pages/DailyLogs";
-import Chatbot from "../pages/chatbot/chatbot";
+import DailyLogs from "../pages/DailyLogs";
+// import Chatbot from "../pages/chatbot/chatbot";
 import PicUpload from "../pages/DailyLogs/dropZone";
 import autoMeasure from "../pages/AutoMeasure/autoMeasure";
 import LoginPage from "../pages/Login/Login";
@@ -53,8 +53,8 @@ export const routes = (
     <PrivateRoute exact path="/docManager" component={DocumentManager} />
     <PrivateRoute exact path="/settings" component={Settings} />
     <PrivateRoute exact path="/userCreation" component={UserCreation} />
-    {/* <PrivateRoute exact path="/dailylogs" component={DailyLogs} /> */}
-    <PrivateRoute exact path="/estimatorai" component={Chatbot} />
+    <PrivateRoute exact path="/dailylogs" component={DailyLogs} />
+    {/* <PrivateRoute exact path="/estimatorai" component={Chatbot} /> */}
     <PrivateRoute exact path="/pic" component={PicUpload} />
     <PrivateRoute exact path="/mysubprojects" component={MySubProjects} />
     <PrivateRoute exact path="/allprojects" component={AllProjects} />
