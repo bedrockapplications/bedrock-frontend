@@ -22,6 +22,7 @@ import AddIcon from "@mui/icons-material/Add";
 import SearchIcon from "@mui/icons-material/Search";
 import DropDownArrow from "@mui/icons-material/ArrowDropDown";
 import crane from "../../Images/crane.png";
+import detailsMain from "../../Images/detailMain.svg"
 // import AllProjectsTable from "./allProjectsTable";
 // import UploadForm from "./uploadForm";
 
@@ -81,6 +82,17 @@ const useStyle = makeStyles(() => ({
         transform: "rotateY(-180deg)",
         marginTop: "-36px"
     },
+    backDisplay: {
+        color: "white",
+        background: "white",
+        padding: "45px 30px",
+        borderRadius: "10px",
+        marginTop: "20px",
+        display: "flex"
+    },
+    text: {
+        color: "black"
+    }
 }));
 
 
@@ -105,6 +117,18 @@ const ProjectDetail = () => {
                     </Paper>
                 </Grid>
             </Grid>
+            <div className={classes.backDisplay}>
+                <Grid container spacing={0}>
+                    <Grid item xs={12} md={6}>
+                        <img src={detailsMain} alt="main-img" />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <h2 className={classes.text}>Project Name</h2>
+                        <br/>
+                        <p className={classes.text}>The project involves the distribution of 50,000 solar cookers to rural households in Zhenping County, Henan Province. The majority of the rural households in Zhenping use coal-fired stoves for water boiling and cooking. Using coal-fired stoves not only leads to significant greenhouse gas emissions but also air pollution which represents a high risk for the health of the residents. In addition, the use of coal-fired stoves needs families to spend money on purchasing coal.</p>
+                    </Grid>
+                </Grid>
+            </div>
         </>
     )
 }
