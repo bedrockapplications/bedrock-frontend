@@ -19,6 +19,7 @@ import { styled } from "@mui/material/styles";
 import { useState } from "react";
 import SheduleDataTable from "./SheduleDataTable";
 import { useTranslation } from "react-i18next";
+import UploadForm from "./uploadForm";
 
 
 const useStyle = makeStyles(() => ({
@@ -71,9 +72,12 @@ let data = [
 const SmartScheduler = () => {
   const classes = useStyle();
     const { t } = useTranslation();
-
-  const [viewToggle, setViewToggle] = useState(false);
   const [openDailyLog, setOpenDailyLog] = useState(false);
+  const [openFileModel, setOpenFileModel] = useState(false);
+
+  const handleCloseFileModel = () => {
+      setOpenFileModel(false);
+  };
 
   const handleSearch = (value) => {
     console.log("value", value);
@@ -104,7 +108,7 @@ const SmartScheduler = () => {
                     startIcon={<AddIcon />}
                     fullWidth
                     className={classes.createBtn}
-                    onClick={handleOpenDailyLog}
+                    onClick={() => setOpenFileModel(true)}
                   >
                     Add Schedule
                   </Button>
@@ -121,6 +125,14 @@ const SmartScheduler = () => {
             <SheduleDataTable data={data} />
        
         </Box>
+        <UploadForm
+                open={openFileModel}
+                handleClose={handleCloseFileModel}
+            // GetDocumentsLists={GetDocumentsLists}
+            // projectOptions={projectOptions}
+            // categoryType={categoryType}
+            // GetSearchOptions={GetSearchOptions}
+            />
       </Box>
     </>
   );
