@@ -47,6 +47,7 @@ import GetDateAndTime from "../components/DigitalClock";
 import BookIcon from "@mui/icons-material/Book";
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import CalculateIcon from '@mui/icons-material/Calculate';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
@@ -111,7 +112,7 @@ if (window.location.pathname === "/allprojects" ||
     { icon: <DashboardIcon />, label: "dashboard", link: "/dashboard" },
     { icon: <DescriptionIcon />, label: "document_manager", link: "/docManager" },
     {
-      icon: <DashboardIcon />,
+      icon: <AutoFixHighIcon />,
       label: "renovateai",
       link: "/renovateai",
     },
@@ -120,16 +121,16 @@ if (window.location.pathname === "/allprojects" ||
       label: "my_projects",
       link: "/myprojects",
     },
-    // {
-    //   icon: <BookIcon />,
-    //   label: "Daily Logs",
-    //   link: "/dailylogs",
-    // },
     {
-      icon: <PsychologyIcon />,
-      label: "Estimator.ai",
-      link: "/estimatorai",
+      icon: <BookIcon />,
+      label: "Daily Logs",
+      link: "/dailylogs",
     },
+    // {
+    //   icon: <PsychologyIcon />,
+    //   label: "Estimator.ai",
+    //   link: "/estimatorai",
+    // },
     {
       icon: <CalculateIcon />,
       label: "AI Auto Measure",
