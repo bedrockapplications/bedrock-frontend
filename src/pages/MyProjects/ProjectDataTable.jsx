@@ -155,11 +155,11 @@ const ProjectDataTable = (props) => {
                 {stableSort(data, getComparator(order, orderBy))?.map(
                   (item, i) => (
                     <TableRow key={i}>
-                      <TableCell align="right">{item?.client}</TableCell>
-                      <TableCell align="right">{item?.projectName}</TableCell>
-                      <TableCell align="right">{item?.category}</TableCell>
-                      <TableCell align="right">{item?.address}</TableCell>
-                      <TableCell align="right">
+                      <TableCell >{item?.client}</TableCell>
+                      <TableCell >{item?.projectName}</TableCell>
+                      <TableCell >{item?.category}</TableCell>
+                      <TableCell >{item?.address}</TableCell>
+                      <TableCell >
                         {/* <ol>
                           {item?.vendorContacts.map((subItem, i) => (
                             <li key={subItem + i}>{subItem}</li>
@@ -173,7 +173,7 @@ const ProjectDataTable = (props) => {
                           <img src={vendor} alt="" style={{width:"80px", height:"30px"}} />
                         </IconButton>
                       </TableCell>
-                      <TableCell align="right">
+                      <TableCell>
                       <IconButton
                           size="small"
                           color="primary"
