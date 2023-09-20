@@ -90,7 +90,6 @@ const LanguagesList = [
   { label: "Français", code: "FR", local: "fr" },
   { label: "Español", code: "ES", local: "es" },
 ];
-<<<<<<< HEAD
 let sideLinks
 if (window.location.pathname === "/allprojects" ||
   window.location.pathname === "/mysubprojects" ||
@@ -136,32 +135,7 @@ if (window.location.pathname === "/allprojects" ||
       label: "AI Auto Measure",
       link: "/automeasure",
     },
-=======
 
-const sideLinks = [
-  { icon: <DashboardIcon />, label: "dashboard", link: "/dashboard" },
-  { icon: <DescriptionIcon />, label: "document_manager", link: "/docManager" },
-  {
-    icon: <EngineeringIcon />,
-    label: "my_projects",
-    link: "/myprojects",
-  },
-  {
-    icon: <BookIcon />,
-    label: "Daily Logs",
-    link: "/dailylogs",
-  },
-  // {
-  //   icon: <PsychologyIcon />,
-  //   label: "Estimator.ai",
-  //   link: "/estimatorai",
-  // },
-  {
-    icon: <CalculateIcon />,
-    label: "AI Auto Measure",
-    link: "/automeasure",
-  },
->>>>>>> 7ccb4014eb93c1ea301a6cf86b73d4af24953a3d
 
 
     // { icon: <PersonAddIcon />, label: "User Creation", link: "/userCreation" },
