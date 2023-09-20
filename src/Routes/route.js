@@ -30,7 +30,8 @@ import RenovateAI from "../pages/RenovateAI";
 import MySubProjects from "../pages/MySubProjects";
 import AllProjects from "../pages/AllProjects";
 import ProjectDetail from "../pages/ProjectDetail";
-// import MySubProjects from "../pages/MyProjects";
+import SmartScheduler from "../pages/smartSchedule";
+
 
 export const routes = (
   <Switch>
@@ -54,6 +55,7 @@ export const routes = (
     <PrivateRoute exact path="/settings" component={Settings} />
     <PrivateRoute exact path="/userCreation" component={UserCreation} />
     <PrivateRoute exact path="/dailylogs" component={DailyLogs} />
+    <PrivateRoute exact path="/smartscheduler" component={SmartScheduler} />
     {/* <PrivateRoute exact path="/estimatorai" component={Chatbot} /> */}
     <PrivateRoute exact path="/pic" component={PicUpload} />
     <PrivateRoute exact path="/mysubprojects" component={MySubProjects} />

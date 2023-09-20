@@ -9,7 +9,7 @@ import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import TablePagination from "@mui/material/TablePagination";
 
-import SortingTableHeader from "../smartSchedule/SortingTableHeaders";
+import SortingTableHeader from "../MyProjects/SortingTableHeaders";
 import {
   getComparator,
   stableSort,
@@ -34,34 +34,28 @@ import vendor from "../../Images/vendor.png";
 
 const headCells = [
   {
-    id: "client",
-    numeric: false,
-    disablePadding: false,
-    label: "Client",
-  },
-  {
     id: "projectName",
     numeric: false,
     disablePadding: false,
     label: "project Name",
   },
   {
-    id: "category",
+    id: "clientName",
     numeric: false,
     disablePadding: false,
-    label: "Category",
+    label: "Client Name",
   },
   {
-    id: "address",
+    id: "subContractor",
     numeric: false,
     disablePadding: false,
-    label: "Address",
+    label: "Sub-Contractor",
   },
   {
-    id: "vendorContacts",
+    id: "availabilty",
     numeric: false,
     disablePadding: false,
-    label: "Vendor Contacts",
+    label: "Availabilty",
   },
   {
     id: "actions",
@@ -71,7 +65,7 @@ const headCells = [
   },
 ];
 
-const ProjectDataTable = (props) => {
+const ScheduleDataTable = (props) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const { data, totalCount } = props;
@@ -113,22 +107,6 @@ const ProjectDataTable = (props) => {
     setOpenDownloadModel(false);
   };
   
-  let projectdata = [
-    {
-        client: "Jim Wills",
-        projectName: "Project 1",
-        category: "Renovate AI",
-        address: "North Street,Tampa, Fl",
-        vendorContacts: ["k"],
-    },
-    {
-        client: "Jim Wills",
-        projectName: "SR Building",
-        category: "Renovate AI",
-        address: "North Street,Tampa, Fl",
-        vendorContacts: ["e"],
-    }
-]
 
   return (
     <>
@@ -155,24 +133,10 @@ const ProjectDataTable = (props) => {
                 {stableSort(data, getComparator(order, orderBy))?.map(
                   (item, i) => (
                     <TableRow key={i}>
-                      <TableCell >{item?.client}</TableCell>
                       <TableCell >{item?.projectName}</TableCell>
-                      <TableCell >{item?.category}</TableCell>
-                      <TableCell >{item?.address}</TableCell>
-                      <TableCell >
-                        {/* <ol>
-                          {item?.vendorContacts.map((subItem, i) => (
-                            <li key={subItem + i}>{subItem}</li>
-                          ))}
-                        </ol> */}
-                        <IconButton
-                          size="small"
-                          color="primary"
-                          // onClick={() => handleOpenDownload(item)}
-                        >
-                          <img src={vendor} alt="" style={{width:"80px", height:"30px"}} />
-                        </IconButton>
-                      </TableCell>
+                      <TableCell >{item?.clientName}</TableCell>
+                      <TableCell >{item?.subContractor}</TableCell>
+                      <TableCell >{item?.availabilty}</TableCell>
                       <TableCell>
                       <IconButton
                           size="small"
@@ -326,4 +290,4 @@ const ProjectDataTable = (props) => {
   );
 };
 
-export default ProjectDataTable;
+export default ScheduleDataTable;
