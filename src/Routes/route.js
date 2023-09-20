@@ -26,7 +26,11 @@ import PicUpload from "../pages/DailyLogs/dropZone";
 import autoMeasure from "../pages/AutoMeasure/autoMeasure";
 import LoginPage from "../pages/Login/Login";
 import RegistrationPage from "../pages/SignUp/SignUp";
-
+import RenovateAI from "../pages/RenovateAI";
+import MySubProjects from "../pages/MySubProjects";
+import AllProjects from "../pages/AllProjects";
+import ProjectDetail from "../pages/ProjectDetail";
+// import MySubProjects from "../pages/MyProjects";
 
 export const routes = (
   <Switch>
@@ -39,8 +43,10 @@ export const routes = (
     <PublicRoute exact path="/resetpassword" component={ResetPassword} />
     <PrivateRoute exact path="/dashboard" component={Dashboard} />
     <PrivateRoute exact path="/projectDirectory" component={ProjectDirectory} />
+    <PrivateRoute exact path="/renovateai" component={RenovateAI} />
 
     <PrivateRoute exact path="/myprojects" component={MyProjects} />
+    {/* <PrivateRoute exact path="/mysubprojects" component={MySubProjects} /> */}
     <PrivateRoute exact path="/automeasure" component={autoMeasure} />
     <PrivateRoute exact path="/createProject" component={CreateProject} />
     <PrivateRoute exact path="/myProject/:id" component={MyProject} />
@@ -50,6 +56,11 @@ export const routes = (
     {/* <PrivateRoute exact path="/dailylogs" component={DailyLogs} /> */}
     <PrivateRoute exact path="/estimatorai" component={Chatbot} />
     <PrivateRoute exact path="/pic" component={PicUpload} />
+    <PrivateRoute exact path="/mysubprojects" component={MySubProjects} />
+    <PrivateRoute exact path="/allprojects" component={AllProjects} />
+    <PrivateRoute exact path="/projectDetail" component={ProjectDetail} />
+
+
 
 
     {/* <PrivateRoute exact path="/docManager" component={DocManager} /> */}

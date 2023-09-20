@@ -47,6 +47,7 @@ import GetDateAndTime from "../components/DigitalClock";
 import BookIcon from "@mui/icons-material/Book";
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import CalculateIcon from '@mui/icons-material/Calculate';
+import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
 // import Dashboard from "../pages/Dashboard";\
@@ -55,6 +56,8 @@ import { io } from "socket.io-client";
 
 
 const drawerWidth = 240;
+
+
 
 const useStyle = makeStyles(() => ({
   userText: {
@@ -87,34 +90,56 @@ const LanguagesList = [
   { label: "Français", code: "FR", local: "fr" },
   { label: "Español", code: "ES", local: "es" },
 ];
+let sideLinks
+if (window.location.pathname === "/allprojects" ||
+  window.location.pathname === "/mysubprojects" ||
+  window.location.pathname === "/projectDetail") {
+  sideLinks = [
+    {
+      icon: <DashboardIcon />,
+      label: "All Projects",
+      link: "/allprojects",
+    },
+    {
+      icon: <DashboardIcon />,
+      label: "My projects",
+      link: "/mysubprojects",
+    },
+  ]
+} else {
+  sideLinks = [
+    { icon: <DashboardIcon />, label: "dashboard", link: "/dashboard" },
+    { icon: <DescriptionIcon />, label: "document_manager", link: "/docManager" },
+    {
+      icon: <DashboardIcon />,
+      label: "renovateai",
+      link: "/renovateai",
+    },
+    {
+      icon: <EngineeringIcon />,
+      label: "my_projects",
+      link: "/myprojects",
+    },
+    // {
+    //   icon: <BookIcon />,
+    //   label: "Daily Logs",
+    //   link: "/dailylogs",
+    // },
+    {
+      icon: <PsychologyIcon />,
+      label: "Estimator.ai",
+      link: "/estimatorai",
+    },
+    {
+      icon: <CalculateIcon />,
+      label: "AI Auto Measure",
+      link: "/automeasure",
+    },
 
-const sideLinks = [
-  { icon: <DashboardIcon />, label: "dashboard", link: "/dashboard" },
-  { icon: <DescriptionIcon />, label: "document_manager", link: "/docManager" },
-  {
-    icon: <EngineeringIcon />,
-    label: "my_projects",
-    link: "/myprojects",
-  },
-  // {
-  //   icon: <BookIcon />,
-  //   label: "Daily Logs",
-  //   link: "/dailylogs",
-  // },
-  {
-    icon: <PsychologyIcon />,
-    label: "Estimator.ai",
-    link: "/estimatorai",
-  },
-  {
-    icon: <CalculateIcon />,
-    label: "AI Auto Measure",
-    link: "/automeasure",
-  },
 
-
-  // { icon: <PersonAddIcon />, label: "User Creation", link: "/userCreation" },
-];
+    // { icon: <PersonAddIcon />, label: "User Creation", link: "/userCreation" },
+  ];
+}
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -202,7 +227,7 @@ export default function MiniDrawer(props) {
   // const socket = io('https://nodejs-apis.bedrockapps.link');
 
   useEffect(() => {
-    socket.emit('getUser', {id:localStorage.getItem('userId'), tz:Intl.DateTimeFormat().resolvedOptions().timeZone});
+    socket.emit('getUser', { id: localStorage.getItem('userId'), tz: Intl.DateTimeFormat().resolvedOptions().timeZone });
     socket.on("response", (data) => {
       // setNotification(data);
       console.log("socketdata", data)
@@ -373,9 +398,8 @@ export default function MiniDrawer(props) {
               {taskList && taskList[taskList.length - 1]?.title}
             </Typography>
             <Tooltip
-              title={`You Have ${
-                taskList !== null ? taskList.length : 0
-              } New Notifications!`}
+              title={`You Have ${taskList !== null ? taskList.length : 0
+                } New Notifications!`}
             >
               <IconButton
                 onClick={handleNotificationClick}

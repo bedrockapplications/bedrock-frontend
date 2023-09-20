@@ -5,7 +5,9 @@
   "good_evening": "Good Evening",
   "good_night": "Good Night",
   "dashboard": "Dashboard",
+  "renovateai":"Renovate AI",
   "my_projects": "My Projects",
+  "project_name":"Project Name",
   "document_manager": "Document Manager",
   "today's_tasks": "Today's Tasks",
   "create_task": "Create Tasks",
@@ -63,10 +65,43 @@
     "workActivity": "Work Activity",
     "notes/comments": "Notes/Comments"
   },
+  "renovate":{
+    "renovateai":"Renovate AI",
+    "search_all_projects": "Search all Projects",
+    "submit_intake_form":"Submit Intake Form",
+    "projectName":"Project Name",
+    "location":"Location",
+    "clientName":"Client Name",
+    "servicesNeeded":"Services Needed",
+    "completionDate":"Completion Date",
+    "actions":"Actions"
+  },
   "settings": {
     "account_overview": "Account Overview",
     "general": "General",
     "billing": "Billing",
     "security": "Security"
+  },
+  "my_sub_projects":{
+    "old_projects":"Old Projects",
+    "new_projects":"New Projects",
+    "applied_projects":"Applied Projects",
+    "my_projects":"My Projects",
+    "all_projects":"All Projects",
+    "project_name":"Project Name",
+    "type":"Type",
+    "location":"Location",
+    "project_manager":"Project Manager",
+    "status":"Status",
+    "actions":"Actions"
+  },
+  "all_projects":{
+    "all_projects":"All Projects",
+    "project_name":"Project Name",
+    "type":"Type",
+    "location":"Location",
+    "project_manager":"Project Manager",
+    "status":"Status",
+    "actions":"Actions"
   }
 }

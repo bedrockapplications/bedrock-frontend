@@ -78,7 +78,7 @@ const validationSchema = Yup.object().shape({
 
 // test
 
-const MyProjects = () => {
+const MySubProjects = () => {
   const classes = useStyle();
   const { t } = useTranslation();
   const uId = localStorage.getItem("userId");
@@ -484,7 +484,7 @@ const MyProjects = () => {
     </>
   );
 };
-export default memo(MyProjects);
+export default memo(MySubProjects);
 
 // const tableData = [
 //   {
