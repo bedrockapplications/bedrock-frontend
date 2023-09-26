@@ -31,6 +31,7 @@ import MySubProjects from "../pages/MySubProjects";
 import AllProjects from "../pages/AllProjects";
 import ProjectDetail from "../pages/ProjectDetail";
 import SmartScheduler from "../pages/smartSchedule";
+import MyBids from "../pages/MyBids";
 
 
 export const routes = (
@@ -61,6 +62,7 @@ export const routes = (
     <PrivateRoute exact path="/mysubprojects" component={MySubProjects} />
     <PrivateRoute exact path="/allprojects" component={AllProjects} />
     <PrivateRoute exact path="/projectDetail" component={ProjectDetail} />
+    <PrivateRoute exact path="/mybids" component={MyBids} />
 
 
 

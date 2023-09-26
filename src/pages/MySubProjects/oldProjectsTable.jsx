@@ -2,6 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 // import DocumentTable from "../../components/MuiTable";
 import { IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import EmailIcon from "@mui/icons-material/Email";
 import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
@@ -228,6 +229,13 @@ const OldProjectsTable = (props) => {
                                                 <IconButton
                                                     size="small"
                                                     color="primary"
+                                                // onClick={() => handleOpenDownload(item)}
+                                                >
+                                                    <RemoveRedEyeIcon fontSize="small" />
+                                                </IconButton>
+                                                <IconButton
+                                                    size="small"
+                                                    color="primary"
                                                     onClick={() => handleEditOpen(item)}
                                                 >
                                                     <EditIcon fontSize="small" />
@@ -247,9 +255,9 @@ const OldProjectsTable = (props) => {
                                                     <DeleteIcon fontSize="small" />
                                                 </IconButton>
                                             </TableCell>
-                                            <TableCell align="right">
+                                            {/* <TableCell align="right">
                                                 {item?.projectId?.projectName}
-                                            </TableCell>'
+                                            </TableCell>' */}
                                         </TableRow>
                                     )
                                 )}

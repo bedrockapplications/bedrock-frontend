@@ -111,5 +111,17 @@
     "project_manager":"Project Manager",
     "status":"Status",
     "actions":"Actions"
+  },
+  "my_bids":{
+    "all_projects":"All Projects",
+    "my_bids":"My Bids",
+    "project_name":"Project Name",
+    "type":"Type",
+    "location":"Location",
+    "project_manager":"Project Manager",
+    "status":"Status",
+    "actions":"Actions",
+    "approved":"Approved",
+    "bids":"Bids"
   }
 }

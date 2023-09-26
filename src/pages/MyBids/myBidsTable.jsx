@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 // import DocumentTable from "../../components/MuiTable";
 import { IconButton } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
-import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import EmailIcon from "@mui/icons-material/Email";
 import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
@@ -24,6 +23,10 @@ import { getComparator, stableSort } from "./SortingTableHeaders";
 // import SubmittalsDialog from "./SubmittlasModel";
 import PremiumDailog from "../../components/premiumDailog";
 import EmptyTableBody from "../../components/EmptyTableBody";
+import { Button } from "@mui/material";
+import { styled } from '@mui/material/styles';
+import { purple,grey } from '@mui/material/colors';
+
 
 const useStyle = makeStyles(() => ({
     headerText: {
@@ -35,10 +38,16 @@ const useStyle = makeStyles(() => ({
 
 const headCells = [
     {
-        id: "projectName",
+        id: "project_name",
         numeric: false,
         disablePadding: true,
-        label: "projectName",
+        label: "project_name",
+    },
+    {
+        id: "type",
+        numeric: false,
+        disablePadding: false,
+        label: "type",
     },
     {
         id: "location",
@@ -47,22 +56,16 @@ const headCells = [
         label: "location",
     },
     {
-        id: "clientName",
+        id: "project_manager",
         numeric: false,
         disablePadding: false,
-        label: "clientName",
+        label: "project_manager",
     },
     {
-        id: "servicesNeeded",
+        id: "status",
         numeric: false,
         disablePadding: false,
-        label: "servicesNeeded",
-    },
-    {
-        id: "completionDate",
-        numeric: false,
-        disablePadding: false,
-        label: "completionDate",
+        label: "status",
     },
     {
         id: "actions",
@@ -72,7 +75,17 @@ const headCells = [
     },
 ];
 
-const RenovateAiTable = (props) => {
+const ColorButton = styled(Button)(({ theme }) => ({
+    color: theme.palette.getContrastText(grey[900]),
+    padding: '6px 12px',
+    textTransform:"initial",
+    backgroundColor: grey[900],
+    '&:hover': {
+      backgroundColor: grey[900],
+    },
+  }));
+
+const MyBidsTable = (props) => {
     const classes = useStyle();
 
     const { data, GetDocumentsLists, projectOptions, totalCount } = props;
@@ -99,20 +112,20 @@ const RenovateAiTable = (props) => {
     const [openSubmittals, setOpenSubmittals] = useState(false);
     const [submittalsData, setSubmittalsData] = useState(null);
 
-    let renovateData = [
+    let mysubprojects = [
         {
-            projectName: "Project 1",
+            project_name: "Project 1",
+            type: "Renovate Ai",
             location: "Tampa, Fi",
-            clientName: "James",
-            servicesNeeded: ["Painting", "Interior"],
-            completionDate: "12-08-2023",
+            project_manager: "Jim Willis",
+            status: "Initial Estimation",
         },
         {
-            projectName: "SR Building",
-            location: "Toronto, CA",
-            clientName: "Williams",
-            servicesNeeded: ["Ceiling Repair", "Painting"],
-            completionDate: "17-08-2023",
+            project_name: "Project 1",
+            type: "Renovate Ai",
+            location: "Tampa, Fi",
+            project_manager: "Jim Willis",
+            status: "Initial Estimation",
         }
     ]
 
@@ -190,8 +203,8 @@ const RenovateAiTable = (props) => {
             <Paper sx={{ width: "100%", border: "3px solid #3A3A3C" }}>
                 <TableContainer
                     sx={{
-                        height: renovateData?.length > 0 ? 320 : 370,
-                        maxHeight: renovateData?.length > 0 ? 320 : 370,
+                        height: mysubprojects?.length > 0 ? 320 : 370,
+                        maxHeight: mysubprojects?.length > 0 ? 320 : 370,
                         position: "relative",
                     }}
                 >
@@ -201,39 +214,33 @@ const RenovateAiTable = (props) => {
                             order={order}
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
-                            rowCount={renovateData.length}
+                            rowCount={mysubprojects.length}
                         //   rowCount={data.length}
                         />
-                        {renovateData?.length > 0 ? (
+                        {mysubprojects?.length > 0 ? (
                             <TableBody>
-                                {stableSort(renovateData, getComparator(order, orderBy))?.map(
+                                {stableSort(mysubprojects, getComparator(order, orderBy))?.map(
                                     (item, i) => (
                                         <TableRow key={item._id}>
                                             <TableCell align="right">
-                                                {item.projectName}
+                                                {item.project_name}
                                             </TableCell>
                                             <TableCell align="right">
-                                                {item?.location}
+                                                {item?.type}
                                             </TableCell>
                                             <TableCell align="right">
-                                                {item.clientName}
+                                                {item.location}
                                             </TableCell>
                                             <TableCell align="right">
-                                                {item.servicesNeeded.join(",")}
+                                                {item.project_manager}
                                             </TableCell>
                                             <TableCell align="right">
                                                 {/* {moment(item?.updatedAt).format("DD-MM-YYYY")} */}
-                                                {item.completionDate}
+                                                {item.status}
                                             </TableCell>
                                             <TableCell align="right">
-                                                <IconButton
-                                                    size="small"
-                                                    color="primary"
-                                                    // onClick={() => handleEditOpen(item)}
-                                                >
-                                                    <RemoveRedEyeIcon fontSize="small" />
-                                                </IconButton>
-                                                <IconButton
+                                                <ColorButton onClick={()=>window.open("/projectDetail")}>View Details</ColorButton>
+                                                {/* <IconButton
                                                     size="small"
                                                     color="primary"
                                                     onClick={() => handleEditOpen(item)}
@@ -253,7 +260,7 @@ const RenovateAiTable = (props) => {
                                                     onClick={() => handleOpenDelete(item)}
                                                 >
                                                     <DeleteIcon fontSize="small" />
-                                                </IconButton>
+                                                </IconButton> */}
                                             </TableCell>
                                             {/* <TableCell align="right">
                                                 {item?.projectId?.projectName}
@@ -267,11 +274,11 @@ const RenovateAiTable = (props) => {
                         )}
                     </Table>
                 </TableContainer>
-                {renovateData?.length > 0 && (
+                {mysubprojects?.length > 0 && (
                     <TablePagination
                         rowsPerPageOptions={[10, 25, 50, 100]}
                         component="div"
-                        count={renovateData.length}
+                        count={mysubprojects.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
@@ -303,5 +310,5 @@ const RenovateAiTable = (props) => {
     );
 };
 
-export default RenovateAiTable;
+export default MyBidsTable;
 

@@ -95,7 +95,8 @@ const LanguagesList = [
 let sideLinks
 if (window.location.pathname === "/allprojects" ||
   window.location.pathname === "/mysubprojects" ||
-  window.location.pathname === "/projectDetail") {
+  window.location.pathname === "/projectDetail" ||
+  window.location.pathname === "/mybids") {
   sideLinks = [
     {
       icon: <DashboardIcon />,
@@ -106,6 +107,11 @@ if (window.location.pathname === "/allprojects" ||
       icon: <DashboardIcon />,
       label: "My projects",
       link: "/mysubprojects",
+    },
+    {
+      icon: <DashboardIcon />,
+      label: "My bids",
+      link: "/mybids",
     },
   ]
 } else {

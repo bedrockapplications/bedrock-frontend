@@ -262,9 +262,9 @@ const AllProjectsTable = (props) => {
                                                     <DeleteIcon fontSize="small" />
                                                 </IconButton> */}
                                             </TableCell>
-                                            <TableCell align="right">
+                                            {/* <TableCell align="right">
                                                 {item?.projectId?.projectName}
-                                            </TableCell>'
+                                            </TableCell>' */}
                                         </TableRow>
                                     )
                                 )}
