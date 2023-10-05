@@ -92,73 +92,7 @@ const LanguagesList = [
   { label: "Français", code: "FR", local: "fr" },
   { label: "Español", code: "ES", local: "es" },
 ];
-let sideLinks
-if (window.location.pathname === "/allprojects" ||
-  window.location.pathname === "/mysubprojects" ||
-  window.location.pathname === "/projectDetail" ||
-  window.location.pathname === "/mybids") {
-  sideLinks = [
-    {
-      icon: <DashboardIcon />,
-      label: "All Projects",
-      link: "/allprojects",
-    },
-    {
-      icon: <DashboardIcon />,
-      label: "My projects",
-      link: "/mysubprojects",
-    },
-    {
-      icon: <DashboardIcon />,
-      label: "My bids",
-      link: "/mybids",
-    },
-  ]
-} else {
-  sideLinks = [
-    { icon: <DashboardIcon />, label: "dashboard", link: "/dashboard" },
-    { icon: <DescriptionIcon />, label: "document_manager", link: "/docManager" },
-    {
-      icon: <AutoFixHighIcon />,
-      label: "renovateai",
-      link: "/renovateai",
-    },
-    {
-      icon: <EngineeringIcon />,
-      label: "my_projects",
-      link: "/myprojects",
-    },
-    {
-      icon: <EventAvailableIcon />,
-      label: "Smart Scheduler",
-      link: "/smartscheduler",
-    },
-    // {
-    //   icon: <PsychologyIcon />,
-    //   label: "Estimator.ai",
-    //   link: "/estimatorai",
-    // },
-    {
-      icon: <BookIcon />,
-      label: "Daily Logs",
-      link: "/dailylogs",
-    },
-    // {
-    //   icon: <PsychologyIcon />,
-    //   label: "Estimator.ai",
-    //   link: "/estimatorai",
-    // },
-    {
-      icon: <CalculateIcon />,
-      label: "AI Auto Measure",
-      link: "/automeasure",
-    },
 
-
-
-    // { icon: <PersonAddIcon />, label: "User Creation", link: "/userCreation" },
-  ];
-}
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -233,6 +167,7 @@ const ITEM_HEIGHT = 48;
 const socket = io.connect('https://nodejs-apis.bedrockapps.link');
 
 export default function MiniDrawer(props) {
+  const { userRole, setUserRole } = useContext(GlobalState);
   let history = useHistory();
   const { i18n, t } = useTranslation();
   const theme = useTheme();
@@ -242,6 +177,68 @@ export default function MiniDrawer(props) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [account, setAccount] = React.useState(null);
   const [notification, setNotification] = React.useState(null);
+
+  let sideLinks
+if (userRole=== "owner") {
+  sideLinks = [
+    { icon: <DashboardIcon />, label: "dashboard", link: "/dashboard" },
+    { icon: <DescriptionIcon />, label: "document_manager", link: "/docManager" },
+    {
+      icon: <AutoFixHighIcon />,
+      label: "renovateai",
+      link: "/renovateai",
+    },
+    {
+      icon: <EngineeringIcon />,
+      label: "my_projects",
+      link: "/myprojects",
+    },
+    {
+      icon: <EventAvailableIcon />,
+      label: "Smart Scheduler",
+      link: "/smartscheduler",
+    },
+    // {
+    //   icon: <PsychologyIcon />,
+    //   label: "Estimator.ai",
+    //   link: "/estimatorai",
+    // },
+    {
+      icon: <BookIcon />,
+      label: "Daily Logs",
+      link: "/dailylogs",
+    },
+    // {
+    //   icon: <PsychologyIcon />,
+    //   label: "Estimator.ai",
+    //   link: "/estimatorai",
+    // },
+    {
+      icon: <CalculateIcon />,
+      label: "AI Auto Measure",
+      link: "/automeasure",
+    },
+    // { icon: <PersonAddIcon />, label: "User Creation", link: "/userCreation" },
+  ];
+} else {
+  sideLinks = [
+    {
+      icon: <DashboardIcon />,
+      label: "All Projects",
+      link: "/allprojects",
+    },
+    {
+      icon: <DashboardIcon />,
+      label: "My projects",
+      link: "/mysubprojects",
+    },
+    {
+      icon: <DashboardIcon />,
+      label: "My bids",
+      link: "/mybids",
+    },
+  ]
+}
 
   // const socket = io('https://nodejs-apis.bedrockapps.link');
 

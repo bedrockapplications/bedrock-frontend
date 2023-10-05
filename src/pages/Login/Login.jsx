@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Button, Grid, Stack, Typography, Box } from "@mui/material";
 // import loginSideImg from "../../Images/login_side_img.svg";
 import bubble from "../../Images/bubble.svg";
@@ -12,6 +12,7 @@ import MuiPasswordField from "../../components/Formik/MuiPassword";
 import { loginApi, getUserDetails } from "../../services/request";
 import { useHistory } from "react-router-dom";
 import { ShowSnackbar } from "../../components/Snackbar";
+import { GlobalState } from "../../Context/Context"
 
 const useStyle = makeStyles((theme) => ({
   bgImgContainer: {
@@ -65,17 +66,20 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
+
 const validationSchema = Yup.object().shape({
   email: Yup.string().required("Please enter your email address").nullable(),
   password: Yup.string().required("Please enter your password").nullable(),
 });
 
 const LoginPage = () => {
+
+  const { userRole, setUserRole } = useContext(GlobalState);
   const classes = useStyle();
   const history = useHistory();
 
   const GetUserDetailsApi = (id) => {
-    // console.log("sdfsdg")
+    console.log(userRole)
     getUserDetails(id)
       .then((res) => {
         if (res.data.status) {
@@ -87,11 +91,18 @@ const LoginPage = () => {
           localStorage.setItem("userFirstName", userFirstName);
           localStorage.setItem("userId", data._id);
           localStorage.setItem("role", data.role);
+          setUserRole(data.role)
           ShowSnackbar("success", "Logged in Successfully");
           setTimeout(() => {
-            history.push({
-              pathname: "/dashboard",
-            });
+            if (data.role === "owner") {
+              history.push({
+                pathname: "/dashboard",
+              });
+            } else {
+              history.push({
+                pathname: "/allprojects",
+              });
+            }
           }, 500);
         }
       })
@@ -107,6 +118,8 @@ const LoginPage = () => {
   const handleSignup = () => {
     history.push("/signup");
   };
+
+
 
   return (
     <>
