@@ -1,4 +1,5 @@
 import axios from "./axiosConfig";
+import Axios from "axios";
 
 let headers = {
   "content-type": "multipart/form-data",
@@ -6,7 +7,7 @@ let headers = {
 
 // user details api
 export const getUserDetails = async (id) => {
-  return axios.get(`/user/details?_id=${id}`);
+  return Axios.get(`http://3.83.191.244:5000/api/user/details?_id=${id}`);
 };
 
 export const updateUserDetails = async (id, payload) => {
@@ -104,7 +105,11 @@ export const getKreoLoginApi = async () => {
 };
 
 export const loginApi = async (data) => {
-  return axios.post(`/user/login`, data);
+  return Axios.post(`http://3.83.191.244:5000/api/user/login`, data);
+};
+
+export const registerApi = async (data) => {
+  return Axios.post(`http://3.83.191.244:5000/api/user/register`, data);
 };
 
 export const uploadFiletoKero = async (payload) => {

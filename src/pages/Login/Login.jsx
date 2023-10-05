@@ -15,8 +15,8 @@ import { ShowSnackbar } from "../../components/Snackbar";
 
 const useStyle = makeStyles((theme) => ({
   bgImgContainer: {
-    background:"#3A3A3C",
-    height:'100vh',
+    background: "#3A3A3C",
+    height: '100vh',
     width: "inherit",
     height: "inherit",
     [theme.breakpoints.only("xs")]: {
@@ -27,23 +27,23 @@ const useStyle = makeStyles((theme) => ({
     },
   },
   bgInnerContainer: {
-    padding:"0vh 0px 12vh 0px",
-    display:"flex",
-    flexDirection:"column",
-    justifyContent:"space-around",
-    alignItems:"center",
-    height:"100vh",
-    width:"50vw",
+    padding: "0vh 0px 12vh 0px",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    alignItems: "center",
+    height: "100vh",
+    width: "50vw",
     backgroundImage: `url(${bubble})`,
     backgroundSize: "100%",
     backgroundPosition: "bottom",
     backgroundRepeat: "no-repeat",
   },
-  bgwelcome:{
-    height:"20vh"
+  bgwelcome: {
+    height: "20vh"
   },
-  bgbedicon:{
-    height:"48vh"
+  bgbedicon: {
+    height: "48vh"
   },
   formContainer: {
     padding: "5rem 7rem 3rem",
@@ -75,12 +75,14 @@ const LoginPage = () => {
   const history = useHistory();
 
   const GetUserDetailsApi = (id) => {
+    // console.log("sdfsdg")
     getUserDetails(id)
       .then((res) => {
-        if (res.status === 200) {
-          let data = res.data;
-          let userFirstName = data.firstName;
-          let uname = data.firstName + " " + data.lastName;
+        if (res.data.status) {
+          let data = res.data.data;
+          let userFirstName = data.fullName;
+          // let uname = data.fullName + " " + data?.lastName;
+          let uname = data.fullName
           localStorage.setItem("userName", uname);
           localStorage.setItem("userFirstName", userFirstName);
           localStorage.setItem("userId", data._id);
@@ -149,11 +151,14 @@ const LoginPage = () => {
                   onSubmit={(values, { setSubmitting, resetForm }) => {
                     loginApi(values)
                       .then((res) => {
-                        if (res.status === 200) {
-                          let id = res?.data?._id;
+                        // console.log(res , "res-login")
+                        if (res.data.status) {
+                          let id = res?.data?.data?.user_id;
                           if (id) {
                             GetUserDetailsApi(id);
                           }
+                        } else {
+                          ShowSnackbar("error", res?.data?.message)
                         }
                       })
                       .catch((error) => {
@@ -164,21 +169,21 @@ const LoginPage = () => {
                   {({ values, isValid, isSubmitting, handleSubmit }) => (
                     <Form onSubmit={handleSubmit}>
                       <Grid container spacing={3}>
-                        <Grid item xs={12} sx={{marginTop:"3vh"}}>
+                        <Grid item xs={12} sx={{ marginTop: "3vh" }}>
                           <MuiEmailField
                             id="email"
                             name="email"
                             label="Email Address"
                           />
                         </Grid>
-                        <Grid item xs={12} sx={{marginTop:"3vh"}}>
+                        <Grid item xs={12} sx={{ marginTop: "3vh" }}>
                           <MuiPasswordField
                             id="password"
                             name="password"
                             label="Password"
                           />
                         </Grid>
-                        <Grid item xs={12} sx={{ textAlign: "center", marginTop:"3vh" }}>
+                        <Grid item xs={12} sx={{ textAlign: "center", marginTop: "3vh" }}>
                           <Button
                             variant="contained"
                             color="primary"

@@ -10,7 +10,7 @@ import * as Yup from "yup";
 import MuiTextField from "../../components/Formik/MuiTextField";
 import MuiEmailField from "../../components/Formik/MuiEmailField";
 import MuiPasswordField from "../../components/Formik/MuiPassword";
-import { loginApi, getUserDetails } from "../../services/request";
+import { loginApi, registerApi, getUserDetails } from "../../services/request";
 import { useHistory } from "react-router-dom";
 import { ShowSnackbar } from "../../components/Snackbar";
 
@@ -107,6 +107,10 @@ const RegistrationPage = () => {
         history.push("/login");
     };
 
+    const handleSubmit = () => {
+
+    }
+
     return (
         <>
             <Grid container sx={{ height: "100vh", backgroundColor: "#fff" }}>
@@ -149,18 +153,20 @@ const RegistrationPage = () => {
                                     validationSchema={validationSchema}
                                     onSubmit={(values, { setSubmitting, resetForm }) => {
                                         console.log(values);
-                                        // loginApi(values)
-                                        //     .then((res) => {
-                                        //         if (res.status === 200) {
-                                        //             let id = res?.data?._id;
-                                        //             if (id) {
-                                        //                 GetUserDetailsApi(id);
-                                        //             }
-                                        //         }
-                                        //     })
-                                        //     .catch((error) => {
-                                        //         console.log("error");
-                                        //     });
+                                        registerApi(values)
+                                            .then((res) => {
+                                                console.log(res)
+                                                if (res.data.status) {
+                                                    let id = res?.data?.data?._id;
+                                                    ShowSnackbar("success", "User Registered Successfully");
+                                                    history.push("/login");
+                                                } else {
+                                                    ShowSnackbar("error", res?.data.message)
+                                                }
+                                            })
+                                            .catch((error) => {
+                                                console.log("error");
+                                            });
                                     }}
                                 >
                                     {({ values, isValid, isSubmitting, handleSubmit }) => (
@@ -168,16 +174,16 @@ const RegistrationPage = () => {
                                             <Grid container spacing={3}>
                                                 <Grid item xs={12} sx={{ marginTop: "3vh" }}>
                                                     <MuiTextField
-                                                        id="name"
-                                                        name="name"
+                                                        id="fullName"
+                                                        name="fullName"
                                                         label="Full Name"
                                                     />
                                                 </Grid>
                                                 <Grid item xs={12} sx={{ marginTop: "3vh" }}>
                                                     <MuiTextField
-                                                        id="number"
+                                                        id="phoneNumber"
                                                         type="number"
-                                                        name="number"
+                                                        name="phoneNumber"
                                                         label="Mobile Number"
                                                     />
                                                 </Grid>
@@ -197,8 +203,8 @@ const RegistrationPage = () => {
                                                 </Grid>
                                                 <Grid item xs={12} sx={{ marginTop: "3vh" }}>
                                                     <MuiTextField
-                                                        id="organization"
-                                                        name="organization"
+                                                        id="organizationName"
+                                                        name="organizationName"
                                                         label="Organization Name"
                                                     />
                                                 </Grid>
