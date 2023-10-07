@@ -7,7 +7,7 @@ let headers = {
 
 // user details api
 export const getUserDetails = async (id) => {
-  return Axios.get(`http://3.83.191.244:5000/api/user/details?_id=${id}`);
+  return Axios.get(`https://bedrock.gullyplay.com/api/user/details?_id=${id}`);
 };
 
 export const updateUserDetails = async (id, payload) => {
@@ -69,8 +69,7 @@ export const getAllDocumentListApi = (
   searchValue
 ) => {
   return axios.get(
-    `/document/getDocs?pageNumber=${pageNumber}&limit=${limit}&userId=${userId}&projectId=${projectId}&fileName=${
-      searchValue || ""
+    `/document/getDocs?pageNumber=${pageNumber}&limit=${limit}&userId=${userId}&projectId=${projectId}&fileName=${searchValue || ""
     }`
   );
 };
@@ -105,11 +104,11 @@ export const getKreoLoginApi = async () => {
 };
 
 export const loginApi = async (data) => {
-  return Axios.post(`http://3.83.191.244:5000/api/user/login`, data);
+  return Axios.post(`https://bedrock.gullyplay.com/api/user/login`, data);
 };
 
 export const registerApi = async (data) => {
-  return Axios.post(`http://3.83.191.244:5000/api/user/register`, data);
+  return Axios.post(`https://bedrock.gullyplay.com/api/user/register`, data);
 };
 
 export const uploadFiletoKero = async (payload) => {
