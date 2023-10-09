@@ -26,6 +26,7 @@ import PicUpload from "../pages/DailyLogs/dropZone";
 import autoMeasure from "../pages/AutoMeasure/autoMeasure";
 import LoginPage from "../pages/Login/Login";
 import RegistrationPage from "../pages/SignUp/SignUp";
+import ContractorRegistrationPage from "../pages/SignUpContractor/SignUpContractor"
 import RenovateAI from "../pages/RenovateAI";
 import MySubProjects from "../pages/MySubProjects";
 import AllProjects from "../pages/AllProjects";
@@ -39,6 +40,7 @@ export const routes = (
     <Route exact path="/" render={() => <Redirect to="/login" />} />
     <PublicRoute exact path="/login" component={LoginPage} />
     <PublicRoute exact path="/signup" component={RegistrationPage} />
+    <PublicRoute exact path="/signupcontractor" component={ContractorRegistrationPage} />
     <PublicRoute exact path="/companyinfo" component={CompanyInfo} />
     <PublicRoute exact path="/forgotpassword" component={ForgotPassword} />
     <PublicRoute exact path="/billing" component={Billing} />
