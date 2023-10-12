@@ -33,6 +33,7 @@ import AllProjects from "../pages/AllProjects";
 import ProjectDetail from "../pages/ProjectDetail";
 import SmartScheduler from "../pages/smartSchedule";
 import MyBids from "../pages/MyBids";
+import Approvals from "../pages/Approvals/Approvals";
 
 
 export const routes = (
@@ -65,6 +66,7 @@ export const routes = (
     <PrivateRoute exact path="/allprojects" component={AllProjects} />
     <PrivateRoute exact path="/projectDetail" component={ProjectDetail} />
     <PrivateRoute exact path="/mybids" component={MyBids} />
+    <PrivateRoute exact path="/approvals" component={Approvals} />
 
 
 

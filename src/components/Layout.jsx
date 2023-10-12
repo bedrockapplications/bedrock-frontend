@@ -49,6 +49,7 @@ import PsychologyIcon from '@mui/icons-material/Psychology';
 import CalculateIcon from '@mui/icons-material/Calculate';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
@@ -193,6 +194,12 @@ if (userRole=== "owner") {
       label: "my_projects",
       link: "/myprojects",
     },
+    {
+      icon: <CheckCircleIcon />,
+      label: "Approvals/Bids",
+      link: "/approvals",
+    },
+    
     {
       icon: <EventAvailableIcon />,
       label: "Smart Scheduler",
