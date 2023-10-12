@@ -67,7 +67,7 @@ const headCells = [
     id: "actions",
     numeric: false,
     disablePadding: false,
-    label: "actions",
+    label: "Actions",
   },
 ];
 
@@ -253,7 +253,7 @@ const ProjectDataTable = (props) => {
               sx={{ marginRight: "10px", fontWeight: 700 }}
               onClick={handleCloseDeleteLog}
             >
-              Cancle
+              Cancel
             </Button>
             <Button
               variant="outlined"

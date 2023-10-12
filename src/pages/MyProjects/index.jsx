@@ -19,6 +19,7 @@ import { styled } from "@mui/material/styles";
 import { useState } from "react";
 import ProjectDataTable from "../MyProjects/ProjectDataTable";
 import { useTranslation } from "react-i18next";
+import UploadForm from "./uploadForm";
 
 
 const useStyle = makeStyles(() => ({
@@ -75,19 +76,17 @@ const MySubProjects = () => {
     const { t } = useTranslation();
 
   const [viewToggle, setViewToggle] = useState(false);
-  const [openDailyLog, setOpenDailyLog] = useState(false);
+  const [openFileModel, setOpenFileModel] = useState(false);
+
+  const handleCloseFileModel = () => {
+      setOpenFileModel(false);
+  };
+
 
   const handleSearch = (value) => {
     console.log("value", value);
   };
 
-  const handleOpenDailyLog = () => {
-    setOpenDailyLog(true);
-  };
-
-  const handleCloseDailyLog = useCallback(() => {
-    setOpenDailyLog(false);
-  }, []);
 
   return (
     <>
@@ -124,9 +123,8 @@ const MySubProjects = () => {
                   <Button
                     startIcon={<AddIcon />}
                     fullWidth
-                    endIcon={<ArrowDropDownIcon />}
                     className={classes.createBtn}
-                    onClick={handleOpenDailyLog}
+                    onClick={() => setOpenFileModel(true)}
                   >
                     New Project
                   </Button>
@@ -143,6 +141,14 @@ const MySubProjects = () => {
             <ProjectDataTable data={data} />
        
         </Box>
+        <UploadForm
+                open={openFileModel}
+                handleClose={handleCloseFileModel}
+            // GetDocumentsLists={GetDocumentsLists}
+            // projectOptions={projectOptions}
+            // categoryType={categoryType}
+            // GetSearchOptions={GetSearchOptions}
+            />
       </Box>
     </>
   );
