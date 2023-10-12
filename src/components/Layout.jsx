@@ -185,14 +185,14 @@ if (userRole=== "owner") {
     { icon: <DashboardIcon />, label: "dashboard", link: "/dashboard" },
     { icon: <DescriptionIcon />, label: "document_manager", link: "/docManager" },
     {
-      icon: <AutoFixHighIcon />,
-      label: "renovateai",
-      link: "/renovateai",
-    },
-    {
       icon: <EngineeringIcon />,
       label: "my_projects",
       link: "/myprojects",
+    },
+    {
+      icon: <AutoFixHighIcon />,
+      label: "renovateai",
+      link: "/renovateai",
     },
     {
       icon: <CheckCircleIcon />,
