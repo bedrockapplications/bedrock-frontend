@@ -111,6 +111,10 @@ export const registerApi = async (data) => {
   return Axios.post(`https://api.bedrockapps.link/api/user/register`, data);
 };
 
+export const ContractorRegisterApi = async (data) => {
+  return Axios.post(`https://api.bedrockapps.link/api/user/register/contractor`, data);
+};
+
 export const uploadFiletoKero = async (payload) => {
   return axios.post(`/external/uploadToKreo`, payload, { headers });
 };
@@ -120,3 +124,6 @@ export const getKreoProjectDetails = async (token, projectId, pageIndex) => {
     `/external/getProjectDetails?kreo_auth_access_token=${token}&projectId=${projectId}&pageIndex=${pageIndex}`
   );
 };
+
+// project API's
+

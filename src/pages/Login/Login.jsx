@@ -119,6 +119,10 @@ const LoginPage = () => {
     history.push("/signup");
   };
 
+  const handleContactorSignup = () => {
+    history.push("/signupcontractor");
+  };
+
 
 
   return (
@@ -224,6 +228,17 @@ const LoginPage = () => {
               </Grid>
             </Grid>
             <Grid container spacing={3}>
+              <Grid item xs={12} sx={{ textAlign: "center" }}>
+                <Typography>
+                  New Contractor Registration?{" "}
+                  <span
+                    style={{ color: "#FFC100", cursor: "pointer" }}
+                    onClick={handleContactorSignup}
+                  >
+                    Sign Up
+                  </span>
+                </Typography>
+              </Grid>
               <Grid item xs={12} sx={{ textAlign: "center" }}>
                 <Typography>
                   New User Registration?{" "}
