@@ -1,4 +1,4 @@
-import React, { useState, memo, useContext } from "react";
+import React, { useState, memo, useContext, useEffect } from "react";
 import { makeStyles } from "@mui/styles";
 import {
     Grid,
@@ -94,6 +94,8 @@ const AllProjects = () => {
     const handleCloseFileModel = () => {
         setOpenFileModel(false);
     };
+
+  
     return (
         <>
             <Grid container spacing={2}>

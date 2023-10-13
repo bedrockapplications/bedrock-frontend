@@ -25,8 +25,8 @@ import PremiumDailog from "../../components/premiumDailog";
 import EmptyTableBody from "../../components/EmptyTableBody";
 import { Button } from "@mui/material";
 import { styled } from '@mui/material/styles';
-import { purple,grey } from '@mui/material/colors';
-
+import { purple, grey } from '@mui/material/colors';
+import { getAllProjects } from '../../services/request'
 
 const useStyle = makeStyles(() => ({
     headerText: {
@@ -78,42 +78,34 @@ const headCells = [
 const ColorButton = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(grey[900]),
     padding: '6px 12px',
-    textTransform:"initial",
+    textTransform: "initial",
     backgroundColor: grey[900],
     '&:hover': {
-      backgroundColor: grey[900],
+        backgroundColor: grey[900],
     },
-  }));
+}));
 
 const AllProjectsTable = (props) => {
     const classes = useStyle();
 
-    const { data, GetDocumentsLists, projectOptions, totalCount } = props;
+    const { GetDocumentsLists } = props;
     const {
         page,
         setPage,
         rowsPerPage,
         setRowsPerPage,
         selectedProjected,
-        setSelectedProjected,
         search,
-        setSearch,
         popen,
-        setPopen,
     } = useContext(GlobalState);
 
-    const [deleteOpen, setDeleteOpen] = useState(false);
-    const [deleteItem, setDeleteItem] = useState({});
-    const [editOpen, setEditOpen] = useState(false);
-    const [editData, setEditData] = useState({});
-    const [dense, setDense] = React.useState(false);
     const [order, setOrder] = React.useState("asc");
     const [orderBy, setOrderBy] = React.useState("");
-    const [openSubmittals, setOpenSubmittals] = useState(false);
-    const [submittalsData, setSubmittalsData] = useState(null);
+    const [allProjects, setAllProjects] = useState([])
 
     let mysubprojects = [
         {
+            _id: 1,
             project_name: "Project 1",
             type: "Renovate Ai",
             location: "Tampa, Fi",
@@ -121,6 +113,7 @@ const AllProjectsTable = (props) => {
             status: "Initial Estimation",
         },
         {
+            _id: 2,
             project_name: "Project 1",
             type: "Renovate Ai",
             location: "Tampa, Fi",
@@ -129,9 +122,20 @@ const AllProjectsTable = (props) => {
         }
     ]
 
-    // useEffect(() =>{
-    //   console.log(popen, "kkkkk")
-    // }, [])
+    useEffect(() => {
+        const allProjects = async () => {
+            const allProjectsData = await getAllProjects();
+            // console.log(allProjectsData.data.data.length)
+            if (allProjectsData.status === 200) {
+                if (allProjectsData.data.data.length > 0) {
+                    setAllProjects(allProjectsData.data.data)
+                } else {
+                    setAllProjects([])
+                }
+            }
+        };
+        allProjects();
+    }, []);
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === "asc";
@@ -139,43 +143,6 @@ const AllProjectsTable = (props) => {
         setOrderBy(property);
     };
 
-    const handleEditOpen = (item) => {
-        const data = {
-            projectId: item?.projectId?._id,
-            categoryType: item?.categoryType,
-            fileName: item?.fileName,
-            id: item._id,
-        };
-        setEditData(data);
-        setEditOpen(true);
-    };
-
-    const handleEditClose = () => {
-        setEditData({});
-        setEditOpen(false);
-    };
-
-    const handleOpenDelete = (item) => {
-        setDeleteItem(item._id);
-        setDeleteOpen(true);
-    };
-
-    const handleCloseDelete = () => {
-        setDeleteOpen(false);
-    };
-
-    const handleDeleteDocument = () => {
-        deleteDocumentApi(deleteItem)
-            .then((res) => {
-                if (res.status === 200) {
-                    GetDocumentsLists();
-                    setDeleteOpen(false);
-                }
-            })
-            .catch((error) => {
-                console.log("error", error);
-            });
-    };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -186,16 +153,6 @@ const AllProjectsTable = (props) => {
         setRowsPerPage(parseInt(event.target.value));
         setPage(0);
         GetDocumentsLists(0, event.target.value, selectedProjected, search);
-    };
-
-    const handleCloseSubmittals = () => {
-        setOpenSubmittals(false);
-    };
-
-    const handleOpenSubmittals = (item) => {
-        setSubmittalsData(item);
-        setOpenSubmittals(true);
-        setPopen(true);
     };
 
     return (
@@ -217,29 +174,29 @@ const AllProjectsTable = (props) => {
                             rowCount={mysubprojects.length}
                         //   rowCount={data.length}
                         />
-                        {mysubprojects?.length > 0 ? (
+                        {allProjects.length > 0 ? (
                             <TableBody>
-                                {stableSort(mysubprojects, getComparator(order, orderBy))?.map(
+                                {stableSort(allProjects, getComparator(order, orderBy))?.map(
                                     (item, i) => (
                                         <TableRow key={item._id}>
                                             <TableCell align="right">
-                                                {item.project_name}
+                                                {item.projectName}
                                             </TableCell>
                                             <TableCell align="right">
-                                                {item?.type}
+                                                {item?.projectType}
                                             </TableCell>
                                             <TableCell align="right">
-                                                {item.location}
+                                                {item.state} , {item.country}
                                             </TableCell>
                                             <TableCell align="right">
-                                                {item.project_manager}
+                                                {item.clientPhNumber}
                                             </TableCell>
                                             <TableCell align="right">
                                                 {/* {moment(item?.updatedAt).format("DD-MM-YYYY")} */}
                                                 {item.status}
                                             </TableCell>
                                             <TableCell align="right">
-                                                <ColorButton onClick={()=>window.open("/projectDetail")}>View Details</ColorButton>
+                                                <ColorButton onClick={() => window.open("/projectDetail")}>View Details</ColorButton>
                                                 {/* <IconButton
                                                     size="small"
                                                     color="primary"

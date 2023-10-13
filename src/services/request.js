@@ -127,3 +127,6 @@ export const getKreoProjectDetails = async (token, projectId, pageIndex) => {
 
 // project API's
 
+export const getAllProjects = async () => {
+  return Axios.get(`https://api.bedrockapps.link/api/project/get`);
+};
