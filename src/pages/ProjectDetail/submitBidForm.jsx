@@ -1,4 +1,4 @@
-import React, { useContext,useState } from "react";
+import React, { useContext, useState } from "react";
 import MuiDialog from "../../components/MuiDialog";
 import {
     Grid,
@@ -70,6 +70,10 @@ const useStyle = makeStyles(() => ({
     },
     activeBtn: {
         background: "Black"
+    },
+    area: {
+        borderRadius: "10px",
+        border: "1px solid #ACAAAA"
     }
 }));
 
@@ -136,12 +140,56 @@ const SubmitBidForm = (props) => {
                     <div className={classes.btnGroups}>
                         {detailArray?.map((item, i) => (
                             <>
-                                <div onClick={()=>setSelectedItem(item)}>
+                                <div onClick={() => setSelectedItem(item)}>
                                     <p style={{ background: item === selectedItem ? "black" : "#7A7A7A" }} className={classes.detailButton}>{item}</p>
                                 </div>
                                 &nbsp;&nbsp;
                             </>
                         ))}
+                    </div>
+                    <br />
+                    <textarea className={classes.area} rows="7" cols="70"></textarea>
+                    <br />
+                    <p className={classes.formTitle}>Proposed Date for Whole Project</p>
+                    <div className={classes.datesPara}>
+                        <Formik
+                            initialValues={{ projectId: "", categoryType: "", docs: null, startDate: null, endDate: null }}
+                            enableReinitialize
+                            validationSchema={validationSchema}
+                        // onSubmit={(values, { setSubmitting, resetForm }) => {
+                        //   handleSave(values, setSubmitting, resetForm);
+                        // }}
+                        >
+                            {({ values, isSubmitting, isValid, setFieldValue }) => (
+                                <Form>
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={5}>
+                                            <MuiDatePicker
+                                                name="startDate"
+                                                id="startDate"
+                                                label={"Proposed Start Date"}
+                                                disablePast
+                                                value={values?.startDate}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={1}>
+                                            <p>-</p>
+                                        </Grid>
+                                        <Grid item xs={5}>
+                                            <MuiDatePicker
+                                                name="endDate"
+                                                id="endDate"
+                                                label="Proposed End Date"
+                                                disablePast
+                                                disabled={values?.startDate === null}
+                                                minDate={values?.startDate}
+                                                value={values?.endDate}
+                                            />
+                                        </Grid>
+                                    </Grid>
+                                </Form>
+                            )}
+                        </Formik>
                     </div>
                 </div>
             </MuiDialog>

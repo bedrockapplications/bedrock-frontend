@@ -347,6 +347,7 @@ const MySubProjects = () => {
               GetDocumentsLists={GetDocumentsLists}
               projectOptions={projectOptions}
               totalCount={totalCount}
+              status="completed"
             />
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
@@ -355,6 +356,7 @@ const MySubProjects = () => {
               GetDocumentsLists={GetDocumentsLists}
               projectOptions={projectOptions}
               totalCount={photosCount}
+              status="active"
             />
           </TabPanel>
           <TabPanel value={tabValue} index={2}>
@@ -363,6 +365,7 @@ const MySubProjects = () => {
               GetDocumentsLists={GetDocumentsLists}
               projectOptions={projectOptions}
               totalCount={submittalsCount}
+              status="pending"
             />
           </TabPanel>
         </Grid>

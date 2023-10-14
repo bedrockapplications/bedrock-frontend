@@ -7,7 +7,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import DeleteIcon from "@mui/icons-material/Delete";
 import moment from "moment";
 // import DeleteDocument from "./DeleteDocument";
-import { deleteDocumentApi } from "../../services/request";
+import { deleteDocumentApi, getMyProjects } from "../../services/request";
 // import EditUploadFiles from "./EditUploadeFiles";
 import { GlobalState } from "../../Context/Context";
 import Table from "@mui/material/Table";
@@ -75,7 +75,7 @@ const headCells = [
 const OldProjectsTable = (props) => {
     const classes = useStyle();
 
-    const { data, GetDocumentsLists, projectOptions, totalCount } = props;
+    const { data, GetDocumentsLists, projectOptions, totalCount, status } = props;
     const {
         page,
         setPage,
@@ -89,6 +89,8 @@ const OldProjectsTable = (props) => {
         setPopen,
     } = useContext(GlobalState);
 
+    // console.log(status)
+
     const [deleteOpen, setDeleteOpen] = useState(false);
     const [deleteItem, setDeleteItem] = useState({});
     const [editOpen, setEditOpen] = useState(false);
@@ -98,6 +100,7 @@ const OldProjectsTable = (props) => {
     const [orderBy, setOrderBy] = React.useState("");
     const [openSubmittals, setOpenSubmittals] = useState(false);
     const [submittalsData, setSubmittalsData] = useState(null);
+    const [myProjectsData, setMyProjectsData] = useState([])
 
     let mysubprojects = [
         {
@@ -116,9 +119,20 @@ const OldProjectsTable = (props) => {
         }
     ]
 
-    // useEffect(() =>{
-    //   console.log(popen, "kkkkk")
-    // }, [])
+    useEffect(() => {
+        const allProjects = async () => {
+            const allProjectsData = await getMyProjects(status);
+            console.log(allProjectsData.data.data)
+            if (allProjectsData.status === 200) {
+                if (allProjectsData.data.data.length > 0) {
+                    setMyProjectsData(allProjectsData.data.data)
+                } else {
+                    setMyProjectsData([])
+                }
+            }
+        };
+        allProjects();
+    }, [])
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === "asc";
@@ -137,32 +151,32 @@ const OldProjectsTable = (props) => {
         setEditOpen(true);
     };
 
-    const handleEditClose = () => {
-        setEditData({});
-        setEditOpen(false);
-    };
+    // const handleEditClose = () => {
+    //     setEditData({});
+    //     setEditOpen(false);
+    // };
 
     const handleOpenDelete = (item) => {
         setDeleteItem(item._id);
         setDeleteOpen(true);
     };
 
-    const handleCloseDelete = () => {
-        setDeleteOpen(false);
-    };
+    // const handleCloseDelete = () => {
+    //     setDeleteOpen(false);
+    // };
 
-    const handleDeleteDocument = () => {
-        deleteDocumentApi(deleteItem)
-            .then((res) => {
-                if (res.status === 200) {
-                    GetDocumentsLists();
-                    setDeleteOpen(false);
-                }
-            })
-            .catch((error) => {
-                console.log("error", error);
-            });
-    };
+    // const handleDeleteDocument = () => {
+    //     deleteDocumentApi(deleteItem)
+    //         .then((res) => {
+    //             if (res.status === 200) {
+    //                 GetDocumentsLists();
+    //                 setDeleteOpen(false);
+    //             }
+    //         })
+    //         .catch((error) => {
+    //             console.log("error", error);
+    //         });
+    // };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -175,9 +189,9 @@ const OldProjectsTable = (props) => {
         GetDocumentsLists(0, event.target.value, selectedProjected, search);
     };
 
-    const handleCloseSubmittals = () => {
-        setOpenSubmittals(false);
-    };
+    // const handleCloseSubmittals = () => {
+    //     setOpenSubmittals(false);
+    // };
 
     const handleOpenSubmittals = (item) => {
         setSubmittalsData(item);

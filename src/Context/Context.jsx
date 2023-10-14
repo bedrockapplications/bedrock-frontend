@@ -24,6 +24,7 @@ const ContextProvider = (props) => {
   const [expanded, setExpanded] = useState(false);
   const [profKey, setProfKey] = useState(true);
   const [userRole, setUserRole] = useState("")
+  const [token, setToken] = useState(localStorage.getItem("token") || "")
 
   return (
     <GlobalState.Provider
@@ -54,11 +55,12 @@ const ContextProvider = (props) => {
         setTaskList,
         taskDetails,
         setTaskDetails,
-        expanded, 
+        expanded,
         setExpanded,
         profKey, setProfKey,
         userRole,
-        setUserRole
+        setUserRole,
+        token, setToken
       }}
     >
       {props.children}
