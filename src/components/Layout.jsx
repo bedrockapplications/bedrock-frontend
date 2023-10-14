@@ -53,7 +53,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
-// import Dashboard from "../pages/Dashboard";\
+// import Dashboard from "../pages/Dashboard";
 
 import { io } from "socket.io-client";
 
@@ -339,9 +339,9 @@ if (localStorage.getItem("role") && localStorage.getItem("role") === "owner") {
       });
   };
 
-  useEffect(() => {
-    // GetDateAndTime();
-  }, []);
+  // useEffect(() => {
+  //   // GetDateAndTime();
+  // }, []);
 
   // useEffect(() => {
   //   const MINUTE_MS = 60000;
