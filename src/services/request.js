@@ -130,3 +130,13 @@ export const getKreoProjectDetails = async (token, projectId, pageIndex) => {
 export const getAllProjects = async () => {
   return Axios.get(`https://api.bedrockapps.link/api/project/get`);
 };
+
+export const getMyProjects = async (status) => {
+  Axios
+    .get(`https://api.bedrockapps.link/api/project/contractor/get-projects?status=${status}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }
+    )
+}

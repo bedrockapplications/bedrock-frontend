@@ -74,7 +74,7 @@ const validationSchema = Yup.object().shape({
 
 const LoginPage = () => {
 
-  const { userRole, setUserRole } = useContext(GlobalState);
+  const { userRole, setUserRole, token, setToken } = useContext(GlobalState);
   const classes = useStyle();
   const history = useHistory();
 
@@ -171,6 +171,8 @@ const LoginPage = () => {
                         // console.log(res , "res-login")
                         if (res.data.status) {
                           let id = res?.data?.data?.user_id;
+                          localStorage.setItem("token", res?.data?.data?.token)
+                          setToken(res?.data?.data?.token)
                           if (id) {
                             GetUserDetailsApi(id);
                           }
