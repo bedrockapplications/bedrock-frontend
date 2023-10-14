@@ -35,6 +35,7 @@
     "react-datepicker": "^4.8.0",
     "react-dom": "^18.1.0",
     "react-drag-drop-files": "^2.3.7",
+    "react-dropdown-tree-select": "^2.8.0",
     "react-dropzone": "^14.2.3",
     "react-i18next": "^11.18.6",
     "react-input-emoji": "^4.3.0",

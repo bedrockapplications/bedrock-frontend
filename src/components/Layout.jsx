@@ -168,6 +168,7 @@ const ITEM_HEIGHT = 48;
 const socket = io.connect('https://nodejs-apis.bedrockapps.link');
 
 export default function MiniDrawer(props) {
+  
   const { userRole, setUserRole } = useContext(GlobalState);
   let history = useHistory();
   const { i18n, t } = useTranslation();
@@ -180,7 +181,7 @@ export default function MiniDrawer(props) {
   const [notification, setNotification] = React.useState(null);
 
   let sideLinks
-if (userRole=== "owner") {
+if (localStorage.getItem("role") && localStorage.getItem("role") === "owner") {
   sideLinks = [
     { icon: <DashboardIcon />, label: "dashboard", link: "/dashboard" },
     { icon: <DescriptionIcon />, label: "document_manager", link: "/docManager" },

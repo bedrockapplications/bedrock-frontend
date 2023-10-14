@@ -25,6 +25,8 @@ import { useState } from "react";
 import MuiTextArea from "../../components/Formik/MuiTextArea";
 import { makeStyles } from "@mui/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
+import DropdownTreeSelect from "react-dropdown-tree-select";
+import data from "./dropData.json";
 
 const useStyle = makeStyles(() => ({
   Addresslabel: {
@@ -67,6 +69,20 @@ const validationSchema = Yup.object().shape({
 
 const categoryList = ["DesignDocuments", "Photos", "Submittals"];
 
+const onChange = (currentNode, selectedNodes) => {
+  console.log("path::", currentNode.path);
+};
+
+const assignObjectPaths = (obj, stack) => {
+  Object.keys(obj).forEach(k => {
+    const node = obj[k];
+    if (typeof node === "object") {
+      node.path = stack ? `${stack}.${k}` : k;
+      assignObjectPaths(node, node.path);
+    }
+  });
+};
+
 const UploadForm = (props) => {
   const classes = useStyle();
   const {
@@ -81,6 +97,8 @@ const UploadForm = (props) => {
   const [step, setStep] = useState(0);
 
   const userId = localStorage.getItem("userId");
+
+  assignObjectPaths(data);
 
   const handleSave = (data, setSubmitting, resetForm) => {
     setIsLoading(true);
@@ -219,12 +237,13 @@ const UploadForm = (props) => {
                         />
                       </Grid>
                       <Grid item xs={12}>
-                        <MuiSelectField
+                        {/* <MuiSelectField
                           name="projectType"
                           id="projectType"
                           label="Category Type"
                         // options={projectOptions}
-                        />
+                        /> */}
+                        <DropdownTreeSelect data={data} onChange={onChange} className="mdl-demo" />
                       </Grid>
                       <Grid item xs={6}>
                         <MuiDatePicker
