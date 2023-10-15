@@ -1,6 +1,7 @@
-import React, { memo, useState } from "react";
+import React, { memo, useState, useContext } from "react";
 import moment from "moment";
 import { Button, IconButton, Typography } from "@mui/material";
+import { GlobalState } from "../../Context/Context";
 
 import Paper from "@mui/material/Paper";
 import Table from "@mui/material/Table";
@@ -30,14 +31,16 @@ import csvicon from "../../Images/csvicon.svg";
 import pdficon from "../../Images/pdficon.svg";
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import vendor from "../../Images/vendor.png";
+import { deleteProjectRow, getManagerProjects } from "../../services/request";
+import { ShowSnackbar } from "../../components/Snackbar";
 
 
 const headCells = [
   {
-    id: "client",
+    id: "clientName",
     numeric: false,
     disablePadding: false,
-    label: "Client",
+    label: "Vendor Name",
   },
   {
     id: "projectName",
@@ -46,10 +49,10 @@ const headCells = [
     label: "project Name",
   },
   {
-    id: "category",
+    id: "projectType",
     numeric: false,
     disablePadding: false,
-    label: "Category",
+    label: "Project Type",
   },
   {
     id: "address",
@@ -58,10 +61,10 @@ const headCells = [
     label: "Address",
   },
   {
-    id: "vendorContacts",
+    id: "status",
     numeric: false,
     disablePadding: false,
-    label: "Vendor Contacts",
+    label: "status",
   },
   {
     id: "actions",
@@ -72,12 +75,15 @@ const headCells = [
 ];
 
 const ProjectDataTable = (props) => {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+  const { setOpenMode, openFileModel, setOpenFileModel,  page,
+    setPage,
+    rowsPerPage,
+    setRowsPerPage, setStep, setRowdata} = useContext(GlobalState);
   const { data, totalCount } = props;
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");
   const [openDeleteModel, setOpenDeleteModel] = useState(false);
+  const [deleteItem, setDeleteItem] = useState({})
   const [openDownloadModel, setOpenDownloadModel] = useState(false);
 
   const handleRequestSort = (event, property) => {
@@ -87,25 +93,47 @@ const ProjectDataTable = (props) => {
   };
 
   
-  const handleChangePage = () => {
-    console.log("test");
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+};
+
+const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value));
+    setPage(0);
+};
+
+  const handleDeleteLog = () => {
+    deleteProjectRow(deleteItem["_id"]).then(res => {
+      if(res.status){
+        setDeleteItem({})
+        setOpenDeleteModel(false);
+        handleGetAllProject();
+        ShowSnackbar("success", "Record Deleted Successfully!");
+      }
+    }).catch(err => {
+      console.log(err)
+    })
+    
   };
 
-  const handleChangeRowsPerPage = () => {
-    console.log("test1");
-  };
-
-  const handleDeleteLog = (deleteItem) => {
-    console.log("deleteItem", deleteItem);
-    setOpenDeleteModel(true);
-  };
+  const handleGetAllProject = () => {
+    setIsLoading(true)
+    getManagerProjects().then(res => {
+      if(res.data.status){
+        setProjectTableData(res.data.data)
+        setIsLoading(false)
+      }
+    }).catch(error => {
+      setIsLoading(false)
+    })
+  }
 
   const handleCloseDeleteLog = () => {
+    setDeleteItem({})
     setOpenDeleteModel(false);
   };
 
   const handleOpenDownload = (deleteItem) => {
-    console.log("deleteItem", deleteItem);
     setOpenDownloadModel(true);
   };
 
@@ -113,22 +141,6 @@ const ProjectDataTable = (props) => {
     setOpenDownloadModel(false);
   };
   
-  let projectdata = [
-    {
-        client: "Jim Wills",
-        projectName: "Project 1",
-        category: "Renovate AI",
-        address: "North Street,Tampa, Fl",
-        vendorContacts: ["k"],
-    },
-    {
-        client: "Jim Wills",
-        projectName: "SR Building",
-        category: "Renovate AI",
-        address: "North Street,Tampa, Fl",
-        vendorContacts: ["e"],
-    }
-]
 
   return (
     <>
@@ -155,9 +167,9 @@ const ProjectDataTable = (props) => {
                 {stableSort(data, getComparator(order, orderBy))?.map(
                   (item, i) => (
                     <TableRow key={i}>
-                      <TableCell >{item?.client}</TableCell>
+                      <TableCell >{item?.clientName !== undefined ? item?.clientName : "..."}</TableCell>
                       <TableCell >{item?.projectName}</TableCell>
-                      <TableCell >{item?.category}</TableCell>
+                      <TableCell >{item?.projectType}</TableCell>
                       <TableCell >{item?.address}</TableCell>
                       <TableCell >
                         {/* <ol>
@@ -165,33 +177,47 @@ const ProjectDataTable = (props) => {
                             <li key={subItem + i}>{subItem}</li>
                           ))}
                         </ol> */}
-                        <IconButton
+                        {/* <IconButton
                           size="small"
                           color="primary"
                           // onClick={() => handleOpenDownload(item)}
                         >
                           <img src={vendor} alt="" style={{width:"80px", height:"30px"}} />
-                        </IconButton>
+                        </IconButton> */}
+                        {item.status}
                       </TableCell>
                       <TableCell>
                       <IconButton
                           size="small"
                           color="primary"
-                          // onClick={() => handleOpenDownload(item)}
+                          onClick={() => {
+                            setRowdata(item)
+                            setStep(0)
+                            setOpenMode("View")
+                            setOpenFileModel(true)
+                          }}
                         >
                           <RemoveRedEyeIcon fontSize="small" />
                         </IconButton>
-                        <IconButton size="small" color="primary">
+                        <IconButton size="small" color="primary" onClick={() => {
+                          setRowdata(item)
+                          setStep(0)
+                          setOpenMode("Edit")
+                          setOpenFileModel(true)
+                          }}>
                           <EditIcon fontSize="small" />
                         </IconButton>
                         
-                        <IconButton size="small" color="primary">
+                        <IconButton size="small" color="primary" disabled>
                           <ShareIcon fontSize="small" />
                         </IconButton>
                         <IconButton
                           size="small"
                           color="primary"
-                          // onClick={() => handleDeleteLog(item)}
+                          onClick={() => {
+                            setOpenDeleteModel(true)
+                            setDeleteItem(item)
+                          }}
                         >
                           <DeleteIcon fontSize="small" />
                         </IconButton>
@@ -207,9 +233,9 @@ const ProjectDataTable = (props) => {
           <TablePagination
             rowsPerPageOptions={[10, 25, 50, 100]}
             component="div"
-            count={100}
-            rowsPerPage={10}
-            page={0}
+            count={ProjectDataTable.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
@@ -242,7 +268,7 @@ const ProjectDataTable = (props) => {
               color: "#3A3A3A",
             }}
           >
-            Are You Sure You Want To Delete Selected Records ?
+            Are You Sure, You Want To Delete Selected Record ?
           </Typography>
 
           <Box sx={{ marginBottom: "2rem" }}>
@@ -260,7 +286,7 @@ const ProjectDataTable = (props) => {
               color="error"
               size="small"
               sx={{ marginLeft: "10px", fontWeight: 700 }}
-              onClick={handleCloseDeleteLog}
+              onClick={handleDeleteLog}
             >
               Delete
             </Button>
@@ -268,7 +294,7 @@ const ProjectDataTable = (props) => {
         </DialogContent>
       </MuiDialog>
 
-      <MuiDialog
+      {/* <MuiDialog
         open={openDownloadModel}
         handleClose={handleCloseDownload}
         id={"downloadLog"}
@@ -321,7 +347,7 @@ const ProjectDataTable = (props) => {
             </Button>
           </Box>
         </DialogContent>
-      </MuiDialog>
+      </MuiDialog> */}
     </>
   );
 };

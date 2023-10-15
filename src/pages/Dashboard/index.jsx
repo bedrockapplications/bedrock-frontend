@@ -303,20 +303,23 @@ const Dashboard = () => {
     setOpenUserForm(false);
   }, []);
 
+  //temporary commented
+
   const getAllTasksList = useCallback(() => {
-    if (userId) {
-      getMeetingsList(userId, moment(new Date()).format("YYYY-MM-DD"))
-        .then((res) => {
-          if (res.status === 200) {
-            setDetailsList([...res.data]);
-            setIsLoading(false);
-          }
-        })
-        .catch((error) => {
-          console.log("error", error);
-          setIsLoading(false);
-        });
-    }
+    console.log("test")
+    // if (userId) {
+    //   getMeetingsList(userId, moment(new Date()).format("YYYY-MM-DD"))
+    //     .then((res) => {
+    //       if (res.status === 200) {
+    //         setDetailsList([...res.data]);
+    //         setIsLoading(false);
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.log("error", error);
+    //       setIsLoading(false);
+    //     });
+    // }
   }, []);
 
   const getAllContactsList = useCallback(() => {
@@ -342,7 +345,7 @@ const Dashboard = () => {
   }, []);
 
   useEffect(() => {
-    setIsLoading(true);
+    // setIsLoading(true);
     getAllTasksList();
     getAllContactsList();
   }, []);

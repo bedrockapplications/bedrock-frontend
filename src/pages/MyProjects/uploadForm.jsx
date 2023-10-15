@@ -12,7 +12,7 @@ import {
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
 import MuiSelectField from "../../components/Formik/MuiSelectField";
-import FileUpload from "../../components/docUpload";
+import FileUpload from "./docUpload";
 import { uploadDocumentApi } from "../../services/request";
 import { GlobalState } from "../../Context/Context";
 import { ShowSnackbar } from "../../components/Snackbar";
@@ -27,6 +27,9 @@ import { makeStyles } from "@mui/styles";
 import DeleteIcon from "@mui/icons-material/Delete";
 import DropdownTreeSelect from "react-dropdown-tree-select";
 import data from "./dropData.json";
+import { createNewProjectApi } from "../../services/request";
+import { getManagerProjects } from "../../services/request";
+import { useEffect } from "react";
 
 const useStyle = makeStyles(() => ({
   Addresslabel: {
@@ -49,11 +52,10 @@ const useStyle = makeStyles(() => ({
     margin:"auto",
   },
   imgName:{
-    marginTop:"20px",
-    marginRight:"2%",
+    margin:"20px 10px 0px 10px",
     display:"flex",
     justifyContent:"space-between",
-    width: "30%",
+    width: "44%",
     whiteSpace: "nowrap",
     overflow: "hidden",
     textOverflow: "ellipsis",
@@ -63,14 +65,11 @@ const useStyle = makeStyles(() => ({
   },
 }));
 
-const validationSchema = Yup.object().shape({
-  projectId: Yup.string().required().nullable(),
-});
-
 const categoryList = ["DesignDocuments", "Photos", "Submittals"];
+const selectedNodesMain = []
 
 const onChange = (currentNode, selectedNodes) => {
-  console.log("path::", currentNode.path);
+  selectedNodesMain = selectedNodes
 };
 
 const assignObjectPaths = (obj, stack) => {
@@ -93,8 +92,9 @@ const UploadForm = (props) => {
     categoryType,
     GetSearchOptions,
   } = props;
-  const { page, rowsPerPage, setIsLoading } = useContext(GlobalState);
-  const [step, setStep] = useState(0);
+  const { openMode, setIsLoading, setProjectTableData, step, setStep, rowData } = useContext(GlobalState);
+
+  const [formSubmitted, setFormSubmitted] = useState(false)
 
   const userId = localStorage.getItem("userId");
 
@@ -113,12 +113,11 @@ const UploadForm = (props) => {
     uploadDocumentApi(formData)
       .then((res) => {
         if (res.status === 200) {
-          GetSearchOptions(data?.categoryType);
-          GetDocumentsLists(page, rowsPerPage);
           setSubmitting(false);
+          handleGetAllProject();
           resetForm();
           handleClose();
-          setIsLoading(false);
+          setOpenMode("")
           ShowSnackbar("success", res?.data);
         }
       })
@@ -129,14 +128,27 @@ const UploadForm = (props) => {
       });
   };
 
+  const handleGetAllProject = () => {
+    setIsLoading(true)
+    getManagerProjects().then(res => {
+      if(res.data.status){
+        setProjectTableData(res.data.data)
+        setIsLoading(false)
+      }
+    }).catch(error => {
+      setIsLoading(false)
+    })
+  }
+
   return (
     <>
       <MuiDialog
         open={open}
         handleClose={handleClose}
         id={"newFile"}
-        title="Create Project"
+        title={openMode=== "" ? "Create Project" : openMode=== "Edit" ? "Edit Project" : "View Project" }
         maxWidth="xs"
+        // sx={{height:"84vh", position:"relative"}}
       >
         <Divider />
         <DialogContent>
@@ -144,18 +156,28 @@ const UploadForm = (props) => {
             <Grid item xs={12}> */}
           <Formik
             initialValues={{
-              projectId: "",
-              categoryType: "",
-              docs: null,
-              startDate: null,
-              endDate: null,
-              docuploads: null,
+              clientName: openMode === "" ? "" : rowData.clientName,
+              clientPhNumber:openMode === "" ? "" : rowData.clientPhNumber,
+              projectName: openMode === "" ? "" : rowData.projectName,
+              projectDescription:openMode === "" ? "" : rowData.projectDescription,
+              address:openMode === "" ? "" : rowData.address,
+              city:openMode === "" ? "" : rowData.city,
+              state:openMode === "" ? "" : rowData.state,
+              country:openMode === "" ? "" : rowData.country,
+              zipcode:openMode === "" ? "" : rowData.zipcode,
+              projectType:openMode === "" ? "" : rowData.projectType,
+              startDate: openMode === "" ? null: new Date(rowData.startDate),
+              endDate: openMode === "" ? null: new Date(rowData.endDate),
+              moveDate:openMode === "" ? null: new Date(rowData.moveDate),
+              documents: null,
             }}
             enableReinitialize
-            validationSchema={validationSchema}
-            // onSubmit={(values, { setSubmitting, resetForm }) => {
-            //   handleSave(values, setSubmitting, resetForm);
-            // }}
+            onSubmit={(values, { setSubmitting, resetForm }) => {
+              if(formSubmitted){
+                console.log(values)
+                handleSave(values, setSubmitting, resetForm);
+              }
+            }}
           >
             {({ values, isSubmitting, isValid, setFieldValue }) => (
               <Form>
@@ -164,9 +186,17 @@ const UploadForm = (props) => {
                     <>
                       <Grid item xs={12}>
                         <MuiTextField
-                          name="clientId"
-                          id="clientId"
-                          label="Select Client"
+                          name="clientName"
+                          id="clientName"
+                          label="Vendor Name"
+                          // options={projectOptions}
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <MuiTextField
+                          name="clientPhNumber"
+                          id="clientPhNumber"
+                          label="Vendor Phone Number"
                           // options={projectOptions}
                         />
                       </Grid>
@@ -187,8 +217,8 @@ const UploadForm = (props) => {
                       </Grid>
                       <Grid item xs={12}>
                         <MuiTextField
-                          name="Address"
-                          id="Address"
+                          name="address"
+                          id="address"
                           label="Address"
                         />
                       </Grid>
@@ -197,9 +227,9 @@ const UploadForm = (props) => {
                       </Grid>
                       <Grid item xs={6}>
                         <MuiTextField
-                          name="province"
-                          id="province"
-                          label="Province/Sate"
+                          name="state"
+                          id="state"
+                          label="Province/State"
                         />
                       </Grid>
                       <Grid item xs={6}>
@@ -211,8 +241,8 @@ const UploadForm = (props) => {
                       </Grid>
                       <Grid item xs={6}>
                         <MuiTextField
-                          name="zipCode"
-                          id="zipCode"
+                          name="zipcode"
+                          id="zipcode"
                           label="ZIP Code"
                         />
                       </Grid>
@@ -233,22 +263,16 @@ const UploadForm = (props) => {
                           name="projectType"
                           id="projectType"
                           label="Project Type"
-                        // options={projectOptions}
+                        options={["RenovateAI", "DesignAI", "EstimateAI"]}
                         />
                       </Grid>
                       <Grid item xs={12}>
-                        {/* <MuiSelectField
-                          name="projectType"
-                          id="projectType"
-                          label="Category Type"
-                        // options={projectOptions}
-                        /> */}
                         <DropdownTreeSelect data={data} onChange={onChange} className="mdl-demo" />
                       </Grid>
                       <Grid item xs={6}>
                         <MuiDatePicker
-                          name="projectStartDate"
-                          id="projectStartDate"
+                          name="startDate"
+                          id="startDate"
                           label={"Project Start Date"}
                           // disablePast
                           value={values?.startDate}
@@ -256,26 +280,26 @@ const UploadForm = (props) => {
                       </Grid>
                       <Grid item xs={6}>
                         <MuiDatePicker
-                          name="proposedListDate"
-                          id="proposedListDate"
+                          name="endDate"
+                          id="endDate"
                           label={"Proposed List Date"}
                           // disablePast
-                          value={values?.startDate}
+                          value={values?.endDate}
                         />
                       </Grid>
                       <Grid item xs={12}>
                         <MuiDatePicker
-                          name="anticipatedMoveInDate"
-                          id="anticipatedMoveInDate"
+                          name="moveDate"
+                          id="moveDate"
                           label={"Anticipated Move-In Date"}
                           // disablePast
-                          value={values?.startDate}
+                          value={values?.moveDate}
                         />
                       </Grid>
-                      <Grid item xs={12}>
+                      <Grid item xs={12} style={{display: openMode !== "" ? "none" : ""}}>
                         <FileUpload
-                          id="docuploads"
-                          name="docuploads"
+                          id="documents"
+                          name="documents"
                           maxFiles={5}
                           multiple={true}
                         />
@@ -287,21 +311,23 @@ const UploadForm = (props) => {
                           Uploaded Files:
                         </Typography>
                       </Grid>
+                      <Grid item xs={12}>
                       <Box className={classes.imgTexts}>
-                          {values?.docuploads?.map((file, i) => (
+                          {values?.documents?.map((file, i) => (
                             <Typography
                               key={file + i}
                               className={classes.imgName}
-                            >{`${i + 1}. ${file.name}`}
-                            <span>
-                            <IconButton size="small" color="primary" onClick={() => console.log()}>
+                            >{`${i + 1}. ${file.name.substr(0, 16)}`}
+                            {/* <span>
+                            <IconButton size="small" color="primary" onClick={() => values?.documents.splice(i, 1)}>
                               <DeleteIcon fontSize="16px" />
                             </IconButton>
-                            </span>
+                            </span> */}
                             </Typography>
                           ))}
                         </Box>
-                      <Grid item xs={6} sx={{ textAlign: "left" }}>
+                        </Grid>
+                      <Grid item xs={6} sx={{ textAlign: "left"}}>
                         <Button
                           variant="contained"
                           size="small"
@@ -310,12 +336,12 @@ const UploadForm = (props) => {
                           Previous
                         </Button>
                       </Grid>
-                      <Grid item xs={6} sx={{ textAlign: "right" }}>
+                      <Grid item xs={6} sx={{ textAlign: "right"}}>
                         <Button
                           variant="contained"
                           type="submit"
                           size="small"
-                          onClick={() => handleClose()}
+                          onClick={() => setFormSubmitted(true)}
                         >
                           Submit
                         </Button>

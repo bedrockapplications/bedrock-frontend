@@ -170,6 +170,7 @@ const LoginPage = () => {
                       .then((res) => {
                         // console.log(res , "res-login")
                         if (res.data.status) {
+                          console.log("name")
                           let id = res?.data?.data?.user_id;
                           localStorage.setItem("token", res?.data?.data?.token)
                           setToken(res?.data?.data?.token)
@@ -243,7 +244,7 @@ const LoginPage = () => {
               </Grid>
               <Grid item xs={12} sx={{ textAlign: "center" }}>
                 <Typography>
-                  New User Registration?{" "}
+                  New Admin Registration?{" "}
                   <span
                     style={{ color: "#FFC100", cursor: "pointer" }}
                     onClick={handleSignup}

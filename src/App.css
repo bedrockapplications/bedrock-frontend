@@ -1602,3 +1602,46 @@ canvas{
   border-color: #2196f3;
 }
 
+.tag-remove{
+  margin-left: 10px;
+  padding: 1px 4px;
+  border-radius: 50%;
+  background-color: #2196f3;
+  color:#fff;
+  border: none;
+}
+
+.tag-list{
+  display: flex;
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    flex-wrap: wrap;
+}
+
+.tag-item{
+  display: flex;
+  align-items: center;
+  margin: 5px;
+  width: fit-content;
+    background: white;
+    border-radius: 20px;
+    padding: 0px 20px;
+}
+
+.search{
+  width: 365px;
+    padding: 8px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+}
+
+.dropdown-content{
+  width: 404px;
+    margin-top: 10px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+}
+

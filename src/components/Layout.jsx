@@ -51,6 +51,7 @@ import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 // import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 // import dotted_img from "../Images/Dotted Circles.png";
 // import Dashboard from "../pages/Dashboard";
@@ -236,15 +237,20 @@ if (localStorage.getItem("role") && localStorage.getItem("role") === "owner") {
       link: "/allprojects",
     },
     {
-      icon: <DashboardIcon />,
+      icon: <EngineeringIcon />,
       label: "My projects",
       link: "/mysubprojects",
     },
     {
-      icon: <DashboardIcon />,
+      icon: <AttachMoneyIcon />,
       label: "My bids",
       link: "/mybids",
     },
+    {
+      icon: <BookIcon />,
+      label: "Daily Logs",
+      link: "/dailylogs",
+    }
   ]
 }
 

@@ -25,6 +25,11 @@ const ContextProvider = (props) => {
   const [profKey, setProfKey] = useState(true);
   const [userRole, setUserRole] = useState("")
   const [token, setToken] = useState(localStorage.getItem("token") || "")
+  const [projectTableData, setProjectTableData] = useState([]);
+  const [step, setStep] = useState(0);
+  const [openFileModel, setOpenFileModel] = useState(false);
+  const [openMode, setOpenMode] = useState("")
+  const [rowData, setRowdata] = useState({})
 
   return (
     <GlobalState.Provider
@@ -60,7 +65,12 @@ const ContextProvider = (props) => {
         profKey, setProfKey,
         userRole,
         setUserRole,
-        token, setToken
+        token, setToken,
+        projectTableData, setProjectTableData,
+        step, setStep,
+        openFileModel, setOpenFileModel,
+        openMode, setOpenMode,
+        rowData, setRowdata,
       }}
     >
       {props.children}

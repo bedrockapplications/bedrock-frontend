@@ -47,9 +47,6 @@ export const getProjectDetails = async (pId) => {
   return axios.get(`/project/getprojectdetailsbyid?_id=${pId}`);
 };
 
-export const createNewProjectApi = async (projectPayload) => {
-  return axios.post(`/project/upload/`, projectPayload);
-};
 
 //document manager apis
 
@@ -132,11 +129,30 @@ export const getAllProjects = async () => {
 };
 
 export const getMyProjects = async (status) => {
-  Axios
+  return Axios
     .get(`https://api.bedrockapps.link/api/project/contractor/get-projects?status=${status}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     }
     )
+}
+
+export const getManagerProjects = async () => {
+  
+  return Axios
+    .get(`https://api.bedrockapps.link/api/project/myproject`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }
+    )
+}
+
+export const createNewProjectApi = async (projectPayload) => {
+  return axios.post(`project/add`, projectPayload);
+};
+
+export const deleteProjectRow = async (id) => {
+  return axios.delete(`https://api.bedrockapps.link/api/project/delete/${id}`)
 }

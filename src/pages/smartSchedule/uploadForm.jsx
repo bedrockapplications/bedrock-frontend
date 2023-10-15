@@ -131,12 +131,11 @@ const UploadForm = (props) => {
                       name="commentId"
                       id="commentId"
                       label="Comments"
-                    // options={categoryList}
                     />
                   </Grid>
                  
                   <Grid item xs={12} sx={{ textAlign: "right" }}>
-                    <Button variant="contained" type="submit" size="small" onClick={()=>handleClose()}>
+                    <Button variant="contained" type="submit" disabled size="small">
                       Submit
                     </Button>
                   </Grid>

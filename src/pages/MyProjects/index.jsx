@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import { makeStyles } from "@mui/styles";
 import {
   Box,
@@ -20,6 +20,9 @@ import { useState } from "react";
 import ProjectDataTable from "../MyProjects/ProjectDataTable";
 import { useTranslation } from "react-i18next";
 import UploadForm from "./uploadForm";
+import { getManagerProjects } from "../../services/request";
+import { GlobalState } from "../../Context/Context";
+import { useEffect } from "react";
 
 
 const useStyle = makeStyles(() => ({
@@ -53,40 +56,62 @@ const useStyle = makeStyles(() => ({
   },
 }));
 
-
-let data = [
-    {
-        client: "Jim Wills",
-        projectName: "Project 1",
-        category: "Renovate AI",
-        address: "North Street,Tampa, Fl",
-        vendorContacts: "../../Images/vendor.png",
-    },
-    {
-        client: "Jim Wills",
-        projectName: "SR Building",
-        category: "Renovate AI",
-        address: "North Street,Tampa, Fl",
-        vendorContacts: "../../Images/vendor.png",
-    }
-];
-
 const MySubProjects = () => {
   const classes = useStyle();
-    const { t } = useTranslation();
+  const { t } = useTranslation();
+  const {
+    projectTableData,
+    setProjectTableData,
+    isLoading,
+    setIsLoading,
+    setStep,
+    openFileModel,
+    setOpenFileModel,
+    setOpenMode
+  } = useContext(GlobalState);
 
   const [viewToggle, setViewToggle] = useState(false);
-  const [openFileModel, setOpenFileModel] = useState(false);
 
   const handleCloseFileModel = () => {
-      setOpenFileModel(false);
+    setOpenFileModel(false);
   };
-
 
   const handleSearch = (value) => {
-    console.log("value", value);
+    console.log("first")
+    if (value?.trim() === "") {
+      handleGetAllProject();
+    } else {
+      let data = projectTableData.filter(
+        (item) =>
+          item?.projectName?.toLowerCase()?.startsWith(value) ||
+          item?.projectType?.toLowerCase()?.startsWith(value) ||
+          item?.address?.toLowerCase()?.startsWith(value) ||
+          item?.status?.toLowerCase()?.startsWith(value) ||
+          item?.clientName?.toLowerCase()?.startsWith(value)
+      );
+      setProjectTableData(data);
+    }
   };
 
+  const handleGetAllProject = () => {
+    setIsLoading(true);
+    getManagerProjects()
+      .then((res) => {
+        console.log(res.data, "hggf")
+        if (res.data.status) {
+          console.log(res.data.data, "vgvcvc")
+          setProjectTableData(res.data.data);
+          setIsLoading(false);
+        }
+      })
+      .catch((error) => {
+        setIsLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    handleGetAllProject();
+  }, []);
 
   return (
     <>
@@ -97,7 +122,7 @@ const MySubProjects = () => {
               <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <Typography className={classes.titleText}>
-                  {t("myProject.projectDirectory")}
+                    {t("myProject.projectDirectory")}
                   </Typography>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6} lg={6}>
@@ -124,31 +149,30 @@ const MySubProjects = () => {
                     startIcon={<AddIcon />}
                     fullWidth
                     className={classes.createBtn}
-                    onClick={() => setOpenFileModel(true)}
+                    onClick={() => {
+                      setStep(0);
+                      setOpenMode("")
+                      setOpenFileModel(true);
+                    }}
                   >
                     New Project
                   </Button>
                 </Grid>
-
-               
-               
               </Grid>
             </Paper>
           </Grid>
         </Grid>
         <Box sx={{ width: "100%", marginTop: "1rem" }}>
-
-            <ProjectDataTable data={data} />
-       
+          <ProjectDataTable data={projectTableData} />
         </Box>
         <UploadForm
-                open={openFileModel}
-                handleClose={handleCloseFileModel}
-            // GetDocumentsLists={GetDocumentsLists}
-            // projectOptions={projectOptions}
-            // categoryType={categoryType}
-            // GetSearchOptions={GetSearchOptions}
-            />
+          open={openFileModel}
+          handleClose={handleCloseFileModel}
+          // GetDocumentsLists={GetDocumentsLists}
+          // projectOptions={projectOptions}
+          // categoryType={categoryType}
+          // GetSearchOptions={GetSearchOptions}
+        />
       </Box>
     </>
   );
