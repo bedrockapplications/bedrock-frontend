@@ -78,7 +78,7 @@ const ProjectDataTable = (props) => {
   const { setOpenMode, openFileModel, setOpenFileModel,  page,
     setPage,
     rowsPerPage,
-    setRowsPerPage, setStep, setRowdata} = useContext(GlobalState);
+    setRowsPerPage, setStep, setRowdata,setProjectTableData,setIsLoading} = useContext(GlobalState);
   const { data, totalCount } = props;
   const [order, setOrder] = React.useState("asc");
   const [orderBy, setOrderBy] = React.useState("");

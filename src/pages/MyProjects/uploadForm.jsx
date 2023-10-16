@@ -92,7 +92,7 @@ const UploadForm = (props) => {
     categoryType,
     GetSearchOptions,
   } = props;
-  const { openMode, setIsLoading, setProjectTableData, step, setStep, rowData } = useContext(GlobalState);
+  const { openMode, setIsLoading, setProjectTableData, step, setStep, rowData,setOpenMode } = useContext(GlobalState);
 
   const [formSubmitted, setFormSubmitted] = useState(false)
 

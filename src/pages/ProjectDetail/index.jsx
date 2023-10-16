@@ -188,9 +188,11 @@ const ProjectDetail = () => {
     const classes = useStyle();
     const { t } = useTranslation();
     const [openFileModel, setOpenFileModel] = useState(false);
+    const [step, setStep] = useState("default")
 
     const handleCloseFileModel = () => {
         setOpenFileModel(false);
+        setStep("")
     };
 
     const detailArray = ["Interior", "Painting", "Electrical"]
@@ -246,6 +248,8 @@ const ProjectDetail = () => {
             <SubmitBidForm
                 open={openFileModel}
                 handleClose={handleCloseFileModel}
+                step={step}
+                setStep={setStep}
             // GetDocumentsLists={GetDocumentsLists}
             // projectOptions={projectOptions}
             // categoryType={categoryType}

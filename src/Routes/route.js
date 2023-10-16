@@ -50,7 +50,7 @@ export const routes = (
     <PrivateRoute exact path="/projectDirectory" component={ProjectDirectory} />
     <PrivateRoute exact path="/renovateai" component={RenovateAI} />
 
-    <PrivateRoute exact path="/myprojects" component={MyProjects} />
+    {/* <PrivateRoute exact path="/myprojects" component={MyProjects} /> */}
     {/* <PrivateRoute exact path="/mysubprojects" component={MySubProjects} /> */}
     <PrivateRoute exact path="/automeasure" component={autoMeasure} />
     <PrivateRoute exact path="/createProject" component={CreateProject} />
