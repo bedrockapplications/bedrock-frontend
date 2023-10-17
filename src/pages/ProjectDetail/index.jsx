@@ -1,4 +1,4 @@
-import React, { useState, memo, useContext } from "react";
+import React, { useEffect, useState, memo, useContext } from "react";
 import { makeStyles } from "@mui/styles";
 import {
     Grid,
@@ -25,6 +25,8 @@ import crane from "../../Images/crane.png";
 import detailsMain from "../../Images/detailMain.svg"
 // import AllProjectsTable from "./allProjectsTable";
 import SubmitBidForm from "./submitBidForm";
+import { GlobalState } from "../../Context/Context";
+import { getOneProject } from '../../services/request'
 
 
 
@@ -189,13 +191,37 @@ const ProjectDetail = () => {
     const { t } = useTranslation();
     const [openFileModel, setOpenFileModel] = useState(false);
     const [step, setStep] = useState("default")
+    const [projectData, setProjectData] = useState("")
+    console.log(window.location.href.split("/")[4])
 
     const handleCloseFileModel = () => {
         setOpenFileModel(false);
         setStep("")
     };
+    // const {
+    //     projectId
+    // } = useContext(GlobalState);
 
-    const detailArray = ["Interior", "Painting", "Electrical"]
+
+    useEffect(() => {
+        const ProjectDetail = async () => {
+            // console.log(projectId)
+            const allProjectsData = await getOneProject(window.location.href.split("/")[4]);
+            // console.log(allProjectsData.data.data.length)
+            if (allProjectsData.status === 200) {
+                if (allProjectsData.data.status) {
+                    console.log(allProjectsData.data.data)
+                    setProjectData(allProjectsData.data.data)
+                } else {
+                    setProjectData([])
+                }
+            }
+        };
+        ProjectDetail();
+    }, []);
+
+    const detailArray = projectData?.serviceNeeded
+    const docsArray = projectData?.documents
     return (
         <>
             <Grid container spacing={2}>
@@ -213,29 +239,31 @@ const ProjectDetail = () => {
                         <img src={detailsMain} alt="main-img" />
                     </Grid>
                     <Grid item xs={12} md={4} lg={6}>
-                        <h2 className={classes.textTitle}>Project Name</h2>
+                        <h2 className={classes.textTitle}>{projectData?.projectName}</h2>
                         <br />
                         <p className={classes.text}>The project involves the distribution of 50,000 solar cookers to rural households in Zhenping County, Henan Province. The majority of the rural households in Zhenping use coal-fired stoves for water boiling and cooking. Using coal-fired stoves not only leads to significant greenhouse gas emissions but also air pollution which represents a high risk for the health of the residents. In addition, the use of coal-fired stoves needs families to spend money on purchasing coal.</p>
                         <div className={classes.btnGroups}>
                             {detailArray?.map((item, i) => (
                                 <>
-                                    <p className={classes.detailButton}>{item}</p>
+                                    <p className={classes.detailButton}>{item ? item : ""}</p>
                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                 </>
                             ))}
                         </div>
                         <p className={classes.attachedText}>Attached Documents : </p>
-                        <div className={classes.docFile}>
-                            <p>Blue Print Of Home.PDF</p>
-                            <p className={classes.viewBtn}>View</p>
-                        </div>
-                        <div className={classes.docFile}>
+                        {docsArray?.map((item, i) => (
+                            <div className={classes.docFile}>
+                                <p>{item?.split("/")[3]?.length > 20 ? item?.split("/")[3]?.slice(0,19) + "...." : item?.split("/")[3]}</p>
+                                <p className={classes.viewBtn} onClick={() => window.open(item)}>View</p>
+                            </div>
+                        ))}
+                        {/* <div className={classes.docFile}>
                             <p>Agreement.PDF</p>
                             <p className={classes.viewBtn}>View</p>
-                        </div>
+                        </div> */}
                         <br />
-                        <p className={classes.normalText}><span className={classes.darkText}>Project Start Date :</span> 20-08-2023</p>
-                        <p className={classes.normalText}><span className={classes.darkText}>Project End Date :</span> 26-08-2023</p>
+                        <p className={classes.normalText}><span className={classes.darkText}>Project Start Date :</span> {projectData?.startDate?.split("T")[0]}</p>
+                        <p className={classes.normalText}><span className={classes.darkText}>Project End Date :</span> {projectData?.endDate?.split("T")[0]}</p>
                     </Grid>
                 </Grid>
             </div>

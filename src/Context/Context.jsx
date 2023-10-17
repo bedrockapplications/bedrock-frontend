@@ -30,6 +30,7 @@ const ContextProvider = (props) => {
   const [openFileModel, setOpenFileModel] = useState(false);
   const [openMode, setOpenMode] = useState("")
   const [rowData, setRowdata] = useState({})
+  const [projectId , setProjectId] = useState("")
 
   return (
     <GlobalState.Provider
@@ -71,6 +72,7 @@ const ContextProvider = (props) => {
         openFileModel, setOpenFileModel,
         openMode, setOpenMode,
         rowData, setRowdata,
+        projectId , setProjectId
       }}
     >
       {props.children}

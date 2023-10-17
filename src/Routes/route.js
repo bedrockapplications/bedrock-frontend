@@ -64,7 +64,7 @@ export const routes = (
     <PrivateRoute exact path="/pic" component={PicUpload} />
     <PrivateRoute exact path="/mysubprojects" component={MySubProjects} />
     <PrivateRoute exact path="/allprojects" component={AllProjects} />
-    <PrivateRoute exact path="/projectDetail" component={ProjectDetail} />
+    <PrivateRoute exact path="/projectDetail/:id" component={ProjectDetail} />
     <PrivateRoute exact path="/mybids" component={MyBids} />
     <PrivateRoute exact path="/approvals" component={Approvals} />
 

@@ -128,6 +128,10 @@ export const getAllProjects = async () => {
   return Axios.get(`https://api.bedrockapps.link/api/project/get`);
 };
 
+export const getOneProject = async (id) => {
+  return Axios.get(`https://api.bedrockapps.link/api/project/get/${id}`);
+};
+
 export const getMyProjects = async (status) => {
   return Axios
     .get(`https://api.bedrockapps.link/api/project/contractor/get-projects?status=${status}`, {
@@ -139,7 +143,7 @@ export const getMyProjects = async (status) => {
 }
 
 export const getManagerProjects = async () => {
-  
+
   return Axios
     .get(`https://api.bedrockapps.link/api/project/myproject`, {
       headers: {

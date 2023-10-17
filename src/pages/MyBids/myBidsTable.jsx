@@ -25,7 +25,7 @@ import PremiumDailog from "../../components/premiumDailog";
 import EmptyTableBody from "../../components/EmptyTableBody";
 import { Button } from "@mui/material";
 import { styled } from '@mui/material/styles';
-import { purple,grey } from '@mui/material/colors';
+import { purple, grey } from '@mui/material/colors';
 
 
 const useStyle = makeStyles(() => ({
@@ -78,12 +78,12 @@ const headCells = [
 const ColorButton = styled(Button)(({ theme }) => ({
     color: theme.palette.getContrastText(grey[900]),
     padding: '6px 12px',
-    textTransform:"initial",
+    textTransform: "initial",
     backgroundColor: grey[900],
     '&:hover': {
-      backgroundColor: grey[900],
+        backgroundColor: grey[900],
     },
-  }));
+}));
 
 const MyBidsTable = (props) => {
     const classes = useStyle();
@@ -239,7 +239,11 @@ const MyBidsTable = (props) => {
                                                 {item.status}
                                             </TableCell>
                                             <TableCell align="right">
-                                                <ColorButton onClick={()=>window.open("/projectDetail")}>View Details</ColorButton>
+                                                <ColorButton
+                                                    // onClick={() => window.open(`/projectDetail/${item._id}`)}
+                                                >
+                                                    View Details
+                                                </ColorButton>
                                                 {/* <IconButton
                                                     size="small"
                                                     color="primary"

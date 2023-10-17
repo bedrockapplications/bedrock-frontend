@@ -97,6 +97,7 @@ const AllProjectsTable = (props) => {
         selectedProjected,
         search,
         popen,
+        setProjectId
     } = useContext(GlobalState);
 
     const [order, setOrder] = React.useState("asc");
@@ -160,8 +161,8 @@ const AllProjectsTable = (props) => {
             <Paper sx={{ width: "100%", border: "3px solid #3A3A3C" }}>
                 <TableContainer
                     sx={{
-                        height: mysubprojects?.length > 0 ? 320 : 370,
-                        maxHeight: mysubprojects?.length > 0 ? 320 : 370,
+                        height: allProjects?.length > 0 ? 600 : 370,
+                        maxHeight: allProjects?.length > 0 ? 600 : 370,
                         position: "relative",
                     }}
                 >
@@ -171,7 +172,7 @@ const AllProjectsTable = (props) => {
                             order={order}
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
-                            rowCount={mysubprojects.length}
+                            rowCount={allProjects.length}
                         //   rowCount={data.length}
                         />
                         {allProjects.length > 0 ? (
@@ -196,7 +197,10 @@ const AllProjectsTable = (props) => {
                                                 {item.status}
                                             </TableCell>
                                             <TableCell align="right">
-                                                <ColorButton onClick={() => window.open("/projectDetail")}>View Details</ColorButton>
+                                                <ColorButton onClick={() => {
+                                                    setProjectId(item._id)
+                                                    window.open(`/projectDetail/${item._id}`)
+                                                }}>View Details</ColorButton>
                                                 {/* <IconButton
                                                     size="small"
                                                     color="primary"
@@ -231,11 +235,11 @@ const AllProjectsTable = (props) => {
                         )}
                     </Table>
                 </TableContainer>
-                {mysubprojects?.length > 0 && (
+                {allProjects?.length > 0 && (
                     <TablePagination
                         rowsPerPageOptions={[10, 25, 50, 100]}
                         component="div"
-                        count={mysubprojects.length}
+                        count={allProjects.length}
                         rowsPerPage={rowsPerPage}
                         page={page}
                         onPageChange={handleChangePage}
