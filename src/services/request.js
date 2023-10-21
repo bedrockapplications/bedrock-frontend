@@ -132,6 +132,15 @@ export const getOneProject = async (id) => {
   return Axios.get(`https://api.bedrockapps.link/api/project/get/${id}`);
 };
 
+export const appliedCheck = async (id) => {
+  return Axios.get(`https://api.bedrockapps.link/api/projectbid/applied/project?projectId=${id}`,{
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};
+
+
 export const getMyProjects = async (status) => {
   return Axios
     .get(`https://api.bedrockapps.link/api/project/contractor/get-projects?status=${status}`, {
@@ -141,6 +150,15 @@ export const getMyProjects = async (status) => {
     }
     )
 }
+
+//submit Bid
+export const submitBid = (payload) => {
+  return Axios.post(`https://api.bedrockapps.link/api/projectbid/add`, payload, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("token")}`,
+    },
+  });
+};
 
 export const getManagerProjects = async () => {
 

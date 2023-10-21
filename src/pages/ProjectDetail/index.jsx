@@ -26,7 +26,7 @@ import detailsMain from "../../Images/detailMain.svg"
 // import AllProjectsTable from "./allProjectsTable";
 import SubmitBidForm from "./submitBidForm";
 import { GlobalState } from "../../Context/Context";
-import { getOneProject } from '../../services/request'
+import { getOneProject, appliedCheck } from '../../services/request'
 
 
 
@@ -192,6 +192,7 @@ const ProjectDetail = () => {
     const [openFileModel, setOpenFileModel] = useState(false);
     const [step, setStep] = useState("default")
     const [projectData, setProjectData] = useState("")
+    const [projectCheck, setProjectCheck] = useState("")
     console.log(window.location.href.split("/")[4])
 
     const handleCloseFileModel = () => {
@@ -217,7 +218,25 @@ const ProjectDetail = () => {
                 }
             }
         };
+
         ProjectDetail();
+    }, []);
+
+    useEffect(() => {
+        const checkBid = async () => {
+            // console.log(projectId)
+            const dataCheck = await appliedCheck(window.location.href.split("/")[4]);
+            // console.log(allProjectsData.data.data.length)
+            if (dataCheck.status === 200) {
+                if (dataCheck.data.status) {
+                    console.log(dataCheck.data.message)
+                    setProjectCheck(dataCheck.data.message)
+                } else {
+                    setProjectCheck([])
+                }
+            }
+        };
+        checkBid();
     }, []);
 
     const detailArray = projectData?.serviceNeeded
@@ -253,7 +272,7 @@ const ProjectDetail = () => {
                         <p className={classes.attachedText}>Attached Documents : </p>
                         {docsArray?.map((item, i) => (
                             <div className={classes.docFile}>
-                                <p>{item?.split("/")[3]?.length > 20 ? item?.split("/")[3]?.slice(0,19) + "...." : item?.split("/")[3]}</p>
+                                <p>{item?.split("/")[3]?.length > 20 ? item?.split("/")[3]?.slice(0, 19) + "...." : item?.split("/")[3]}</p>
                                 <p className={classes.viewBtn} onClick={() => window.open(item)}>View</p>
                             </div>
                         ))}
@@ -267,17 +286,25 @@ const ProjectDetail = () => {
                     </Grid>
                 </Grid>
             </div>
-            <div className={classes.btnGroup}>
-                <p className={classes.btn1} onClick={() => setOpenFileModel(true)}
-                >Apply to Bid</p>
-                &nbsp; &nbsp; &nbsp;
-                <p className={classes.btn2}>Deny</p>
-            </div>
+            {projectCheck === "applied" ?
+                <div className={classes.btnGroup}>
+                    <p className={classes.textTitle}>Applied !</p>
+                </div>
+                :
+                <div className={classes.btnGroup}>
+                    <p className={classes.btn1} onClick={() => setOpenFileModel(true)}
+                    >Apply to Bid</p>
+                    &nbsp; &nbsp; &nbsp;
+                    <p className={classes.btn2}>Deny</p>
+                </div>
+            }
             <SubmitBidForm
                 open={openFileModel}
                 handleClose={handleCloseFileModel}
                 step={step}
                 setStep={setStep}
+                projectData={projectData}
+                projectCheck={projectCheck}
             // GetDocumentsLists={GetDocumentsLists}
             // projectOptions={projectOptions}
             // categoryType={categoryType}
