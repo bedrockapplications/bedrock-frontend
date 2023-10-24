@@ -133,7 +133,7 @@ export const getOneProject = async (id) => {
 };
 
 export const appliedCheck = async (id) => {
-  return Axios.get(`https://api.bedrockapps.link/api/projectbid/applied/project?projectId=${id}`,{
+  return Axios.get(`https://api.bedrockapps.link/api/projectbid/applied/project?projectId=${id}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
     },
@@ -142,6 +142,15 @@ export const appliedCheck = async (id) => {
 
 
 export const getMyProjects = async (status) => {
+  if (status === "pending") {
+    return Axios
+      .get(`https://api.bedrockapps.link/api/projectbid/applied`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+      )
+  }
   return Axios
     .get(`https://api.bedrockapps.link/api/project/contractor/get-projects?status=${status}`, {
       headers: {
@@ -149,6 +158,26 @@ export const getMyProjects = async (status) => {
       },
     }
     )
+}
+
+export const getBidProjects = async (status) => {
+  if (status === "pending") {
+    return Axios
+      .get(`https://api.bedrockapps.link/api/projectbid/applied`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+      )
+  }
+  return Axios
+    .get(`https://api.bedrockapps.link/api/projectbid/applied?status=${status}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }
+    )
+
 }
 
 //submit Bid

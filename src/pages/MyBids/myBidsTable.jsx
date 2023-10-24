@@ -26,6 +26,8 @@ import EmptyTableBody from "../../components/EmptyTableBody";
 import { Button } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { purple, grey } from '@mui/material/colors';
+import { getBidProjects } from "../../services/request";
+
 
 
 const useStyle = makeStyles(() => ({
@@ -88,7 +90,7 @@ const ColorButton = styled(Button)(({ theme }) => ({
 const MyBidsTable = (props) => {
     const classes = useStyle();
 
-    const { data, GetDocumentsLists, projectOptions, totalCount } = props;
+    const { data, GetDocumentsLists, projectOptions, totalCount,status } = props;
     const {
         page,
         setPage,
@@ -111,6 +113,7 @@ const MyBidsTable = (props) => {
     const [orderBy, setOrderBy] = React.useState("");
     const [openSubmittals, setOpenSubmittals] = useState(false);
     const [submittalsData, setSubmittalsData] = useState(null);
+    const [myBids, setMyBids] = useState([])
 
     let mysubprojects = [
         {
@@ -132,6 +135,22 @@ const MyBidsTable = (props) => {
     // useEffect(() =>{
     //   console.log(popen, "kkkkk")
     // }, [])
+
+    useEffect(() => {
+        const allBids = async () => {
+            const allBidsData = await getBidProjects(status);
+            console.log(allBidsData.data.data)
+            if (allBidsData.status === 200) {
+                if (allBidsData.data.data.length > 0) {
+                    console.log(allBidsData.data.data)
+                    setMyBids(allBidsData.data.data)
+                } else {
+                    setMyBids([])
+                }
+            }
+        };
+        allBids();
+    }, [])
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === "asc";
@@ -217,22 +236,22 @@ const MyBidsTable = (props) => {
                             rowCount={mysubprojects.length}
                         //   rowCount={data.length}
                         />
-                        {mysubprojects?.length > 0 ? (
+                        {myBids?.length > 0 ? (
                             <TableBody>
-                                {stableSort(mysubprojects, getComparator(order, orderBy))?.map(
+                                {stableSort(myBids, getComparator(order, orderBy))?.map(
                                     (item, i) => (
                                         <TableRow key={item._id}>
                                             <TableCell align="right">
-                                                {item.project_name}
+                                                {item?.projectId?.projectName}
                                             </TableCell>
                                             <TableCell align="right">
-                                                {item?.type}
+                                                {item?.projectId?.projectType}
                                             </TableCell>
                                             <TableCell align="right">
-                                                {item.location}
+                                                {item?.projectId?.state},{item?.projectId?.country}
                                             </TableCell>
                                             <TableCell align="right">
-                                                {item.project_manager}
+                                                {item?.projectId?.clientPhNumber}
                                             </TableCell>
                                             <TableCell align="right">
                                                 {/* {moment(item?.updatedAt).format("DD-MM-YYYY")} */}
@@ -240,7 +259,7 @@ const MyBidsTable = (props) => {
                                             </TableCell>
                                             <TableCell align="right">
                                                 <ColorButton
-                                                    // onClick={() => window.open(`/projectDetail/${item._id}`)}
+                                                    onClick={() => window.open(`/projectDetail/${item?.projectId?._id}`)}
                                                 >
                                                     View Details
                                                 </ColorButton>

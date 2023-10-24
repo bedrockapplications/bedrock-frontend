@@ -119,12 +119,14 @@ const OldProjectsTable = (props) => {
         }
     ]
 
+
     useEffect(() => {
         const allProjects = async () => {
             const allProjectsData = await getMyProjects(status);
             console.log(allProjectsData.data.data)
             if (allProjectsData.status === 200) {
                 if (allProjectsData.data.data.length > 0) {
+                    console.log(allProjectsData.data.data)
                     setMyProjectsData(allProjectsData.data.data)
                 } else {
                     setMyProjectsData([])
@@ -215,25 +217,25 @@ const OldProjectsTable = (props) => {
                             order={order}
                             orderBy={orderBy}
                             onRequestSort={handleRequestSort}
-                            rowCount={mysubprojects.length}
+                            rowCount={myProjectsData.length}
                         //   rowCount={data.length}
                         />
-                        {mysubprojects?.length > 0 ? (
+                        {myProjectsData?.length > 0 ? (
                             <TableBody>
-                                {stableSort(mysubprojects, getComparator(order, orderBy))?.map(
+                                {stableSort(myProjectsData, getComparator(order, orderBy))?.map(
                                     (item, i) => (
                                         <TableRow key={item._id}>
                                             <TableCell align="right">
-                                                {item.project_name}
+                                                {item?.projectId?.projectName}
                                             </TableCell>
                                             <TableCell align="right">
-                                                {item?.type}
+                                                {item?.projectId?.projectType}
                                             </TableCell>
                                             <TableCell align="right">
-                                                {item.location}
+                                                {item?.projectId?.state},{item?.projectId?.country}
                                             </TableCell>
                                             <TableCell align="right">
-                                                {item.project_manager}
+                                                {item?.projectId?.clientPhNumber}
                                             </TableCell>
                                             <TableCell align="right">
                                                 {/* {moment(item?.updatedAt).format("DD-MM-YYYY")} */}

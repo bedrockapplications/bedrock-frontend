@@ -175,7 +175,9 @@ const SubmitBidForm = (props) => {
             comment: commentData,
             amount: data.amount,
             currency: data.currencySymbol,
-            documentLink: ""
+            documentLink: "",
+            startDate:data.proposedStartDate,
+            endDate:data.proposedEndDate
         }
         console.log(body, "bodyyy")
         // setIsLoading(true);
@@ -186,6 +188,8 @@ const SubmitBidForm = (props) => {
         formData.append("comment", body.comment);
         formData.append("amount", body.amount);
         formData.append("currency", body.currency);
+        formData.append("startDate", body.startDate);
+        formData.append("endDate", body.endDate);
         data?.documents?.forEach((doc) => {
             formData.append("documentLink", doc);
         });

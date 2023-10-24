@@ -347,6 +347,7 @@ const MySubProjects = () => {
               GetDocumentsLists={GetDocumentsLists}
               projectOptions={projectOptions}
               totalCount={totalCount}
+              status="selected"
             />
           </TabPanel>
           <TabPanel value={tabValue} index={1}>
@@ -355,6 +356,7 @@ const MySubProjects = () => {
               GetDocumentsLists={GetDocumentsLists}
               projectOptions={projectOptions}
               totalCount={photosCount}
+              status="pending"
             />
           </TabPanel>
           {/* <TabPanel value={tabValue} index={2}>
