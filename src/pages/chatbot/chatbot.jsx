@@ -12,7 +12,7 @@ const Chatbot = () => {
   const [allmessages, setallmessages] = useState([
     {
       isbot: true,
-      message: "Welcome to Estimator.ai, How May I Help You?",
+      message: "Welcome to BedRock.ai, How May I Help You?",
     }
   ]);
   const [apikey, setApikey] = useState("");
@@ -26,7 +26,7 @@ const Chatbot = () => {
   }, [])
 
   const configuration = new Configuration({
-    organization: "org-MmWtzG90yXEXPrHbBZDe6uvp",
+    organization: "org-jL7dncxaKsFWFEzNUHPDN9DA",
     apiKey: apikey,
   });
 
@@ -48,7 +48,7 @@ const Chatbot = () => {
     let obj = {
       model: "text-davinci-003",
       prompt: msg.message,
-      temperature: 0,
+      temperature: 0.7,
       max_tokens: 1000,
       top_p: 1,
       frequency_penalty: 0.0,
@@ -75,7 +75,7 @@ const Chatbot = () => {
   }, [allmessages])
   return (
     <div className="chatbot-main">
-      <div className="chatbot-title">Estimator.ai</div>
+      <div className="chatbot-title">BedRock.ai</div>
       <div className="chat-screen">
         {allmessages.map((each, i) => (
             <>

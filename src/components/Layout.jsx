@@ -217,11 +217,11 @@ if (localStorage.getItem("role") && localStorage.getItem("role") === "owner") {
       label: "Daily Logs",
       link: "/dailylogs",
     },
-    // {
-    //   icon: <PsychologyIcon />,
-    //   label: "Estimator.ai",
-    //   link: "/estimatorai",
-    // },
+    {
+      icon: <PsychologyIcon />,
+      label: "BedRock.ai",
+      link: "/BedRockai",
+    },
     {
       icon: <CalculateIcon />,
       label: "AI Auto Measure",
